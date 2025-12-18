@@ -38,6 +38,6 @@ features:
 <div class="home-footer">
 
 Made by [id-netsolutions Digital Solutions GmbH](https://www.idnds.de) with ❤️  
-[Impressum](/impressum) · [Datenschutz](/datenschutz)
+[Impressum](./impressum) · [Datenschutz](./datenschutz)
 
 </div>
