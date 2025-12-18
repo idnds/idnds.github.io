@@ -121,7 +121,7 @@ themeConfig: {
 }
 ```
 
-- **Sidebar automatisch aus Unterordnern generieren** → entsprechende `sidebar` Konfiguration in `config.ts`
+- **Sidebar automatisch aus Unterordnern generieren** → entsprechende `sidebar` Konfiguration in `config.mjs`
 
 ## Support
 
