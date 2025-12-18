@@ -1,0 +1,18 @@
+.home-footer-banner {
+  display: flex;
+  justify-content: center; /* zentriert horizontal */
+  flex-wrap: wrap;         /* bei mehreren Zeilen */
+  gap: 1rem;               /* Abstand zwischen Bildern */
+  margin-top: 0rem;
+}
+
+.home-footer-banner img {
+  max-height: 120px;
+  height: auto;
+  margin: 0rem 0.5rem;
+}
+
+.home-footer {
+  text-align: center;
+  opacity: 0.85;
+}
