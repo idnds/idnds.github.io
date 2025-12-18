@@ -17,8 +17,8 @@ Die Seite wird mit **VitePress 2** erstellt und über **GitHub Pages** als Organ
 
 ## Technologien
 
-- [VitePress 2](https://vitepress.vuejs.org/) – statische Seite  
-- [Vue 3](https://vuejs.org/) – für Komponenten  
+- [VitePress](https://vitepress.vuejs.org/) – statische Seite  
+- [Vue](https://vuejs.org/) – für Komponenten  
 - Node.js (Version ≥ 24 empfohlen)  
 - GitHub Actions – automatisches Deployment auf GitHub Pages
 
