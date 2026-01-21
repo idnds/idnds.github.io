@@ -14,10 +14,10 @@ export default defineConfig({
     nav: [
       { text: 'Erste Schritte', link: '/erste-schritte/' },
       { text: 'Gestaltung', link: '/gestaltung/' },
-      { text: 'Whitepaper',
+      { text: 'Wissen & Praxis',
         items: [
-          { text: 'DocXtraxctor & 7zip', link: '/whitepaper/docxtractor_7zip' },
-          { text: 'Lieblingsplatz.cloud', link: '/whitepaper/lieblingsplatz' }
+          { text: 'Wissen', link: '/wissen' },
+          { text: 'Praxis', link: '/praxis' }
         ]
       },
       { text: 'Über uns', link: '/ueber-uns/' },
@@ -42,6 +42,26 @@ export default defineConfig({
             { text: 'Übersicht', link: '/erste-schritte/' },
             { text: 'Clients', link: '/erste-schritte/clients/' },
             { text: 'Glossar', link: '/erste-schritte/glossar/' }
+          ]
+        }
+      ],
+      '/wissen/': [
+        {
+          text: 'Wissen',
+          items: [
+            { text: 'Übersicht', link: '/wissen/' },
+            { text: 'ELO DocXtractor & 7zip', link: '/wissen/docxtractor_7zip' },
+            { text: 'Lieblingsplatz.cloud', link: '/wissen/lieblingsplatz' }
+          ]
+        }
+      ],
+      '/praxis/': [
+        {
+          text: 'Praxis',
+          items: [
+            { text: 'Übersicht', link: '/praxis/' },
+            { text: 'Dynamische Ordner', link: '/praxis/dynamische_ordner' },
+            { text: 'Metadaten', link: '/praxis/metadaten' }
           ]
         }
       ]
