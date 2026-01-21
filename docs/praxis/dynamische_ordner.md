@@ -43,10 +43,20 @@ Ein dynamischer Ordner mit folgenden Kriterien:
 
 - Status = „In Bearbeitung“
 - Verantwortlich = aktueller Benutzer
-- Wiedervorlagedatum ≤ heute + 7 Tage
 
-Ergebnis:
-- Der Ordner zeigt **immer nur die aktuell relevanten Dokumente**
+### Vorgehen
+
+1. Führe eine Suche mit deinen Kriterien durch.
+2. Wähle im Menüband **Ergebnis > Dynamischer Ordner**.
+3. Wähle im Dialog **Dynamischen Ordner erstellen** einen Zielordner für Deinen dynamischen Ordner aus.
+4. Wähle **OK**.
+5. Gib die Metadaten (Kurzbezeichnung) für den dynamischen Ordner ein.
+6. Wähle **OK**.
+
+### Ergebnis
+
+- Der dynamische Ordner wird am gewählten Ablageort angelegt.
+- Der Ordner zeigt **immer nur die aktuell relevanten Dokumente** gemäß deiner Suchkriterien
 - Keine manuelle Pflege notwendig
 - Neue Dokumente erscheinen automatisch
 
