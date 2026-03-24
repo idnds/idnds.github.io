@@ -1,0 +1,32 @@
+id: announcement-2025-08-04-elo-xc-25-lts-release
+slug: announcement-2025-08-04-elo-xc-25-lts-release
+typeId: announcement
+vendorId: elo
+productIds:
+  - elo-xc-25
+
+title: "Abkündigung von ELO XC 23 und Release von ELO XC 25 LTS mit Anpassungen für Microsoft Exchange Online"
+
+publishedAt: "2025-08-04T19:49:17+01:00"
+
+summaryMd: |
+  ELO XC 23 wird ab sofort abgekündigt. Nutzer sollten auf die LTS-Version XC 25 migrieren, die Verbesserungen für Exchange Online enthält und geplante Änderungen der Microsoft Schnittstellen berücksichtigt.
+
+detailsMd: |
+  Mit der Veröffentlichung von ELO XC 25.00 LTS wird XC 23 deprecated und sollte in allen produktiven Umgebungen ersetzt werden.  
+  XC 25 bietet zusätzlich Unterstützung für die ELO ECM Suite 25, sowie die Nutzung von Microsoft Graph für Katalogsammlungen und Exchange Online.  
+  Die initiale Graph-API-Unterstützung (Release 25.01) betrifft zunächst nur die Nachrichtenverarbeitung; Events und Kontakte werden in zukünftigen Updates folgen. Die Nutzung von Graph erfordert keine Installation des EXO-Moduls und keine Exchange-Administrator-Rollen, API-Berechtigungen sind User.Read.All, Mail.ReadWrite und ggf. Mail.Send.  
+  Exchange 2016 wird mit XC 25 nicht mehr unterstützt; Migration auf neuere Exchange-Versionen wird empfohlen.  
+  Kunden haben mit XC 23 werden ab Februar 2026 mit Problemen beim Katalogabruf in Verbindung mit Microsoft 365 feststellen. Updates auf XC 25.00.006.184 und das EXO-Modul (ab Version 3.8.0) beheben diese Probleme.  
+  Alle bestehenden XC 23 Installationen sollten aktualisiert werden, um weiterhin mit Exchange Online kompatibel zu bleiben und Microsoft-Updates korrekt zu verarbeiten.
+
+impact:
+  - action-required
+
+customerActionMd: |
+  - Prüfen, ob die Umgebung aktuell XC 23 nutzt und auf XC 25 LTS migrieren.  
+  - Sicherstellen, dass die Exchange Online Schnittstellen (insbesondere bei Nutzung von Katalogtypen "azure" oder "ews") weiterhin korrekt arbeiten.  
+  - Gegebenenfalls Updates des EXO PowerShell-Moduls einspielen (ab Version 3.8.0) und Microsoft Graph Konfiguration prüfen.  
+  - Testläufe durchführen, um die vollständige Katalog- und Postfachverarbeitung zu verifizieren.
+
+relations: []
