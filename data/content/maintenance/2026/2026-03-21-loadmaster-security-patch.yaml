@@ -7,19 +7,19 @@ productIds:
   - lpc-prod
   - lpc-test
 
-title: "Wartungsfenster: Kemp LoadMaster Sicherheitsupdates"
+title: "Wartung - Kemp LoadMaster Sicherheitsupdates"
 publishedAt: "2026-03-19T12:10:00+01:00"
 
-eventDate: "2026-03-21T08:00:00+01:00"
-endDate: "2026-03-21T08:30:00+01:00"
+eventDate: "2026-03-21T09:00:00+01:00"
+endDate: "2026-03-21T09:30:00+01:00"
 status: active
 
 summaryMd: |
-  Geplantes Wartungsfenster zur Behebung kritischer Sicherheitslücken (CVE-2026-3517, CVE-2026-3518, CVE-2026-3519, CVE-2026-4048, CVE-2026-21876) in Kemp LoadMaster. Das System ist während der Arbeiten kurzzeitig nicht verfügbar.
+  Wartung zur Behebung kritischer Sicherheitslücken (CVE-2026-3517, CVE-2026-3518, CVE-2026-3519, CVE-2026-4048, CVE-2026-21876) in Kemp LoadMaster. Das System ist während der Arbeiten kurzzeitig nicht verfügbar.
 
 detailsMd: |
-  Am 2. März 2026 wird ein geplantes Wartungsfenster durchgeführt, um die neuesten Sicherheitsupdates für Kemp LoadMaster einzuspielen. Betroffen sind GA-Versionen bis v7.2.62.2 und LTSF-Versionen bis v7.2.54.16. Die Wartung dauert voraussichtlich von 08:00 bis 08:30 Uhr.  
-  Während dieses Zeitraums ist die LoadMaster-Appliance nicht verfügbar.  
+  Es wird eine Wartung durchgeführt, um die neuesten Sicherheitsupdates für Kemp LoadMaster einzuspielen. Betroffen sind GA-Versionen bis v7.2.62.2 und LTSF-Versionen bis v7.2.54.16.  
+  Durch die Hochverfügbarkeit ist während dieses Zeitraums nicht mit Einschränkungen zu rechnen.  
   Ziel der Wartung ist die Behebung der kritischen CVEs:
   - CVE-2026-3517: Command Injection Remote Code Execution
   - CVE-2026-3518: Command Injection Remote Code Execution
