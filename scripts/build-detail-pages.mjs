@@ -16,12 +16,6 @@ fs.mkdirSync(outDir, { recursive: true });
 // Lookup-Map fuer Relations-Verlinkung
 const eventMap = new Map(events.map((e) => [e.id, e]));
 
-const impactLabel = {
-    "downtime": "Downtime",
-    "limited-availability": "Eingeschraenkte Verfuegbarkeit",
-    "action-required": "Handlungsbedarf",
-};
-
 const relationLabel = {
     "relates-to": "Verwandtes Event",
     "resolves": "Behebt",
@@ -32,9 +26,29 @@ const relationLabel = {
 function formatDateTime(iso) {
     if (!iso) return "";
     return new Date(iso).toLocaleString("de-DE", {
-        year: "numeric", month: "2-digit", day: "2-digit",
-        hour: "2-digit", minute: "2-digit",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
     }) + " Uhr";
+}
+
+// Serialisiert die Badge-relevanten Felder als JSON-String fuer den
+// EventDetailBadges-Prop. Einfache Anfuehrungszeichen im JSON werden
+// als HTML-Entity kodiert, weil der Prop in einem single-quoted Attribut steht.
+function buildBadgeJson(event) {
+    const data = {
+        typeId: event.typeId,
+        status: event.status ?? null,
+        eventDate: event.eventDate ?? null,
+        endDate: event.endDate ?? null,
+        impact: event.impact ?? [],
+        eventType: event.eventType
+            ? { color: event.eventType.color, name: event.eventType.name }
+            : null,
+    };
+    return JSON.stringify(data).replace(/'/g, "&#39;");
 }
 
 for (const event of events) {
@@ -42,39 +56,24 @@ for (const event of events) {
     const add = (l) => lines.push(l);
     const gap = () => lines.push("");
 
-    // VitePress Frontmatter
+    // ── Frontmatter ──────────────────────────────────────────
     add("---");
     add("title: \"" + event.title.replace(/"/g, '\\"') + "\"");
     add("layout: doc");
     add("---");
     gap();
 
-    // Badges als HTML
-    add("<div class=\"badges\">");
-    add("  <span class=\"type-badge\" style=\"background:" +
-        (event.eventType?.color ?? "#ccc") + "\">" +
-        (event.eventType?.name ?? event.typeId) + "</span>");
-
-    if (event.typeId === "maintenance" && event.status) {
-        add("  <EventStatusBadge :event=\"" + JSON.stringify({
-            typeId: event.typeId,
-            status: event.status,
-            eventDate: event.eventDate,
-            endDate: event.endDate,
-        }).replace(/"/g, "&quot;") + "\" />");
-    }
-
-    if (event.isCustomerActionRequired) {
-        add("  <span class=\"impact-badge impact-action-required\">Handlungsbedarf</span>");
-    }
-    add("</div>");
+    // ── Badges (Komponente, laeuft im Browser) ───────────────
+    // EventDetailBadges berechnet den Maintenance-Status zur Laufzeit
+    // und zeigt alle Impact-Badges fuer alle Event-Typen an.
+    add("<EventDetailBadges event-json='" + buildBadgeJson(event) + "' />");
     gap();
 
-    // Titel
+    // ── Titel ─────────────────────────────────────────────────
     add("# " + event.title);
     gap();
 
-    // Meta-Tabelle
+    // ── Meta-Tabelle ──────────────────────────────────────────
     add("| | |");
     add("|---|---|");
     add("| **Typ** | " + (event.eventType?.name ?? event.typeId) + " |");
@@ -85,11 +84,13 @@ for (const event of events) {
     if (event.updatedAt) {
         add("| **Zuletzt aktualisiert** | " + formatDateTime(event.updatedAt) + " |");
     }
-    if (event.typeId === "maintenance" && event.eventDate) {
+
+    // Typ-spezifische Meta-Zeilen
+    if (event.typeId === "maintenance") {
         add("| **Beginn** | " + formatDateTime(event.eventDate) + " |");
         add("| **Ende** | " + formatDateTime(event.endDate) + " |");
     }
-    if (event.typeId === "release" && event.version) {
+    if (event.typeId === "release") {
         add("| **Version** | " + event.version + " |");
         if (event.changelogUrl) {
             add("| **Changelog** | [Link](" + event.changelogUrl + ") |");
@@ -100,9 +101,9 @@ for (const event of events) {
             add("| **Severity** | " + event.severity + " |");
         }
         if (event.cveIds?.length) {
-            const cveLinks = event.cveIds.map((cve) =>
-                "[" + cve + "](https://nvd.nist.gov/vuln/detail/" + cve + ")"
-            ).join(", ");
+            const cveLinks = event.cveIds
+                .map((cve) => "[" + cve + "](https://nvd.nist.gov/vuln/detail/" + cve + ")")
+                .join(", ");
             add("| **CVE-IDs** | " + cveLinks + " |");
         }
         if (event.affectedVersions?.length) {
@@ -114,17 +115,7 @@ for (const event of events) {
     }
     gap();
 
-    // Auswirkungen
-    if (event.impact?.length) {
-        add("## Auswirkungen");
-        gap();
-        for (const imp of event.impact) {
-            add("- **" + (impactLabel[imp] ?? imp) + "**");
-        }
-        gap();
-    }
-
-    // Zusammenfassung
+    // ── Zusammenfassung ───────────────────────────────────────
     if (event.summaryMd) {
         add("## Zusammenfassung");
         gap();
@@ -132,7 +123,7 @@ for (const event of events) {
         gap();
     }
 
-    // Details
+    // ── Details ───────────────────────────────────────────────
     if (event.detailsMd) {
         add("## Details");
         gap();
@@ -140,7 +131,7 @@ for (const event of events) {
         gap();
     }
 
-    // Kundenhandlungsbedarf
+    // ── Kundenhandlungsbedarf ─────────────────────────────────
     if (event.customerActionMd) {
         add("## Was jetzt zu tun ist");
         gap();
@@ -150,9 +141,9 @@ for (const event of events) {
         gap();
     }
 
-    // Relations
+    // ── Verwandte Events ──────────────────────────────────────
     if (event.relations?.length) {
-        add("## Beziehungsart");
+        add("## Verwandte Events");
         gap();
         for (const rel of event.relations) {
             const related = eventMap.get(rel.eventId);

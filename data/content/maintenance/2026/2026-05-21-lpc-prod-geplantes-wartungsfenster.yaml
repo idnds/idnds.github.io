@@ -1,0 +1,36 @@
+id: maintenance-2026-05-21-lpc-prod-geplantes-wartungsfenster
+slug: maintenance-2026-05-21-lpc-prod-geplantes-wartungsfenster
+typeId: maintenance
+vendorId: idnds
+productIds:
+  - lpc-prod
+
+title: "Geplante Wartung - Lieblingsplatz.cloud (Produktiv)"
+publishedAt: "2026-03-24T13:14:15+01:00"
+# updatedAt: ""  # optional -- nur bei nachtraeglicher Aktualisierung setzen
+
+eventDate: "2026-05-21T18:00:00+01:00"
+endDate: "2026-05-21T20:00:00+01:00"
+status: active
+
+summaryMd: |
+  Die Lieblingsplatz.cloud-Produktivumgebung wird routinemäßig quartalsweise gewartet. 
+  Wartungen finden jeweils am dritten Donnerstag der Monate Februar, Mai, August und November ab 18 Uhr statt.
+detailsMd: |
+  Die Wartung der Produktivumgebung umfasst die folgenden Arbeiten:
+  - Operator-Update auf den Stand der Testumgebung
+  - Auto-Update der Umgebungen mit Versionierung v2X-X-latest
+  - Plattform-Updates
+  - ELO XC Updates
+
+impact:
+  - limited-availability
+# downtime, limited-availability, action-required
+
+# customerActionMd: |  # optional -- nur wenn impact action-required enthaelt
+#   TODO: Konkrete Handlungshinweise fuer Kunden.
+
+relations: []
+# relations:
+#   - type: relates-to  # relates-to | resolves | follow-up-to | supersedes
+#     eventId: ""

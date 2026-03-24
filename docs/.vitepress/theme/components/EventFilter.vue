@@ -16,7 +16,7 @@
       >
         <option value="">Alle Auswirkungen</option>
         <option value="downtime">Downtime</option>
-        <option value="limited-availability">Eingeschraenkte Verfuegbarkeit</option>
+        <option value="limited-availability">Einschränkungen</option>
         <option value="action-required">Handlungsbedarf</option>
       </select>
 

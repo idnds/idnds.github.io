@@ -69,7 +69,7 @@ const status = computed(() =>
 
 const impactLabel = {
   "downtime":             "Downtime",
-  "limited-availability": "Eingeschraenkt",
+  "limited-availability": "Einschränkungen",
   "action-required":      "Handlungsbedarf",
 };
 
