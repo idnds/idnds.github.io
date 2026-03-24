@@ -20,7 +20,7 @@ detailsMd: |
   2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest
   3. Funktionstest
 impact:
-  - downtime # weitere: limited-availability, action-required
+  - limited-availability # weitere: downtime, action-required
 # customerActionMd: |  # optional -- nur wenn impact action-required enthaelt
 #   TODO: Konkrete Handlungshinweise fuer Kunden.
 relations:
