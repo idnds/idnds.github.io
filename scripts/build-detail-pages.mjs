@@ -80,7 +80,7 @@ for (const event of events) {
     add("| **Hersteller** | " + (event.vendor?.name ?? event.vendorId) + " |");
     add("| **Produkte** | " +
         (event.products?.map((p) => p.name).join(", ") || event.productIds.join(", ")) + " |");
-    add("| **Veroeffentlicht** | " + formatDateTime(event.publishedAt) + " |");
+    add("| **Veröffentlicht** | " + formatDateTime(event.publishedAt) + " |");
     if (event.updatedAt) {
         add("| **Zuletzt aktualisiert** | " + formatDateTime(event.updatedAt) + " |");
     }
