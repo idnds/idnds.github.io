@@ -8,3 +8,4 @@ dist/
 # Vite/VitePress Cache
 docs/.vitepress/cache/
 data/_generated/
+docs/public/data/_generated/
