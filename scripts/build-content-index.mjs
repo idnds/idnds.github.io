@@ -48,9 +48,15 @@ for (const dir of contentDirs) {
     }
 }
 
-allEvents.sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-);
+function getSortTimestamp(event) {
+    if (event.typeId === "maintenance") {
+        return new Date(event.eventDate ?? event.publishedAt ?? 0).getTime();
+    }
+
+    return new Date(event.publishedAt ?? event.eventDate ?? 0).getTime();
+}
+
+allEvents.sort((a, b) => getSortTimestamp(b) - getSortTimestamp(a));
 
 function writeIndex(filename, data) {
     fs.mkdirSync(path.dirname(filename), { recursive: true });
