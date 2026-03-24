@@ -5,33 +5,61 @@
     <link>https://lieblingsplatz.cloud</link>
     <description>Wartungen, CVEs, Releases und Ankündigungen</description>
     <language>de</language>
-    <lastBuildDate>Tue, 24 Mar 2026 03:03:38 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 24 Mar 2026 15:38:21 GMT</lastBuildDate>
     <atom:link href="https://lieblingsplatz.cloud/feed.xml" rel="self" type="application/rss+xml" />
 
   <item>
-    <title>Kritische OpenSSL-Schwachstelle (CVE-2025-15467) im ELO DocXtractor 6</title>
-    <link>https://lieblingsplatz.cloud/events/security-2026-03-23-cve-2025-15467</link>
-    <guid isPermaLink="true">https://lieblingsplatz.cloud/events/security-2026-03-23-cve-2025-15467</guid>
-    <pubDate>Mon, 23 Mar 2026 19:11:14 GMT</pubDate>
-    <description>In der Drittkomponente OpenSSL des ELO DocXtractor wurde eine kritische Sicherheitslücke (CVE-2025-15467) entdeckt. 
-Die Schwachstelle weist einen CVSS-Score von 9.3 auf und kann durch manipulierte Daten ausgenutzt werden. 
-Ein Sicherheitsupdate steht zur Verfügung und sollte umgehend installiert werden.
-</description>
-    <category>security</category>
-  </item>
-  <item>
-    <title>TODO: Titel eintragen</title>
-    <link>https://lieblingsplatz.cloud/events/maintenance-2026-03-23-test-eintrag</link>
-    <guid isPermaLink="true">https://lieblingsplatz.cloud/events/maintenance-2026-03-23-test-eintrag</guid>
-    <pubDate>Mon, 23 Mar 2026 17:54:50 GMT</pubDate>
-    <description>TODO: Kurze Zusammenfassung.
+    <title>Geplante Wartung - Lieblingsplatz.cloud (Test)</title>
+    <link>https://lieblingsplatz.cloud/news/maintenance-2026-04-17-lpc-test-geplantes-wartungsfenster</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/maintenance-2026-04-17-lpc-test-geplantes-wartungsfenster</guid>
+    <pubDate>Tue, 24 Mar 2026 12:14:15 GMT</pubDate>
+    <description>Die Lieblingsplatz.cloud-Testumgebung wird routinemäßig quartalsweise gewartet. 
+Wartungen finden jeweils am dritten Donnerstag der Monate Januar, April, Juli und Oktober ab 18 Uhr statt.
 </description>
     <category>maintenance</category>
   </item>
   <item>
+    <title>Geplante Wartung - Lieblingsplatz.cloud (Produktiv)</title>
+    <link>https://lieblingsplatz.cloud/news/maintenance-2026-05-21-lpc-prod-geplantes-wartungsfenster</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/maintenance-2026-05-21-lpc-prod-geplantes-wartungsfenster</guid>
+    <pubDate>Tue, 24 Mar 2026 12:14:15 GMT</pubDate>
+    <description>Die Lieblingsplatz.cloud-Produktivumgebung wird routinemäßig quartalsweise gewartet. 
+Wartungen finden jeweils am dritten Donnerstag der Monate Februar, Mai, August und November ab 18 Uhr statt.
+</description>
+    <category>maintenance</category>
+  </item>
+  <item>
+    <title>Kritische OpenSSL-Schwachstelle (CVE-2025-15467) im ELO DocXtractor 6</title>
+    <link>https://lieblingsplatz.cloud/news/security-2026-03-23-elo-docx-6-openssl-cve-2025-15467</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/security-2026-03-23-elo-docx-6-openssl-cve-2025-15467</guid>
+    <pubDate>Mon, 23 Mar 2026 19:11:14 GMT</pubDate>
+    <description>In der Drittkomponente OpenSSL des ELO DocXtractor 6 wurde eine kritische Sicherheitslücke (CVE-2025-15467) entdeckt. 
+Betroffene Versionen sollten umgehend aktualisiert werden, um Exploits zu verhindern.
+</description>
+    <category>security</category>
+  </item>
+  <item>
+    <title>Wartungsfenster: Kemp LoadMaster Sicherheitsupdates</title>
+    <link>https://lieblingsplatz.cloud/news/maintenance-2026-03-21-loadmaster-security-patch</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/maintenance-2026-03-21-loadmaster-security-patch</guid>
+    <pubDate>Thu, 19 Mar 2026 11:10:00 GMT</pubDate>
+    <description>Geplantes Wartungsfenster zur Behebung kritischer Sicherheitslücken (CVE-2026-3517, CVE-2026-3518, CVE-2026-3519, CVE-2026-4048, CVE-2026-21876) in Kemp LoadMaster. Das System ist während der Arbeiten kurzzeitig nicht verfügbar.
+</description>
+    <category>maintenance</category>
+  </item>
+  <item>
+    <title>Kemp LoadMaster: Serie von hochkritischen Sicherheitslücken</title>
+    <link>https://lieblingsplatz.cloud/news/security-2026-03-19-loadmaster-series-of-high-severity-vulnerabilities</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/security-2026-03-19-loadmaster-series-of-high-severity-vulnerabilities</guid>
+    <pubDate>Thu, 19 Mar 2026 11:05:41 GMT</pubDate>
+    <description>Kemp hat eine Serie von fünf hochkritischen Sicherheitslücken in LoadMaster bestätigt. Betroffen sind GA-Versionen bis v7.2.62.2 und LTSF-Versionen bis v7.2.54.16. Gepatchte Versionen stehen bereits zur Verfügung.
+</description>
+    <category>security</category>
+  </item>
+  <item>
     <title>ELO Cloud Kubernetes Operator 1.18.0</title>
-    <link>https://lieblingsplatz.cloud/events/release-2026-03-04-elo-operator-1-18-0</link>
-    <guid isPermaLink="true">https://lieblingsplatz.cloud/events/release-2026-03-04-elo-operator-1-18-0</guid>
+    <link>https://lieblingsplatz.cloud/news/release-2026-03-04-elo-operator-1-18-0</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/release-2026-03-04-elo-operator-1-18-0</guid>
     <pubDate>Tue, 03 Mar 2026 23:00:00 GMT</pubDate>
     <description>Release des ELO Cloud Kubernetes Operators mit Verbesserungen an der StartupProbe,
 Performance-Optimierungen und Unterstuetzung fuer Priority Classes.
@@ -39,18 +67,18 @@ Performance-Optimierungen und Unterstuetzung fuer Priority Classes.
     <category>release</category>
   </item>
   <item>
-    <title>Geplantes Wartungsfenster für die Lieblingsplatz.cloud (Testumgebung)</title>
-    <link>https://lieblingsplatz.cloud/events/maintenance-2026-03-15-lpc-test-operator-update</link>
-    <guid isPermaLink="true">https://lieblingsplatz.cloud/events/maintenance-2026-03-15-lpc-test-operator-update</guid>
+    <title>Geplante Wartung Lieblingsplatz.cloud (Testumgebung)</title>
+    <link>https://lieblingsplatz.cloud/news/maintenance-2026-03-15-lpc-test-operator-update</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/maintenance-2026-03-15-lpc-test-operator-update</guid>
     <pubDate>Sun, 01 Mar 2026 09:00:00 GMT</pubDate>
     <description>Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.
 </description>
     <category>maintenance</category>
   </item>
   <item>
-    <title>Geplantes Wartungsfenster für die Lieblingsplatz.cloud (Produktionsumgebung)</title>
-    <link>https://lieblingsplatz.cloud/events/maintenance-2026-03-24-lpc-prod-operator-update</link>
-    <guid isPermaLink="true">https://lieblingsplatz.cloud/events/maintenance-2026-03-24-lpc-prod-operator-update</guid>
+    <title>Geplante Wartung Lieblingsplatz.cloud (Produktivumgebung)</title>
+    <link>https://lieblingsplatz.cloud/news/maintenance-2026-03-24-lpc-prod-operator-update</link>
+    <guid isPermaLink="true">https://lieblingsplatz.cloud/news/maintenance-2026-03-24-lpc-prod-operator-update</guid>
     <pubDate>Sun, 01 Mar 2026 09:00:00 GMT</pubDate>
     <description>Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.
 </description>
