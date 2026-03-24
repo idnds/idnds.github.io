@@ -6,13 +6,25 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "docs:serve": "vitepress serve docs",
+    "validate:master": "node scripts/validate-master-data.mjs",
+    "validate:content": "node scripts/validate-content.mjs",
+    "build:index": "node scripts/build-content-index.mjs",
+    "build:feed": "node scripts/build-feed.mjs",
+    "new:event": "node scripts/scaffold-event.mjs",
+    "generate:schemas": "node scripts/generate-json-schemas.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "js-yaml": "^4.1.1",
     "vitepress": "^1.6.4",
-    "vue": "^3.5.26"
+    "vue": "^3.5.26",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "pagefind": "^1.4.0"
   }
 }

@@ -1,0 +1,7 @@
+---
+title: Suche
+---
+
+# Suche
+
+<PagefindSearch />

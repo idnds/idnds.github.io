@@ -1,0 +1,261 @@
+[
+  {
+    "id": "maintenance-2026-03-24-lpc-prod-operator-update",
+    "slug": "maintenance-2026-03-24-lpc-prod-operator-update",
+    "typeId": "maintenance",
+    "vendorId": "idnds",
+    "productIds": [
+      "lpc-prod",
+      "elo-ecm-23",
+      "elo-ecm-25"
+    ],
+    "title": "Geplantes Wartungsfenster für die Lieblingsplatz.cloud (Produktionsumgebung)",
+    "publishedAt": "2026-03-01T10:00:00+01:00",
+    "summaryMd": "Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.\n",
+    "detailsMd": "## Ablauf\n\n1. Aktualisierung des ELO Operators auf Version 1.18.0\n2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest\n3. Funktionstest\n",
+    "relatedEventIds": [
+      "release-2026-03-04-elo-operator-1-18-0"
+    ],
+    "status": "active",
+    "eventDate": "2026-03-24T20:00:00+01:00",
+    "endDate": "2026-03-24T22:00:00+01:00",
+    "vendor": {
+      "vendorId": "idnds",
+      "name": "id-netsolutions Digital Solutions GmbH",
+      "website": "https://idnds.de",
+      "description": "Consulting und Service rund um die ELO ECM Suite. Betreiber der Lieblingsplatz.cloud (ELO ECM Suite als Software as a Service).",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "lpc-prod",
+        "vendorId": "idnds",
+        "name": "Lieblingsplatz.cloud (Produktiv)",
+        "category": "saas",
+        "description": "ELO ECM Suite als Software as a Service in der Partner Managed Cloud der id-netsolutions Digital Solutions GmbH",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-23",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 23",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-25",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 25",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "maintenance",
+      "name": "Wartung",
+      "group": "operations",
+      "color": "#3b82f6",
+      "description": "Geplante Wartungsfenster mit möglicher Downtime"
+    }
+  },
+  {
+    "id": "security-2026-03-23-cve-2025-15467",
+    "slug": "security-2026-03-23-cve-2025-15467",
+    "typeId": "security",
+    "vendorId": "elo",
+    "productIds": [
+      "elo-docx-6"
+    ],
+    "title": "Kritische OpenSSL-Schwachstelle (CVE-2025-15467) im ELO DocXtractor 6",
+    "publishedAt": "2026-03-23T20:11:14+01:00",
+    "summaryMd": "In der Drittkomponente OpenSSL des ELO DocXtractor wurde eine kritische Sicherheitslücke (CVE-2025-15467) entdeckt. \nDie Schwachstelle weist einen CVSS-Score von 9.3 auf und kann durch manipulierte Daten ausgenutzt werden. \nEin Sicherheitsupdate steht zur Verfügung und sollte umgehend installiert werden.\n",
+    "detailsMd": "In der im ELO DocXtractor eingesetzten Drittkomponente OpenSSL wurde eine sicherheitsrelevante Schwachstelle identifiziert. \nDie Sicherheitslücke ist unter der Referenz CVE-2025-15467 dokumentiert und wurde mit einer Kritikalität von 9.3 (kritisch) bewertet.\n\nWeitere Informationen:\nhttps://www.cve.org/CVERecord?id=CVE-2025-15467\n\n## Beschreibung\nDas Parsen von CMS AuthEnvelopedData- oder EnvelopedData-Nachrichten mit böswillig präparierten AEAD-Parametern kann \neinen Stack Buffer Overflow auslösen.\n\n## Betroffene Versionen\n- Version 6 SP0\n- Version 6 SP02\n- Version 6 SP03\n\n## Betroffene Komponenten\n- SPL-Funktion HTTP (für SSL-Verbindungen)\n- Analysedienst mit HTTPS\n- CORBA-Verschlüsselung in ELO DocXtractor\n\n## Betroffene Dateien\n- <%SF_ROOT_DIR%>\\System\\bin\\libcrypto-3-x64.dll\n- <%SF_ROOT_DIR%>\\System\\bin\\libssl-3-x64.dll\n- <%SF_ROOT_DIR%>\\System\\etc\\openSSL\\openssl.exe\n\n## Installation des Sicherheitsupdates\n1. Laden Sie das Sicherheitsupdate herunter:\n   https://supportweb.elo.com/de-de/ergaenzende-module/elo-docxtractor/downloads.html\n\n2. Entpacken Sie den Inhalt.\n\n3. Ersetzen Sie die folgenden Dateien:\n\n   - libcrypto-3-x64.dll  \n     Quelle: \\System\\bin\\libcrypto-3-x64.dll (Update)  \n     Ziel: <%SF_ROOT_DIR%>\\System\\bin\\libcrypto-3-x64.dll  \n\n   - libssl-3-x64.dll  \n     Quelle: \\System\\bin\\libssl-3-x64.dll (Update)  \n     Ziel: <%SF_ROOT_DIR%>\\System\\bin\\libssl-3-x64.dll  \n\n   - openssl.exe  \n     Quelle: \\System\\etc\\openSSL\\openssl.exe (Update)  \n     Ziel: <%SF_ROOT_DIR%>\\System\\etc\\openSSL\\openssl.exe  \n\nEs wird dringend empfohlen, das Sicherheitsupdate zeitnah einzuspielen, um die Sicherheit und Stabilität der Installation zu gewährleisten.\n",
+    "relatedEventIds": [],
+    "cveIds": [
+      "CVE-2025-15467"
+    ],
+    "severity": "high",
+    "affectedVersions": [],
+    "fixedVersion": "",
+    "vendor": {
+      "vendorId": "elo",
+      "name": "ELO Digital Office GmbH",
+      "website": "https://www.elo.com/",
+      "description": "Hersteller der ELO ECM Suite, einer Software für Enterprise Content Management (ECM) und Dokumentenmanagement.",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "elo-docx-6",
+        "vendorId": "elo",
+        "name": "ELO DocXtrator 6",
+        "category": "ecm",
+        "description": "Automatisierte Klassifizierung und Verarbeitung von eingehenden Dokumenten",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "security",
+      "name": "Security / CVE",
+      "group": "security",
+      "color": "#ef4444",
+      "description": "Sicherheitslücken und CVE-Meldungen"
+    }
+  },
+  {
+    "id": "maintenance-2026-03-23-test-eintrag",
+    "slug": "maintenance-2026-03-23-test-eintrag",
+    "typeId": "maintenance",
+    "vendorId": "elo",
+    "productIds": [
+      "elo-ecm-25"
+    ],
+    "title": "TODO: Titel eintragen",
+    "publishedAt": "2026-03-23T18:54:50+01:00",
+    "summaryMd": "TODO: Kurze Zusammenfassung.\n",
+    "detailsMd": "TODO: Ausfuehrliche Beschreibung.\n",
+    "relatedEventIds": [],
+    "status": "active",
+    "eventDate": "2026-03-23T20:00:00+01:00",
+    "endDate": "2026-03-23T22:00:00+01:00",
+    "downtimeMinutes": 30,
+    "vendor": {
+      "vendorId": "elo",
+      "name": "ELO Digital Office GmbH",
+      "website": "https://www.elo.com/",
+      "description": "Hersteller der ELO ECM Suite, einer Software für Enterprise Content Management (ECM) und Dokumentenmanagement.",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "elo-ecm-25",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 25",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "maintenance",
+      "name": "Wartung",
+      "group": "operations",
+      "color": "#3b82f6",
+      "description": "Geplante Wartungsfenster mit möglicher Downtime"
+    }
+  },
+  {
+    "id": "maintenance-2026-03-15-lpc-test-operator-update",
+    "slug": "maintenance-2026-03-15-lpc-test-operator-update",
+    "typeId": "maintenance",
+    "vendorId": "idnds",
+    "productIds": [
+      "lpc-test",
+      "elo-ecm-23",
+      "elo-ecm-25"
+    ],
+    "title": "Geplantes Wartungsfenster für die Lieblingsplatz.cloud (Testumgebung)",
+    "publishedAt": "2026-03-01T10:00:00+01:00",
+    "summaryMd": "Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.\n",
+    "detailsMd": "## Ablauf\n\n1. Aktualisierung des ELO Operators auf Version 1.18.0\n2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest undv25-0-latest\n3. Funktionstest\n",
+    "relatedEventIds": [
+      "release-2026-03-04-elo-operator-1-18-0"
+    ],
+    "status": "active",
+    "eventDate": "2026-03-15T20:00:00+01:00",
+    "endDate": "2026-03-15T22:00:00+01:00",
+    "vendor": {
+      "vendorId": "idnds",
+      "name": "id-netsolutions Digital Solutions GmbH",
+      "website": "https://idnds.de",
+      "description": "Consulting und Service rund um die ELO ECM Suite. Betreiber der Lieblingsplatz.cloud (ELO ECM Suite als Software as a Service).",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "lpc-test",
+        "vendorId": "idnds",
+        "name": "Lieblingsplatz.cloud (Test)",
+        "category": "saas",
+        "description": "ELO ECM Suite als Software as a Service in der Partner Managed Cloud der id-netsolutions Digital Solutions GmbH",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-23",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 23",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-25",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 25",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "maintenance",
+      "name": "Wartung",
+      "group": "operations",
+      "color": "#3b82f6",
+      "description": "Geplante Wartungsfenster mit möglicher Downtime"
+    }
+  },
+  {
+    "id": "release-2026-03-04-elo-operator-1-18-0",
+    "slug": "release-2026-03-04-elo-operator-1-18-0",
+    "typeId": "release",
+    "vendorId": "elo",
+    "productIds": [
+      "lpc-test",
+      "lpc-prod"
+    ],
+    "title": "ELO Cloud Kubernetes Operator 1.18.0",
+    "publishedAt": "2026-03-04T00:00:00+01:00",
+    "summaryMd": "Release des ELO Cloud Kubernetes Operators mit Verbesserungen an der StartupProbe,\nPerformance-Optimierungen und Unterstuetzung fuer Priority Classes.\n",
+    "detailsMd": "## Fixes\n\n**ECLKOP-19** -- ES_JAVA_OPTS Umgebungsvariable wurde durch den Standardwert fuer\nSearch Nodes ueberschrieben. Dieses Verhalten ist korrigiert.\n\n**ECLKOP-20** -- Die StartupProbe im Server StatefulSet prueft nun ausschliesslich\nob der Indexserver erreichbar ist. Dadurch koennen sich alle anderen Services korrekt\ninitialisieren und verbinden. Die Aenderung gilt fuer ELO v25-0.6 und neuere Versionen\nsowie fuer v23-0.27 bis v23-1.0.\n\n## Features\n\n**ECLKOP-9** -- Unterstuetzung fuer Priority Classes. Ermoeglicht die Steuerung der\nScheduling-Prioritaet von Pods im Kubernetes-Cluster.\n\n**ECLKOP-10** -- Priority Class fuer das Operator Deployment konfigurierbar\n(Teilimplementierung von ECLKOP-9).\n\n**ECLKOP-11** -- Priority Class Einstellungen fuer ELO Services integriert\n(Teilimplementierung von ECLKOP-9).\n\n**ECLKOP-17** -- Performance-Verbesserung: Diff-Generierung fuer Base64-Strings wird\nuebersprungen.\n\n**ECLKOP-6** -- Messung der Dauer einzelner Abschnitte des Reconciliation-Prozesses\nzur Identifikation von Performance-Engpaessen. Aktivierbar ueber erhoehtes Log-Level\nbeim Start des Operators: `--zap-log-level=2`\n",
+    "relatedEventIds": [
+      "maintenance-2026-03-15-lpc-test-operator-update"
+    ],
+    "version": "1.18.0",
+    "changelogUrl": "https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-18-0",
+    "vendor": {
+      "vendorId": "elo",
+      "name": "ELO Digital Office GmbH",
+      "website": "https://www.elo.com/",
+      "description": "Hersteller der ELO ECM Suite, einer Software für Enterprise Content Management (ECM) und Dokumentenmanagement.",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "lpc-test",
+        "vendorId": "idnds",
+        "name": "Lieblingsplatz.cloud (Test)",
+        "category": "saas",
+        "description": "ELO ECM Suite als Software as a Service in der Partner Managed Cloud der id-netsolutions Digital Solutions GmbH",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "lpc-prod",
+        "vendorId": "idnds",
+        "name": "Lieblingsplatz.cloud (Produktiv)",
+        "category": "saas",
+        "description": "ELO ECM Suite als Software as a Service in der Partner Managed Cloud der id-netsolutions Digital Solutions GmbH",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "release",
+      "name": "Release",
+      "group": "product",
+      "color": "#22c55e",
+      "description": "Neue Produktversionen und Updates"
+    }
+  }
+]

@@ -1,0 +1,166 @@
+[
+  {
+    "id": "maintenance-2026-03-24-lpc-prod-operator-update",
+    "slug": "maintenance-2026-03-24-lpc-prod-operator-update",
+    "typeId": "maintenance",
+    "vendorId": "idnds",
+    "productIds": [
+      "lpc-prod",
+      "elo-ecm-23",
+      "elo-ecm-25"
+    ],
+    "title": "Geplantes Wartungsfenster für die Lieblingsplatz.cloud (Produktionsumgebung)",
+    "publishedAt": "2026-03-01T10:00:00+01:00",
+    "summaryMd": "Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.\n",
+    "detailsMd": "## Ablauf\n\n1. Aktualisierung des ELO Operators auf Version 1.18.0\n2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest\n3. Funktionstest\n",
+    "relatedEventIds": [
+      "release-2026-03-04-elo-operator-1-18-0"
+    ],
+    "status": "active",
+    "eventDate": "2026-03-24T20:00:00+01:00",
+    "endDate": "2026-03-24T22:00:00+01:00",
+    "vendor": {
+      "vendorId": "idnds",
+      "name": "id-netsolutions Digital Solutions GmbH",
+      "website": "https://idnds.de",
+      "description": "Consulting und Service rund um die ELO ECM Suite. Betreiber der Lieblingsplatz.cloud (ELO ECM Suite als Software as a Service).",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "lpc-prod",
+        "vendorId": "idnds",
+        "name": "Lieblingsplatz.cloud (Produktiv)",
+        "category": "saas",
+        "description": "ELO ECM Suite als Software as a Service in der Partner Managed Cloud der id-netsolutions Digital Solutions GmbH",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-23",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 23",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-25",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 25",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "maintenance",
+      "name": "Wartung",
+      "group": "operations",
+      "color": "#3b82f6",
+      "description": "Geplante Wartungsfenster mit möglicher Downtime"
+    }
+  },
+  {
+    "id": "maintenance-2026-03-23-test-eintrag",
+    "slug": "maintenance-2026-03-23-test-eintrag",
+    "typeId": "maintenance",
+    "vendorId": "elo",
+    "productIds": [
+      "elo-ecm-25"
+    ],
+    "title": "TODO: Titel eintragen",
+    "publishedAt": "2026-03-23T18:54:50+01:00",
+    "summaryMd": "TODO: Kurze Zusammenfassung.\n",
+    "detailsMd": "TODO: Ausfuehrliche Beschreibung.\n",
+    "relatedEventIds": [],
+    "status": "active",
+    "eventDate": "2026-03-23T20:00:00+01:00",
+    "endDate": "2026-03-23T22:00:00+01:00",
+    "downtimeMinutes": 30,
+    "vendor": {
+      "vendorId": "elo",
+      "name": "ELO Digital Office GmbH",
+      "website": "https://www.elo.com/",
+      "description": "Hersteller der ELO ECM Suite, einer Software für Enterprise Content Management (ECM) und Dokumentenmanagement.",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "elo-ecm-25",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 25",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "maintenance",
+      "name": "Wartung",
+      "group": "operations",
+      "color": "#3b82f6",
+      "description": "Geplante Wartungsfenster mit möglicher Downtime"
+    }
+  },
+  {
+    "id": "maintenance-2026-03-15-lpc-test-operator-update",
+    "slug": "maintenance-2026-03-15-lpc-test-operator-update",
+    "typeId": "maintenance",
+    "vendorId": "idnds",
+    "productIds": [
+      "lpc-test",
+      "elo-ecm-23",
+      "elo-ecm-25"
+    ],
+    "title": "Geplantes Wartungsfenster für die Lieblingsplatz.cloud (Testumgebung)",
+    "publishedAt": "2026-03-01T10:00:00+01:00",
+    "summaryMd": "Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.\n",
+    "detailsMd": "## Ablauf\n\n1. Aktualisierung des ELO Operators auf Version 1.18.0\n2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest undv25-0-latest\n3. Funktionstest\n",
+    "relatedEventIds": [
+      "release-2026-03-04-elo-operator-1-18-0"
+    ],
+    "status": "active",
+    "eventDate": "2026-03-15T20:00:00+01:00",
+    "endDate": "2026-03-15T22:00:00+01:00",
+    "vendor": {
+      "vendorId": "idnds",
+      "name": "id-netsolutions Digital Solutions GmbH",
+      "website": "https://idnds.de",
+      "description": "Consulting und Service rund um die ELO ECM Suite. Betreiber der Lieblingsplatz.cloud (ELO ECM Suite als Software as a Service).",
+      "deprecatedAt": null
+    },
+    "products": [
+      {
+        "productId": "lpc-test",
+        "vendorId": "idnds",
+        "name": "Lieblingsplatz.cloud (Test)",
+        "category": "saas",
+        "description": "ELO ECM Suite als Software as a Service in der Partner Managed Cloud der id-netsolutions Digital Solutions GmbH",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-23",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 23",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      },
+      {
+        "productId": "elo-ecm-25",
+        "vendorId": "elo",
+        "name": "ELO ECM Suite 25",
+        "category": "ecm",
+        "description": "Enterprise Content Management Suite",
+        "deprecatedAt": null
+      }
+    ],
+    "eventType": {
+      "typeId": "maintenance",
+      "name": "Wartung",
+      "group": "operations",
+      "color": "#3b82f6",
+      "description": "Geplante Wartungsfenster mit möglicher Downtime"
+    }
+  }
+]

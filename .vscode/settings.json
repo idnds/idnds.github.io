@@ -1,0 +1,14 @@
+{
+  "yaml.schemas": {
+    "./schemas/vendor.schema.json": "data/master/vendors/*.yaml",
+    "./schemas/product.schema.json": "data/master/products/*.yaml",
+    "./schemas/event-type.schema.json": "data/master/event-types/*.yaml",
+    "./schemas/maintenance.schema.json": "data/content/maintenance/*/*.yaml",
+    "./schemas/security.schema.json": "data/content/security/*/*.yaml",
+    "./schemas/release.schema.json": "data/content/release/*/*.yaml",
+    "./schemas/announcement.schema.json": "data/content/announcement/*/*.yaml"
+  },
+  "yaml.validate": true,
+  "yaml.format.enable": true,
+  "editor.formatOnSave": true
+}

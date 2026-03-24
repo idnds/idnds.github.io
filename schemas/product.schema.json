@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "productId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "vendorId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "category": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "deprecatedAt": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "productId",
+    "vendorId",
+    "name",
+    "deprecatedAt"
+  ],
+  "additionalProperties": false
+}

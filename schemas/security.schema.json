@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slug": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "typeId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "vendorId": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "productIds": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9-]+$"
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3
+    },
+    "publishedAt": {
+      "type": "string"
+    },
+    "summaryMd": {
+      "type": "string",
+      "minLength": 1
+    },
+    "detailsMd": {
+      "default": "",
+      "type": "string"
+    },
+    "relatedEventIds": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cveIds": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^CVE-\\d{4}-\\d+$"
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "affectedVersions": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fixedVersion": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "slug",
+    "typeId",
+    "vendorId",
+    "productIds",
+    "title",
+    "publishedAt",
+    "summaryMd",
+    "cveIds",
+    "affectedVersions"
+  ],
+  "additionalProperties": false
+}

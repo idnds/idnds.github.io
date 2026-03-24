@@ -1,0 +1,6 @@
+productId: windows-server
+vendorId: microsoft
+name: Windows Server
+category: operating-system
+description: Serverbetriebssystem von Microsoft
+deprecatedAt: null

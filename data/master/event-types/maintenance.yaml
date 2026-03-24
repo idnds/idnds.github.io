@@ -1,0 +1,5 @@
+typeId: maintenance
+name: Wartung
+group: operations
+color: "#3b82f6"
+description: Geplante Wartungsfenster mit möglicher Downtime

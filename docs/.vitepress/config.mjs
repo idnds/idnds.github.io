@@ -14,12 +14,14 @@ export default defineConfig({
     nav: [
       { text: 'Erste Schritte', link: '/erste-schritte/' },
       { text: 'Gestaltung', link: '/gestaltung/' },
-      { text: 'Wissen & Praxis',
+      {
+        text: 'Wissen & Praxis',
         items: [
           { text: 'Wissen', link: '/wissen' },
           { text: 'Praxis', link: '/praxis' }
         ]
       },
+      { text: 'Ankündigungen', link: '/news/' },
       { text: 'Über uns', link: '/ueber-uns/' },
       {
         text: 'Rechtliches',
@@ -30,7 +32,7 @@ export default defineConfig({
       }
     ],
     outline: { label: 'Auf dieser Seite' },
-      docFooter: {
+    docFooter: {
       prev: 'Vorherige Seite',
       next: 'Nächste Seite'
     },
