@@ -19,5 +19,7 @@ detailsMd: |
   1. Aktualisierung des ELO Operators auf Version 1.18.0
   2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest
   3. Funktionstest
-relatedEventIds:
-  - release-2026-03-04-elo-operator-1-18-0
+impact: []
+relations:
+  - type: relates-to
+    eventId: release-2026-03-04-elo-operator-1-18-0

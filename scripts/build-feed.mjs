@@ -2,7 +2,7 @@ import fs from "node:fs";
 import { readYamlFiles } from "./utils.mjs";
 import { getSchemaForType } from "./schemas/content.mjs";
 
-const contentDirs = ["maintenance", "security", "releases", "announcements"];
+const contentDirs = ["maintenance", "security", "release", "announcement"];
 const events = [];
 
 for (const dir of contentDirs) {
@@ -26,16 +26,24 @@ function escapeXml(str) {
         .replace(/"/g, "&quot;");
 }
 
-const items = latest.map((e) =>
-    "\n  <item>" +
-    "\n    <title>" + escapeXml(e.title) + "</title>" +
-    "\n    <link>" + BASE_URL + "/events/" + escapeXml(e.slug) + "</link>" +
-    "\n    <guid isPermaLink=\"true\">" + BASE_URL + "/events/" + escapeXml(e.slug) + "</guid>" +
-    "\n    <pubDate>" + new Date(e.publishedAt).toUTCString() + "</pubDate>" +
-    "\n    <description>" + escapeXml(e.summaryMd) + "</description>" +
-    "\n    <category>" + escapeXml(e.typeId) + "</category>" +
-    "\n  </item>"
-).join("");
+const items = latest.map((e) => {
+    // Kundenhandlungsbedarf im Titel kennzeichnen
+    const titlePrefix = e.isCustomerActionRequired ? "[Handlungsbedarf] " : "";
+
+    return (
+        "\n  <item>" +
+        "\n    <title>" + escapeXml(titlePrefix + e.title) + "</title>" +
+        "\n    <link>" + BASE_URL + "/news/" + escapeXml(e.slug) + "</link>" +
+        "\n    <guid isPermaLink=\"true\">" + BASE_URL + "/news/" + escapeXml(e.slug) + "</guid>" +
+        "\n    <pubDate>" + new Date(e.publishedAt).toUTCString() + "</pubDate>" +
+        (e.updatedAt
+            ? "\n    <lastBuildDate>" + new Date(e.updatedAt).toUTCString() + "</lastBuildDate>"
+            : "") +
+        "\n    <description>" + escapeXml(e.summaryMd) + "</description>" +
+        "\n    <category>" + escapeXml(e.typeId) + "</category>" +
+        "\n  </item>"
+    );
+}).join("");
 
 const rss =
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

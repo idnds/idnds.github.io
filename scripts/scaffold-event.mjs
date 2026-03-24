@@ -4,20 +4,12 @@ import path from "node:path";
 import rl from "node:readline";
 import yaml from "js-yaml";
 
-// ─────────────────────────────────────────────────────────────
-// Readline-Helfer
-// ─────────────────────────────────────────────────────────────
-
 function prompt(question) {
     const iface = rl.createInterface({ input: process.stdin, output: process.stdout });
     return new Promise(resolve =>
         iface.question(question, ans => { iface.close(); resolve(ans.trim()); })
     );
 }
-
-// ─────────────────────────────────────────────────────────────
-// Masterdaten laden
-// ─────────────────────────────────────────────────────────────
 
 function readYamlDir(dir) {
     if (!fs.existsSync(dir)) return [];
@@ -37,10 +29,6 @@ const products = readYamlDir("data/master/products");
 const vendorsMap = new Map(vendors.map(v => [v.vendorId, v]));
 const productsMap = new Map(products.map(p => [p.productId, p]));
 
-// ─────────────────────────────────────────────────────────────
-// Fuzzy-Suche auf ID und Name
-// ─────────────────────────────────────────────────────────────
-
 function fuzzy(items, query, idKey, nameKey) {
     const q = query.toLowerCase();
     return items.filter(item =>
@@ -48,10 +36,6 @@ function fuzzy(items, query, idKey, nameKey) {
         String(item[nameKey] ?? "").toLowerCase().includes(q)
     );
 }
-
-// ─────────────────────────────────────────────────────────────
-// Interaktive Auswahl
-// ─────────────────────────────────────────────────────────────
 
 async function selectOrInput(label, items, idKey, nameKey) {
     console.log("\n" + label);
@@ -86,13 +70,6 @@ async function selectOrInput(label, items, idKey, nameKey) {
     }
 }
 
-// ─────────────────────────────────────────────────────────────
-// Typ-Mappings
-//
-// Ordner:  Verzeichnis unter data/content/
-// typeId:  Wert im YAML-Feld typeId, muss in event-types/ existieren
-// ─────────────────────────────────────────────────────────────
-
 const FOLDER = {
     maintenance: "maintenance",
     security: "security",
@@ -109,19 +86,11 @@ const TYPE_ID = {
 
 const VALID_TYPES = Object.keys(FOLDER);
 
-// ─────────────────────────────────────────────────────────────
-// CLI-Argumente
-// ─────────────────────────────────────────────────────────────
-
 const args = process.argv.slice(2);
 function getArg(name) {
     const idx = args.indexOf("--" + name);
     return idx !== -1 ? args[idx + 1] : null;
 }
-
-// ─────────────────────────────────────────────────────────────
-// Hauptlogik
-// ─────────────────────────────────────────────────────────────
 
 async function main() {
     console.log("");
@@ -148,8 +117,7 @@ async function main() {
 
     // ── 2. Produkt ───────────────────────────────────────────
     const productId = await selectOrInput(
-        "Produkt auswaehlen:",
-        products, "productId", "name"
+        "Produkt auswaehlen:", products, "productId", "name"
     );
 
     if (!productsMap.has(productId)) {
@@ -232,6 +200,7 @@ async function main() {
     gap();
     todo("title", "Titel eintragen");
     add("publishedAt: \"" + isoNow + "\"");
+    add("# updatedAt: \"\"  # optional -- nur bei nachtraeglicher Aktualisierung setzen");
     gap();
 
     // eventDate, endDate und status nur fuer maintenance
@@ -241,30 +210,45 @@ async function main() {
         add("status: active");
         gap();
     }
-    // Kein else -- alle anderen Typen erhalten weder status noch Datumsfenster
 
-    gap();
     add("summaryMd: |");
     add("  TODO: Kurze Zusammenfassung (1-3 Saetze).");
     add("detailsMd: |");
     add("  TODO: Ausfuehrliche Beschreibung.");
-    add("relatedEventIds: []");
+    gap();
+
+    // impact -- Vorschlaege je nach Typ
+    if (type === "maintenance") {
+        add("impact:");
+        add("  - downtime  # weitere: limited-availability, action-required");
+    } else if (type === "security") {
+        add("impact:");
+        add("  - action-required  # weitere: downtime, limited-availability");
+    } else {
+        add("# impact: []  # optional: downtime, limited-availability, action-required");
+    }
+
+    gap();
+    add("# customerActionMd: |  # optional -- nur wenn impact action-required enthaelt");
+    add("#   TODO: Konkrete Handlungshinweise fuer Kunden.");
+    gap();
+    add("relations: []");
+    add("# relations:");
+    add("#   - type: relates-to  # relates-to | resolves | follow-up-to | supersedes");
+    add("#     eventId: \"\"");
 
     // Typ-spezifische Felder
-    if (type === "maintenance") {
-        gap();
-        add("downtimeMinutes: 30");
-    } else if (type === "security") {
+    if (type === "security") {
         gap();
         add("cveIds:");
         add("  - \"TODO: CVE-YYYY-NNNNN\"");
-        add("severity: high");
+        add("severity: high  # critical | high | medium | low");
         add("affectedVersions: []");
         add("fixedVersion: \"\"");
     } else if (type === "release") {
         gap();
         todo("version", "1.0.0");
-        add("# changelogUrl: \"https://...\"  # optional, wenn leer Zeile loeschen");
+        add("# changelogUrl: \"https://...\"");
     }
 
     fs.writeFileSync(filePath, lines.join("\n") + "\n", "utf8");

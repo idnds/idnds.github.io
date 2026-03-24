@@ -1,0 +1,6 @@
+productId: loadmaster
+vendorId: kemp
+name: LoadMaster
+category: load-balancer
+description: Load-Balancing- und Application-Delivery-Lösung von Kemp für die hochverfügbare, sichere und skalierbare Bereitstellung von Anwendungen in lokalen, virtuellen, hybriden und Cloud-Umgebungen.
+deprecatedAt: null

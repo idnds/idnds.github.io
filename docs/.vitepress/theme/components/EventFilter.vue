@@ -9,6 +9,17 @@
         </option>
       </select>
       
+      <select
+        id="impact-filter"
+        v-model="selectedImpact"
+        aria-label="Nach Auswirkung filtern"
+      >
+        <option value="">Alle Auswirkungen</option>
+        <option value="downtime">Downtime</option>
+        <option value="limited-availability">Eingeschraenkte Verfuegbarkeit</option>
+        <option value="action-required">Handlungsbedarf</option>
+      </select>
+
       <select id="type-filter" v-model="selectedType" aria-label="Nach Eventtyp filtern">
         <option value="">Alle Typen</option>
         <option v-for="t in availableTypes" :key="t.value" :value="t.value">{{ t.label }}</option>
@@ -43,6 +54,7 @@ const events         = ref([]);
 const selectedType   = ref("");
 const selectedVendor = ref("");
 const selectedStatus = ref("");
+const selectedImpact = ref("");
 
 onMounted(async () => {
   const res = await fetch(props.indexFile);
@@ -79,12 +91,26 @@ const filteredEvents = computed(() =>
     if (selectedVendor.value && e.vendorId !== selectedVendor.value) return false;
     // Status wird hier ebenfalls zur Laufzeit berechnet, nicht aus dem Index gelesen
     if (selectedStatus.value && deriveStatus(e) !== selectedStatus.value) return false;
+    if (selectedImpact.value && !e.impact?.includes(selectedImpact.value)) return false;
     return true;
   })
 );
 </script>
 
 <style scoped>
-.filters { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+.filters {
+  display: flex;
+  flex-wrap: nowrap;       /* alles in einer Zeile */
+  gap: 0.5rem;             /* Abstand zwischen den Dropdowns */
+  align-items: center;
+  margin-bottom: 1rem;
+  overflow-x: auto;        /* Scrollbar bei Bedarf */
+}
+
+/* Alle Selects gleich breit machen */
+.filters select {
+  flex: 1 1 0;             /* wächst und schrumpft gleichmäßig */
+  min-width: 120px;        /* optional: Mindestbreite, damit nicht zu schmal */
+}
 .result-count { font-size: 0.85rem; color: var(--vp-c-text-2); margin-bottom: 0.75rem; }
 </style>

@@ -1,7 +1,7 @@
 ---
-title: Alle Ankündigungen
+title: Ankündigungen
 ---
 
 # Ankündigungen
 
-<EventFilter indexFile="/data/_generated/index/latest.json" />
+<EventFilter indexFile="/data/_generated/index/all.json" />

@@ -4,6 +4,8 @@ node_modules/
 # Build / Distribution
 docs/.vitepress/dist/
 dist/
+docs/news/*.md
+"!docs/news/index.md"
 
 # Vite/VitePress Cache
 docs/.vitepress/cache/

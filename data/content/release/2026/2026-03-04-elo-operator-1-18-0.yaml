@@ -5,10 +5,10 @@ vendorId: elo
 productIds:
   - lpc-test
   - lpc-prod
-title: "ELO Cloud Kubernetes Operator 1.18.0"
+title: ELO Cloud Kubernetes Operator 1.18.0
 publishedAt: "2026-03-04T00:00:00+01:00"
-version: "1.18.0"
-changelogUrl: "https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-18-0"
+version: 1.18.0
+changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-18-0
 summaryMd: |
   Release des ELO Cloud Kubernetes Operators mit Verbesserungen an der StartupProbe,
   Performance-Optimierungen und Unterstuetzung fuer Priority Classes.
@@ -40,4 +40,9 @@ detailsMd: |
   **ECLKOP-6** -- Messung der Dauer einzelner Abschnitte des Reconciliation-Prozesses
   zur Identifikation von Performance-Engpaessen. Aktivierbar ueber erhoehtes Log-Level
   beim Start des Operators: `--zap-log-level=2`
-relatedEventIds: [maintenance-2026-03-15-lpc-test-operator-update]
+impact: []
+relations:
+  - type: relates-to
+    eventId: maintenance-2026-03-15-lpc-test-operator-update
+  - type: relates-to
+    eventId: maintenance-2026-03-24-lpc-prod-operator-update

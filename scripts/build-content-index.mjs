@@ -3,7 +3,6 @@ import path from "node:path";
 import { readYamlFiles } from "./utils.mjs";
 import { getSchemaForType } from "./schemas/content.mjs";
 
-// Master-Daten laden
 const vendors = new Map(
     readYamlFiles("data/master/vendors").map((v) => [v.data.vendorId, v.data])
 );
@@ -17,76 +16,79 @@ const eventTypes = new Map(
 const contentDirs = ["maintenance", "security", "release", "announcement"];
 const allEvents = [];
 
-// Alle Events laden und validieren
 for (const dir of contentDirs) {
     for (const { filePath, data } of readYamlFiles("data/content/" + dir)) {
         const result = getSchemaForType(data?.typeId).safeParse(data);
-        if (!result.success) {
-            console.warn("Uebersprungen (Validation fehlgeschlagen): " + filePath);
-            continue;
+        if (!result.success) { console.warn("Uebersprungen: " + filePath); continue; }
+
+        const d = result.data;
+
+        // relatedEventIds -> relations transformieren falls noch nicht migriert
+        let relations = d.relations ?? [];
+        if (d.relatedEventIds?.length) {
+            const existingIds = new Set(relations.map((r) => r.eventId));
+            for (const eventId of d.relatedEventIds) {
+                if (!existingIds.has(eventId)) {
+                    relations.push({ type: "relates-to", eventId });
+                }
+            }
         }
+
+        // isCustomerActionRequired als berechnetes Feld ableiten
+        const isCustomerActionRequired = d.impact?.includes("action-required") ?? false;
+
         allEvents.push({
-            ...result.data,
-            vendor: vendors.get(result.data.vendorId) ?? null,
-            products: result.data.productIds.map((id) => products.get(id)).filter(Boolean),
-            eventType: eventTypes.get(result.data.typeId) ?? null,
+            ...d,
+            relations,
+            isCustomerActionRequired,
+            vendor: vendors.get(d.vendorId) ?? null,
+            products: d.productIds.map((id) => products.get(id)).filter(Boolean),
+            eventType: eventTypes.get(d.typeId) ?? null,
         });
     }
 }
 
-// Sortierung: Maintenance nach eventDate, andere nach publishedAt
-allEvents.sort((a, b) => {
-    const dateA = a.eventDate ? new Date(a.eventDate).getTime() : new Date(a.publishedAt).getTime();
-    const dateB = b.eventDate ? new Date(b.eventDate).getTime() : new Date(b.publishedAt).getTime();
-    return dateB - dateA;
-});
+allEvents.sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+);
 
-// Hilfsfunktion zum Schreiben von Index-Dateien
 function writeIndex(filename, data) {
     fs.mkdirSync(path.dirname(filename), { recursive: true });
     fs.writeFileSync(filename, JSON.stringify(data, null, 2), "utf8");
     console.log("Erzeugt: " + filename + " (" + data.length + " Eintraege)");
 }
 
-// Index nach Jahr (eventDate fallback publishedAt)
+// Indizes nach _generated
 const byYear = {};
 for (const e of allEvents) {
-    const date = e.eventDate ? new Date(e.eventDate) : new Date(e.publishedAt);
-    const y = date.getFullYear().toString();
+    const y = new Date(e.publishedAt).getFullYear().toString();
     (byYear[y] = byYear[y] ?? []).push(e);
 }
 for (const [y, events] of Object.entries(byYear)) {
     writeIndex("data/_generated/index/by-year/" + y + ".json", events);
 }
 
-// Index nach Typ
 const byType = {};
-for (const e of allEvents) {
-    (byType[e.typeId] = byType[e.typeId] ?? []).push(e);
-}
+for (const e of allEvents) { (byType[e.typeId] = byType[e.typeId] ?? []).push(e); }
 for (const [t, events] of Object.entries(byType)) {
     writeIndex("data/_generated/index/by-type/" + t + ".json", events);
 }
 
-// Index nach Vendor
 const byVendor = {};
-for (const e of allEvents) {
-    (byVendor[e.vendorId] = byVendor[e.vendorId] ?? []).push(e);
-}
+for (const e of allEvents) { (byVendor[e.vendorId] = byVendor[e.vendorId] ?? []).push(e); }
 for (const [v, events] of Object.entries(byVendor)) {
     writeIndex("data/_generated/index/by-vendor/" + v + ".json", events);
 }
 
-// Latest-Index: 90 Tage zurück, Maintenance nach eventDate, andere nach publishedAt
 const cutoff = new Date();
 cutoff.setDate(cutoff.getDate() - 90);
-const latest = allEvents.filter(e => {
-    const date = e.eventDate ? new Date(e.eventDate) : new Date(e.publishedAt);
-    return date >= cutoff;
-});
+const latest = allEvents.filter((e) => new Date(e.publishedAt) >= cutoff);
 writeIndex("data/_generated/index/latest.json", latest);
 
-// Kopieren nach docs/public für Fetch im Browser
+// Gesamtindex fuer Detailseiten-Generierung
+writeIndex("data/_generated/index/all.json", allEvents);
+
+// Indizes nach docs/public/ kopieren
 const publicBase = "docs/public/data/_generated/index";
 fs.mkdirSync(publicBase, { recursive: true });
 
@@ -100,10 +102,8 @@ for (const subdir of ["by-year", "by-type", "by-vendor"]) {
         }
     }
 }
-
-fs.copyFileSync(
-    "data/_generated/index/latest.json",
-    publicBase + "/latest.json"
-);
+for (const f of ["latest.json", "all.json"]) {
+    fs.copyFileSync("data/_generated/index/" + f, publicBase + "/" + f);
+}
 
 console.log("\nIndex-Build abgeschlossen. " + allEvents.length + " Events insgesamt.\n");

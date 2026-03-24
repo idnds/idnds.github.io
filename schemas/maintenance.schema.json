@@ -37,6 +37,9 @@
     "publishedAt": {
       "type": "string"
     },
+    "updatedAt": {
+      "type": "string"
+    },
     "summaryMd": {
       "type": "string",
       "minLength": 1
@@ -45,11 +48,46 @@
       "default": "",
       "type": "string"
     },
-    "relatedEventIds": {
+    "customerActionMd": {
+      "type": "string"
+    },
+    "impact": {
       "default": [],
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "enum": [
+          "downtime",
+          "limited-availability",
+          "action-required"
+        ]
+      }
+    },
+    "relations": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "relates-to",
+              "resolves",
+              "follow-up-to",
+              "supersedes"
+            ]
+          },
+          "eventId": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "type",
+          "eventId"
+        ],
+        "additionalProperties": false
       }
     },
     "status": {
@@ -65,11 +103,6 @@
     },
     "endDate": {
       "type": "string"
-    },
-    "downtimeMinutes": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 9007199254740991
     }
   },
   "required": [
@@ -81,6 +114,8 @@
     "title",
     "publishedAt",
     "summaryMd",
+    "impact",
+    "relations",
     "status",
     "eventDate",
     "endDate"

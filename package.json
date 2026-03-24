@@ -10,6 +10,7 @@
     "validate:master": "node scripts/validate-master-data.mjs",
     "validate:content": "node scripts/validate-content.mjs",
     "build:index": "node scripts/build-content-index.mjs",
+    "build:pages": "node scripts/build-detail-pages.mjs",
     "build:feed": "node scripts/build-feed.mjs",
     "new:event": "node scripts/scaffold-event.mjs",
     "generate:schemas": "node scripts/generate-json-schemas.mjs"
