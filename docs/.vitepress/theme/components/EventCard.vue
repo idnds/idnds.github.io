@@ -4,6 +4,7 @@
     :style="{ borderLeftColor: event.eventType?.color ?? '#ccc' }"
     role="article"
     :aria-label="event.title"
+    @click="openModal"
   >
     <div class="badges">
       <span
@@ -41,11 +42,24 @@
       </span>
     </div>
   </article>
+    <EventCardModal
+    :event="event"
+    v-model="showModal"
+  />
 </template>
 
 <script setup>
 import { computed } from "vue";
 import { deriveStatus, statusLabel, statusClass } from "../composables/useEventStatus.js";
+
+import { ref } from "vue";
+import EventCardModal from "./EventCardModal.vue";
+
+const showModal = ref(false);
+
+function openModal() {
+  showModal.value = true;
+}
 
 const props = defineProps({ event: { type: Object, required: true } });
 

@@ -1,7 +1,7 @@
 <template>
   <div class="event-filter">
     <div class="filters" role="group" aria-label="Event-Filter">
-      <label for="status-filter">Status:</label>
+      <label for="status-filter">Filter:</label>
       <select id="status-filter" v-model="selectedStatus" aria-label="Nach Status filtern">
         <option value="">Alle Status</option>
         <option v-for="s in availableStatuses" :key="s" :value="s">
