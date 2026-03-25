@@ -6,6 +6,7 @@ docs/.vitepress/dist/
 dist/
 docs/news/*.md
 "!docs/news/index.md"
+docs/public/feed.xml
 
 # Vite/VitePress Cache
 docs/.vitepress/cache/
