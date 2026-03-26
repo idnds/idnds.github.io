@@ -112,4 +112,24 @@ for (const f of ["latest.json", "all.json"]) {
     fs.copyFileSync("data/_generated/index/" + f, publicBase + "/" + f);
 }
 
+// Stammdaten als JSON fuer den Browser exportieren.
+// Die Seite /news/add laedt diese Datei um Produkt- und Hersteller-Dropdowns zu befuellen.
+const mastersData = {
+    vendors: readYamlFiles("data/master/vendors").map((v) => v.data),
+    products: readYamlFiles("data/master/products").map((p) => p.data),
+};
+fs.writeFileSync(
+    "data/_generated/masters.json",
+    JSON.stringify(mastersData, null, 2),
+    "utf8"
+);
+fs.writeFileSync(
+    "docs/public/data/_generated/masters.json",
+    JSON.stringify(mastersData, null, 2),
+    "utf8"
+);
+console.log("Erzeugt: data/_generated/masters.json (" +
+    mastersData.vendors.length + " Hersteller, " +
+    mastersData.products.length + " Produkte)");
+
 console.log("\nIndex-Build abgeschlossen. " + allEvents.length + " Events insgesamt.\n");
