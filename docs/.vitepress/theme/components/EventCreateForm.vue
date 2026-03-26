@@ -16,7 +16,7 @@
       <div class="ecf-field">
         <label class="ecf-label" for="f-type">Event-Typ *</label>
         <select id="f-type" v-model="form.typeId" class="ecf-input">
-          <option value="announcement">Ankuendigung</option>
+          <option value="announcement">Ankündigung</option>
           <option value="maintenance">Wartung</option>
           <option value="release">Release</option>
           <option value="security">Security / CVE</option>
@@ -26,7 +26,7 @@
       <div class="ecf-field">
         <label class="ecf-label" for="f-product">Produkt *</label>
         <select id="f-product" v-model="form.productId" class="ecf-input">
-          <option value="">-- Produkt auswaehlen --</option>
+          <option value="">-- Produkt auswählen --</option>
           <option
             v-for="p in masters.products"
             :key="p.productId"
@@ -53,7 +53,7 @@
           v-model="form.title"
           type="text"
           class="ecf-input"
-          placeholder="z.B. Geplantes Wartungsfenster fuer lieblingsplatz.cloud (Produktion)"
+          placeholder="z.B. Geplantes Wartungsfenster für lieblingsplatz.cloud (Produktion)"
         />
       </div>
 
@@ -67,7 +67,7 @@
           placeholder="z.B. operator-update"
         />
         <p class="ecf-hint">
-          Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt. Wird fuer den Dateinamen
+          Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt. Wird für den Dateinamen
           und die URL der Detailseite verwendet.
           Normalisiert: <code>{{ shortname || "–" }}</code>
         </p>
@@ -79,7 +79,7 @@
       <h2 class="ecf-section-title">2. Datum und Zeit</h2>
 
       <div class="ecf-field">
-        <label class="ecf-label" for="f-published">Veroeffentlicht am *</label>
+        <label class="ecf-label" for="f-published">Veröffentlicht am *</label>
         <input
           id="f-published"
           v-model="form.publishedAt"
@@ -122,7 +122,7 @@
           id="f-summary"
           v-model="form.summaryMd"
           class="ecf-input ecf-textarea"
-          placeholder="Kurze Beschreibung des Events (1-3 Saetze)."
+          placeholder="Kurze Beschreibung des Events (1-3 Sätze)."
           rows="3"
         />
       </div>
@@ -133,7 +133,7 @@
           id="f-details"
           v-model="form.detailsMd"
           class="ecf-input ecf-textarea"
-          placeholder="Ausfuehrliche Beschreibung, Ablauf, Hintergrund..."
+          placeholder="Ausführliche Beschreibung, Ablauf, Hintergrund..."
           rows="6"
         />
       </div>
@@ -150,14 +150,14 @@
             <input type="checkbox" v-model="form.impact" value="downtime" />
             <span>
               <strong>Downtime</strong> &mdash;
-              geplante oder tatsaechliche Nichtverfuegbarkeit
+              geplante oder tatsächliche Nichtverfügbarkeit
             </span>
           </label>
           <label class="ecf-checkbox-label">
             <input type="checkbox" v-model="form.impact" value="limited-availability" />
             <span>
               <strong>Limited Availability</strong> &mdash;
-              eingeschraenkte Nutzung, keine vollstaendige Nichtverfuegbarkeit
+              eingeschränkte Nutzung, keine vollständige Nichtverfügbarkeit
             </span>
           </label>
           <label class="ecf-checkbox-label">
@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <!-- customerActionMd: nur sichtbar wenn action-required gewaehlt -->
+      <!-- customerActionMd: nur sichtbar wenn action-required gewählt -->
       <div v-if="hasActionRequired" class="ecf-field">
         <label class="ecf-label" for="f-customer-action">
           Handlungshinweise * (Markdown)
@@ -179,11 +179,11 @@
           id="f-customer-action"
           v-model="form.customerActionMd"
           class="ecf-input ecf-textarea"
-          placeholder="Konkrete Schritte die Kunden durchfuehren sollen..."
+          placeholder="Konkrete Schritte die Kunden durchführen sollen..."
           rows="4"
         />
         <p class="ecf-hint">
-          Pflichtfeld wenn "Action Required" ausgewaehlt ist.
+          Pflichtfeld wenn "Action Required" ausgewählt ist.
         </p>
       </div>
     </section>
@@ -271,9 +271,9 @@
       </div>
     </section>
 
-    <!-- ── Sektion 6: Verknuepfte Events ──────────────────────── -->
+    <!-- ── Sektion 6: Verknüpfte Events ──────────────────────── -->
     <section class="ecf-section">
-      <h2 class="ecf-section-title">6. Verknuepfte Events (optional)</h2>
+      <h2 class="ecf-section-title">6. Verknüpfte Events (optional)</h2>
 
       <div
         v-for="(rel, idx) in form.relations"
@@ -295,7 +295,7 @@
         <button
           class="ecf-btn ecf-btn--remove"
           type="button"
-          :aria-label="'Verknuepfung ' + (idx + 1) + ' entfernen'"
+          :aria-label="'Verknüpfung ' + (idx + 1) + ' entfernen'"
           @click="removeRelation(idx)"
         >
           Entfernen
@@ -307,7 +307,7 @@
         type="button"
         @click="addRelation"
       >
-        + Verknuepfung hinzufuegen
+        + Verknüpfung hinzufügen
       </button>
     </section>
 
@@ -364,7 +364,7 @@
         />
 
         <div class="ecf-next-steps">
-          <h4>Naechste Schritte</h4>
+          <h4>Nächste Schritte</h4>
           <ol>
             <li>
               YAML-Datei herunterladen.
@@ -375,10 +375,10 @@
               ablegen.
             </li>
             <li>
-              Einen Pull Request eroeffnen.
+              Einen Pull Request eröffnen.
             </li>
             <li>
-              Maintainer prueft Referenzen und merged den PR.
+              Maintainer prüft Referenzen und merged den PR.
             </li>
           </ol>
         </div>
@@ -393,7 +393,7 @@ import { ref, reactive, computed, onMounted } from "vue";
 import yaml from "js-yaml";
 
 // ── Masterdaten laden ─────────────────────────────────────────
-// Wird einmalig beim Oeffnen der Seite geladen.
+// Wird einmalig beim Öffnen der Seite geladen.
 // Die Datei /data/_generated/masters.json wird von build-content-index.mjs erzeugt.
 const masters = reactive({ vendors: [], products: [] });
 
@@ -409,7 +409,7 @@ onMounted(async () => {
 });
 
 // ── Formular-State ────────────────────────────────────────────
-// reactive() macht das Objekt reaktiv: Vue erkennt Aenderungen und
+// reactive() macht das Objekt reaktiv: Vue erkennt änderungen und
 // aktualisiert die Anzeige automatisch.
 const form = reactive({
   typeId:              "announcement",
@@ -436,7 +436,7 @@ const errors     = ref([]);
 const yamlOutput = ref("");
 
 // ── Berechnete Felder ─────────────────────────────────────────
-// computed() berechnet den Wert automatisch neu wenn sich abhaengige Felder aendern.
+// computed() berechnet den Wert automatisch neu wenn sich abhängige Felder ändern.
 
 // Shortname: normalisiert aus der Roheingabe des Benutzers
 const shortname = computed(() =>
@@ -447,7 +447,7 @@ const shortname = computed(() =>
     .replace(/^-|-$/g, "")
 );
 
-// Vendor: automatisch aus dem ausgewaehlten Produkt abgeleitet
+// Vendor: automatisch aus dem ausgewählten Produkt abgeleitet
 const derivedVendor = computed(() => {
   const product = masters.products.find((p) => p.productId === form.productId);
   if (!product) return null;
@@ -457,12 +457,12 @@ const derivedVendor = computed(() => {
   );
 });
 
-// Impact: ist "action-required" ausgewaehlt?
+// Impact: ist "action-required" ausgewählt?
 const hasActionRequired = computed(() =>
   form.impact.includes("action-required")
 );
 
-// Datum aus publishedAt fuer Dateiname und ID
+// Datum aus publishedAt für Dateiname und ID
 const publishedDate = computed(() =>
   form.publishedAt ? form.publishedAt.substring(0, 10) : ""
 );
@@ -520,8 +520,8 @@ function removeRelation(index) {
 }
 
 // ── Validierung ───────────────────────────────────────────────
-// Prueft nur die Felder die auf dieser Seite eingegeben werden koennen.
-// Referenzintegritaet (Produkt/Vendor existiert wirklich) prueft der Maintainer.
+// Prüft nur die Felder die auf dieser Seite eingegeben werden können.
+// Referenzintegrität (Produkt/Vendor existiert wirklich) prüft der Maintainer.
 function validate() {
   const errs = [];
 
@@ -538,7 +538,7 @@ function validate() {
     errs.push("Kurzname ist Pflichtfeld (nur Kleinbuchstaben, Zahlen, Bindestriche).");
 
   if (!form.publishedAt)
-    errs.push("Veroeffentlichungsdatum ist Pflichtfeld.");
+    errs.push("Veröffentlichungsdatum ist Pflichtfeld.");
 
   if (!form.summaryMd.trim())
     errs.push("Zusammenfassung ist Pflichtfeld.");
@@ -557,17 +557,17 @@ function validate() {
     errs.push("Version ist Pflichtfeld bei Release-Events.");
 
   if (hasActionRequired.value && !form.customerActionMd.trim())
-    errs.push("Handlungshinweise sind Pflichtfeld wenn 'Action Required' gewaehlt ist.");
+    errs.push("Handlungshinweise sind Pflichtfeld wenn 'Action Required' gewählt ist.");
 
   if (form.changelogUrl && !form.changelogUrl.match(/^https?:\/\/.+/))
     errs.push("Changelog-URL muss mit https:// oder http:// beginnen.");
 
-  // CVE-IDs: Format CVE-YYYY-NNNNN pruefen
+  // CVE-IDs: Format CVE-YYYY-NNNNN prüfen
   const cveIds = form.cveIdsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
   for (const cve of cveIds) {
     if (!/^CVE-\d{4}-\d+$/.test(cve)) {
       errs.push(
-        'CVE-ID "' + cve + '" hat kein gueltiges Format. Erwartet: CVE-YYYY-NNNNN'
+        'CVE-ID "' + cve + '" hat kein gültiges Format. Erwartet: CVE-YYYY-NNNNN'
       );
     }
   }
@@ -602,7 +602,7 @@ function generate() {
     summaryMd:  form.summaryMd.trim(),
   };
 
-  // Optionale Felder: nur einfuegen wenn belegt
+  // Optionale Felder: nur einfügen wenn belegt
   if (form.detailsMd.trim())
     obj.detailsMd = form.detailsMd.trim();
 
@@ -662,7 +662,7 @@ function generate() {
 }
 
 // ── Herunterladen ─────────────────────────────────────────────
-// Erzeugt eine temporaere Datei im Browser und startet den Download.
+// Erzeugt eine temporäre Datei im Browser und startet den Download.
 function download() {
   if (!yamlOutput.value) return;
 
@@ -683,8 +683,8 @@ function download() {
 <style>
 /*
   Nicht scoped: Stile gelten auf der gesamten Seite.
-  Der Praefix "ecf-" (event-create-form) verhindert Kollisionen mit anderen Klassen.
-  VitePress-CSS-Variablen (--vp-c-*) sorgen fuer automatische Unterstuetzung von Dark Mode.
+  Der Präfix "ecf-" (event-create-form) verhindert Kollisionen mit anderen Klassen.
+  VitePress-CSS-Variablen (--vp-c-*) sorgen für automatische Unterstützung von Dark Mode.
 */
 
 .ecf {
