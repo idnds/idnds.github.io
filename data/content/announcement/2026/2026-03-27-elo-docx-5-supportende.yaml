@@ -6,11 +6,11 @@ productIds:
   - elo-docx-5
 title: ELO DocXtractor 5 – Ankündigung des Supportendes und wichtige Fristen
 publishedAt: "2026-03-27T10:28:00+01:00"
-summaryMd: >-
+summaryMd: |
   Der Support für **ELO DocXtractor 5** endet zum **31.12.2026**. Bereits im Vorfeld gelten wichtige Fristen für
   Lizenzierung und Umstellung auf das neue dokumentenbasierte Lizenzmodell. Eine rechtzeitige Planung und Migration auf
   ELO DocXtractor 6 wird dringend empfohlen, um Supportfähigkeit und Zukunftssicherheit zu gewährleisten.
-detailsMd: >-
+detailsMd: |
   Mit der Veröffentlichung von **ELO DocXtractor 6 SP03** am **13.02.2026** wurde die aktuelle Produktgeneration
   bereitgestellt. Parallel dazu läuft die Version 5 aus und erreicht zum 31.12.2026 ihr offizielles Ende der
   Softwarepflege.
@@ -20,7 +20,7 @@ detailsMd: >-
   eingeschränkt. Spätestens mit dem Supportende entfallen zudem sicherheitsrelevante Updates und Hersteller-Support.
 impact:
   - action-required
-customerActionMd: >-
+customerActionMd: |
   - **Migration planen:** Starten Sie frühzeitig die Planung zur Umstellung auf ELO DocXtractor 6, um einen
   reibungslosen Übergang sicherzustellen.
     - **Bedarf analysieren:** Klären Sie den zukünftigen Lizenzbedarf (z. B. Verifier-Komponenten), da Einschränkungen für Version 5 bereits vor dem Supportende greifen.

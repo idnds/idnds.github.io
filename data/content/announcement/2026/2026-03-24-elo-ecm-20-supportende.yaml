@@ -6,11 +6,11 @@ productIds:
   - elo-ecm-20
 title: ELO ECM Suite 20 LTS – Ankündigung des Supportendes und eingeschränkter Support
 publishedAt: "2026-03-24T20:47:00+01:00"
-summaryMd: >-
+summaryMd: |
   Der reguläre Produktsupport für die **ELO ECM Suite 20 LTS** endet am **31.03.2026**. Für Bestandskunden besteht
   optional die Möglichkeit, einen kostenpflichtigen eingeschränkten Support bis zum **31.12.2026** in Anspruch zu
   nehmen. ELO empfiehlt grundsätzlich die Migration auf eine aktuelle LTS-Version.
-detailsMd: >-
+detailsMd: |
   Die ELO ECM Suite 20 LTS erreicht zum **31.03.2026** das Ende des regulären Supports (inkl. Produkt- und
   Sicherheitsupdates). Dieses Datum wurde bereits pauschal um drei Monate verlängert.
 
@@ -42,7 +42,7 @@ detailsMd: >-
     - ELO kann den eingeschränkten Support bei Bedarf vorzeitig beenden (mit 30 Tagen Vorlauf)
 impact:
   - action-required
-customerActionMd: >-
+customerActionMd: |
   - **Upgrade einplanen:** Planen Sie zeitnah die Migration auf eine aktuelle LTS-Version (z. B. ELO ECM Suite 23 LTS
   oder neuer).
     - **Risiken bewerten:** Prüfen Sie die technischen und regulatorischen Risiken eines Weiterbetriebs nach dem Supportende.
