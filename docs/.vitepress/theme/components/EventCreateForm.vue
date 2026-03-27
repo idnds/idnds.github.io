@@ -392,9 +392,37 @@
 import { ref, reactive, computed, onMounted } from "vue";
 import yaml from "js-yaml";
 
+// ── Literal-Block-Stil fuer Markdown-Felder ───────────────────
+// yaml.dump() waehlt >- (folded) fuer lange Strings ohne Zeilenumbrueche.
+// Markdown-Felder muessen aber als | (literal) ausgegeben werden,
+// damit der Text exakt so erhalten bleibt wie eingegeben.
+//
+// LiteralString ist ein Wrapper-Objekt. LITERAL_TYPE erklaert js-yaml,
+// wie dieses Objekt serialisiert werden soll: als Literal-Block-Scalar.
+
+class LiteralString {
+  constructor(value) { this.value = value; }
+}
+
+const LITERAL_TYPE = new yaml.Type("tag:yaml.org,2002:str", {
+  kind:        "scalar",
+  instanceOf:  LiteralString,
+  represent:   (obj) => obj.value,
+  defaultStyle: "literal",
+});
+
+const LITERAL_SCHEMA = yaml.DEFAULT_SCHEMA.extend([LITERAL_TYPE]);
+
+// Hilfsfunktion: einen String in einen LiteralString-Wrapper verwandeln.
+// Fuegt einen abschliessenden Zeilenumbruch hinzu -- das ist bei Literal-Blocks
+// gute Praxis und entspricht dem Verhalten von yaml.dump fuer multiline Strings.
+function lit(str) {
+  const trimmed = (str ?? "").trim();
+  if (!trimmed) return undefined;
+  return new LiteralString(trimmed + "\n");
+}
+
 // ── Masterdaten laden ─────────────────────────────────────────
-// Wird einmalig beim Öffnen der Seite geladen.
-// Die Datei /data/_generated/masters.json wird von build-content-index.mjs erzeugt.
 const masters = reactive({ vendors: [], products: [] });
 
 onMounted(async () => {
@@ -409,8 +437,6 @@ onMounted(async () => {
 });
 
 // ── Formular-State ────────────────────────────────────────────
-// reactive() macht das Objekt reaktiv: Vue erkennt änderungen und
-// aktualisiert die Anzeige automatisch.
 const form = reactive({
   typeId:              "announcement",
   productId:           "",
@@ -436,9 +462,7 @@ const errors     = ref([]);
 const yamlOutput = ref("");
 
 // ── Berechnete Felder ─────────────────────────────────────────
-// computed() berechnet den Wert automatisch neu wenn sich abhängige Felder ändern.
 
-// Shortname: normalisiert aus der Roheingabe des Benutzers
 const shortname = computed(() =>
   form.shortnameRaw
     .toLowerCase()
@@ -447,7 +471,6 @@ const shortname = computed(() =>
     .replace(/^-|-$/g, "")
 );
 
-// Vendor: automatisch aus dem ausgewählten Produkt abgeleitet
 const derivedVendor = computed(() => {
   const product = masters.products.find((p) => p.productId === form.productId);
   if (!product) return null;
@@ -457,12 +480,10 @@ const derivedVendor = computed(() => {
   );
 });
 
-// Impact: ist "action-required" ausgewählt?
 const hasActionRequired = computed(() =>
   form.impact.includes("action-required")
 );
 
-// Datum aus publishedAt für Dateiname und ID
 const publishedDate = computed(() =>
   form.publishedAt ? form.publishedAt.substring(0, 10) : ""
 );
@@ -472,12 +493,11 @@ const previewId       = computed(() =>
   form.typeId + "-" + publishedDate.value + "-" + form.productId + "-" + shortname.value
 );
 const previewFilename = computed(() =>
-  publishedDate.value + "-" + form.productId + "-" + shortname.value + ".yaml"
+  form.typeId + "-" + publishedDate.value + "-" + form.productId + "-" + shortname.value + ".yaml"
 );
 
 // ── Hilfsfunktionen ───────────────────────────────────────────
 
-// datetime-local-Inputs erwarten das Format "YYYY-MM-DDTHH:MM" ohne Sekunden.
 function formatForDatetimeLocal(date) {
   const pad = (n) => String(n).padStart(2, "0");
   return (
@@ -489,12 +509,10 @@ function formatForDatetimeLocal(date) {
   );
 }
 
-// Wandelt den datetime-local-Wert in einen ISO-String mit Zeitzone um.
-// Beispiel: "2026-03-24T20:00" -> "2026-03-24T20:00:00+01:00"
 function toIso(localDatetime) {
   if (!localDatetime) return null;
   const d      = new Date(localDatetime);
-  const offset = -d.getTimezoneOffset(); // Minuten, positiv = Osten
+  const offset = -d.getTimezoneOffset();
   const sign   = offset >= 0 ? "+" : "-";
   const pad    = (n) => String(Math.abs(n)).padStart(2, "0");
   const hh     = pad(Math.floor(Math.abs(offset) / 60));
@@ -520,26 +538,20 @@ function removeRelation(index) {
 }
 
 // ── Validierung ───────────────────────────────────────────────
-// Prüft nur die Felder die auf dieser Seite eingegeben werden können.
-// Referenzintegrität (Produkt/Vendor existiert wirklich) prüft der Maintainer.
+
 function validate() {
   const errs = [];
 
   if (!form.typeId)
     errs.push("Event-Typ ist Pflichtfeld.");
-
   if (!form.productId)
     errs.push("Produkt ist Pflichtfeld.");
-
   if (!form.title.trim() || form.title.trim().length < 3)
     errs.push("Titel muss mindestens 3 Zeichen lang sein.");
-
   if (!shortname.value)
     errs.push("Kurzname ist Pflichtfeld (nur Kleinbuchstaben, Zahlen, Bindestriche).");
-
   if (!form.publishedAt)
-    errs.push("Veröffentlichungsdatum ist Pflichtfeld.");
-
+    errs.push("Veroeffentlichungsdatum ist Pflichtfeld.");
   if (!form.summaryMd.trim())
     errs.push("Zusammenfassung ist Pflichtfeld.");
 
@@ -557,122 +569,107 @@ function validate() {
     errs.push("Version ist Pflichtfeld bei Release-Events.");
 
   if (hasActionRequired.value && !form.customerActionMd.trim())
-    errs.push("Handlungshinweise sind Pflichtfeld wenn 'Action Required' gewählt ist.");
+    errs.push("Handlungshinweise sind Pflichtfeld wenn 'Action Required' gewaehlt ist.");
 
   if (form.changelogUrl && !form.changelogUrl.match(/^https?:\/\/.+/))
     errs.push("Changelog-URL muss mit https:// oder http:// beginnen.");
 
-  // CVE-IDs: Format CVE-YYYY-NNNNN prüfen
   const cveIds = form.cveIdsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
   for (const cve of cveIds) {
-    if (!/^CVE-\d{4}-\d+$/.test(cve)) {
-      errs.push(
-        'CVE-ID "' + cve + '" hat kein gültiges Format. Erwartet: CVE-YYYY-NNNNN'
-      );
-    }
+    if (!/^CVE-\d{4}-\d+$/.test(cve))
+      errs.push('CVE-ID "' + cve + '" hat kein gueltiges Format. Erwartet: CVE-YYYY-NNNNN');
   }
 
   return errs;
 }
 
 // ── YAML generieren ───────────────────────────────────────────
+
 function generate() {
   errors.value = validate();
 
   if (errors.value.length) {
     yamlOutput.value = "";
-    // Benutzer zum Seitenanfang scrollen damit er die Fehler sieht
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
   }
 
   const id       = previewId.value;
-  const slug     = id;
   const vendorId = derivedVendor.value?.vendorId ?? form.productId;
 
-  // Basis-Pflichtfelder -- sind immer vorhanden
+  // Pflichtfelder -- Markdown-Felder werden mit lit() in LiteralString gewrapped
   const obj = {
     id,
-    slug,
-    typeId:     form.typeId,
+    slug:        id,
+    typeId:      form.typeId,
     vendorId,
-    productIds: [form.productId],
-    title:      form.title.trim(),
+    productIds:  [form.productId],
+    title:       form.title.trim(),
     publishedAt: toIso(form.publishedAt),
-    summaryMd:  form.summaryMd.trim(),
+    summaryMd:   lit(form.summaryMd),
   };
 
-  // Optionale Felder: nur einfügen wenn belegt
-  if (form.detailsMd.trim())
-    obj.detailsMd = form.detailsMd.trim();
+  // Optionale Felder -- nur einfuegen wenn belegt
+  const detailsLit = lit(form.detailsMd);
+  if (detailsLit) obj.detailsMd = detailsLit;
 
   if (form.impact.length)
     obj.impact = [...form.impact];
 
-  if (hasActionRequired.value && form.customerActionMd.trim())
-    obj.customerActionMd = form.customerActionMd.trim();
+  const actionLit = hasActionRequired.value ? lit(form.customerActionMd) : undefined;
+  if (actionLit) obj.customerActionMd = actionLit;
 
+  // relations immer ausgeben -- auch als leeres Array.
+  // Das signalisiert dem Redakteur dass das Feld existiert,
+  // und der Maintainer sieht sofort dass keine Verknuepfungen gesetzt sind.
   const cleanRelations = form.relations.filter((r) => r.eventId.trim());
-  if (cleanRelations.length)
-    obj.relations = cleanRelations.map((r) => ({
-      type:    r.type,
-      eventId: r.eventId.trim(),
-    }));
+  obj.relations = cleanRelations.map((r) => ({
+    type:    r.type,
+    eventId: r.eventId.trim(),
+  }));
 
-  // Maintenance-spezifische Felder
+  // Maintenance
   if (form.typeId === "maintenance") {
     obj.status    = "active";
     obj.eventDate = toIso(form.eventDate);
     obj.endDate   = toIso(form.endDate);
   }
 
-  // Release-spezifische Felder
+  // Release
   if (form.typeId === "release") {
     obj.version = form.version.trim();
     if (form.changelogUrl.trim())
       obj.changelogUrl = form.changelogUrl.trim();
   }
 
-  // Security-spezifische Felder
+  // Security
   if (form.typeId === "security") {
-    const cveIds = form.cveIdsRaw
-      .split("\n").map((s) => s.trim()).filter(Boolean);
-    if (cveIds.length)
-      obj.cveIds = cveIds;
+    const cveIds = form.cveIdsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
+    if (cveIds.length)   obj.cveIds = cveIds;
+    if (form.severity)   obj.severity = form.severity;
 
-    if (form.severity)
-      obj.severity = form.severity;
-
-    const affected = form.affectedVersionsRaw
-      .split("\n").map((s) => s.trim()).filter(Boolean);
-    if (affected.length)
-      obj.affectedVersions = affected;
-
-    if (form.fixedVersion.trim())
-      obj.fixedVersion = form.fixedVersion.trim();
+    const affected = form.affectedVersionsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
+    if (affected.length) obj.affectedVersions = affected;
+    if (form.fixedVersion.trim()) obj.fixedVersion = form.fixedVersion.trim();
   }
 
-  // yaml.dump wandelt das JavaScript-Objekt in YAML-Text um
+  // LITERAL_SCHEMA stellt sicher dass LiteralString-Objekte als | ausgegeben werden.
   yamlOutput.value = yaml.dump(obj, {
+    schema:      LITERAL_SCHEMA,
     lineWidth:   120,
-    quotingType: '"',
-    forceQuotes: false,
     noRefs:      true,
   });
 }
 
 // ── Herunterladen ─────────────────────────────────────────────
-// Erzeugt eine temporäre Datei im Browser und startet den Download.
+
 function download() {
   if (!yamlOutput.value) return;
-
   const blob = new Blob([yamlOutput.value], { type: "text/yaml;charset=utf-8" });
   const url  = URL.createObjectURL(blob);
   const link = document.createElement("a");
-
   link.href     = url;
   link.download = previewFilename.value;
-
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
