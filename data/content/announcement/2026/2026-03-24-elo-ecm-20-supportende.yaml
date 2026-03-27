@@ -1,0 +1,54 @@
+id: announcement-2026-03-24-elo-ecm-20-supportende
+slug: announcement-2026-03-24-elo-ecm-20-supportende
+typeId: announcement
+vendorId: elo
+productIds:
+  - elo-ecm-20
+title: ELO ECM Suite 20 LTS – Ankündigung des Supportendes und eingeschränkter Support
+publishedAt: "2026-03-24T20:47:00+01:00"
+summaryMd: >-
+  Der reguläre Produktsupport für die **ELO ECM Suite 20 LTS** endet am **31.03.2026**. Für Bestandskunden besteht
+  optional die Möglichkeit, einen kostenpflichtigen eingeschränkten Support bis zum **31.12.2026** in Anspruch zu
+  nehmen. ELO empfiehlt grundsätzlich die Migration auf eine aktuelle LTS-Version.
+detailsMd: >-
+  Die ELO ECM Suite 20 LTS erreicht zum **31.03.2026** das Ende des regulären Supports (inkl. Produkt- und
+  Sicherheitsupdates). Dieses Datum wurde bereits pauschal um drei Monate verlängert.
+
+
+  Gemäß der Release-Strategie der ELO Digital Office GmbH werden jeweils nur die aktuelle sowie die vorhergehende
+  LTS-Version unterstützt. Für bestehende Installationen der Version 20 LTS wird daher ein **eingeschränkter Support**
+  als Übergangslösung angeboten.
+
+
+  ## Eingeschränkter Support (01.04.2026 – 31.12.2026)
+
+    - Nur auf Antrag und mit separater Zusatzvereinbarung (Addendum) pro Kunde
+    - Beantragung spätestens bis 30.04.2026 erforderlich
+    - Support ausschließlich über das ELO Ticketsystem
+    - Leistungen beschränken sich auf Problemanalyse, Lösungsempfehlungen und bekannte Workarounds
+
+  ## Nicht enthalten im eingeschränkten Support
+
+    - Bugfixes oder Code-Anpassungen
+    - Sicherheits- und Bugfixes für Drittkomponenten (z. B. Suchtechnologien)
+    - Garantierte Sicherheitsupdates (nur eingeschränkt und nach Einzelfallentscheidung)
+
+  ## Wichtige Rahmenbedingungen
+
+    - Der Betrieb erfolgt nach dem Supportende auf eigenes Risiko
+    - Es können bekannte oder zukünftige Sicherheitslücken bestehen
+    - Bei kritischen oder hochriskanten Sicherheitslücken ist ein sofortiges Upgrade auf eine unterstützte Version erforderlich (empfohlen: aktuelle LTS-Version)
+    - Datenschutzrechtliche Risiken (z. B. im Hinblick auf DSGVO) sind zu berücksichtigen
+    - ELO kann den eingeschränkten Support bei Bedarf vorzeitig beenden (mit 30 Tagen Vorlauf)
+impact:
+  - action-required
+customerActionMd: >-
+  - **Upgrade einplanen:** Planen Sie zeitnah die Migration auf eine aktuelle LTS-Version (z. B. ELO ECM Suite 23 LTS
+  oder neuer).
+    - **Risiken bewerten:** Prüfen Sie die technischen und regulatorischen Risiken eines Weiterbetriebs nach dem Supportende.
+    - **Übergang absichern:** Nutzen Sie den eingeschränkten Support nur als temporäre Übergangslösung.
+    - **Fristen beachten:** Beantragen Sie den eingeschränkten Support rechtzeitig bis spätestens 30.04.2026, sofern erforderlich.
+    - **Sicherheitsstrategie definieren:** Stellen Sie sicher, dass bei kritischen Sicherheitslücken kurzfristig ein Upgrade erfolgen kann.
+
+  Bei Fragen oder Unterstützungsbedarf wenden Sie sich bitte an unseren Support unter servicedesk@idnds.de
+relations: []
