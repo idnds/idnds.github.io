@@ -45,10 +45,10 @@ impact:
 customerActionMd: |
   - **Upgrade einplanen:** Planen Sie zeitnah die Migration auf eine aktuelle LTS-Version (z. B. ELO ECM Suite 23 LTS
   oder neuer).
-    - **Risiken bewerten:** Prüfen Sie die technischen und regulatorischen Risiken eines Weiterbetriebs nach dem Supportende.
-    - **Übergang absichern:** Nutzen Sie den eingeschränkten Support nur als temporäre Übergangslösung.
-    - **Fristen beachten:** Beantragen Sie den eingeschränkten Support rechtzeitig bis spätestens 30.04.2026, sofern erforderlich.
-    - **Sicherheitsstrategie definieren:** Stellen Sie sicher, dass bei kritischen Sicherheitslücken kurzfristig ein Upgrade erfolgen kann.
+  - **Risiken bewerten:** Prüfen Sie die technischen und regulatorischen Risiken eines Weiterbetriebs nach dem Supportende.
+  - **Übergang absichern:** Nutzen Sie den eingeschränkten Support nur als temporäre Übergangslösung.
+  - **Fristen beachten:** Beantragen Sie den eingeschränkten Support rechtzeitig bis spätestens 30.04.2026, sofern erforderlich.
+  - **Sicherheitsstrategie definieren:** Stellen Sie sicher, dass bei kritischen Sicherheitslücken kurzfristig ein Upgrade erfolgen kann.
 
   Bei Fragen oder Unterstützungsbedarf wenden Sie sich bitte an unseren Support unter servicedesk@idnds.de
 relations: []
