@@ -1,15 +1,21 @@
 <template>
   <div class="ecf">
 
-    <!-- Fehlermeldungen erscheinen oben wenn der Nutzer auf Generieren klickt -->
-    <div v-if="errors.length" class="ecf-errors" role="alert" aria-live="assertive">
+    <div v-if="errors.length" class="ecf-errors" role="alert">
       <strong>Bitte korrigiere folgende Felder:</strong>
       <ul>
         <li v-for="err in errors" :key="err">{{ err }}</li>
       </ul>
     </div>
 
-    <!-- ── Sektion 1: Typ & Produkt ───────────────────────────── -->
+    <div v-if="isDirty && yamlOutput" class="ecf-state-warning" role="status">
+      Änderungen vorhanden -- bitte erneut auf "YAML generieren" klicken.
+    </div>
+    <div v-if="isValid && !isDirty" class="ecf-state-success" role="status">
+      YAML ist aktuell und kann heruntergeladen werden.
+    </div>
+
+    <!-- Sektion 1: Typ und Produkt -->
     <section class="ecf-section">
       <h2 class="ecf-section-title">1. Event-Typ und Produkt</h2>
 
@@ -40,7 +46,6 @@
         </p>
       </div>
 
-      <!-- Hersteller wird automatisch aus dem Produkt abgeleitet, kein Eingabefeld -->
       <div v-if="derivedVendor" class="ecf-derived">
         <span class="ecf-label">Hersteller (automatisch aus Produkt)</span>
         <code>{{ derivedVendor.name }} ({{ derivedVendor.vendorId }})</code>
@@ -53,7 +58,7 @@
           v-model="form.title"
           type="text"
           class="ecf-input"
-          placeholder="z.B. Geplantes Wartungsfenster für lieblingsplatz.cloud (Produktion)"
+          placeholder="z.B. Geplantes Wartungsfenster für lieblingsplatz.cloud"
         />
       </div>
 
@@ -67,14 +72,33 @@
           placeholder="z.B. operator-update"
         />
         <p class="ecf-hint">
-          Nur Kleinbuchstaben, Zahlen und Bindestriche erlaubt. Wird für den Dateinamen
-          und die URL der Detailseite verwendet.
-          Normalisiert: <code>{{ shortname || "–" }}</code>
+          Nur Kleinbuchstaben, Zahlen und Bindestriche.
+          Normalisiert: <code>{{ shortname || "..." }}</code>
         </p>
+      </div>
+
+      <!--
+        Badge-Vorschau: nutzt vp-badge-type-* aus badges.css.
+        Farben entsprechen data/master/event-types/*.yaml.
+      -->
+      <div class="ecf-badge-preview">
+        <span class="ecf-label">Badge-Vorschau</span>
+        <div class="ecf-badge-row">
+          <span :class="'vp-badge vp-badge-type-' + form.typeId">
+            {{ typeLabel }}
+          </span>
+          <span
+            v-for="imp in form.impact"
+            :key="imp"
+            :class="'vp-badge vp-badge-impact-' + imp"
+          >
+            {{ impactLabel[imp] ?? imp }}
+          </span>
+        </div>
       </div>
     </section>
 
-    <!-- ── Sektion 2: Datum ───────────────────────────────────── -->
+    <!-- Sektion 2: Datum -->
     <section class="ecf-section">
       <h2 class="ecf-section-title">2. Datum und Zeit</h2>
 
@@ -88,7 +112,6 @@
         />
       </div>
 
-      <!-- eventDate und endDate: nur bei Wartung sichtbar -->
       <template v-if="form.typeId === 'maintenance'">
         <div class="ecf-field">
           <label class="ecf-label" for="f-event-date">Wartungsbeginn *</label>
@@ -99,7 +122,6 @@
             class="ecf-input ecf-input--date"
           />
         </div>
-
         <div class="ecf-field">
           <label class="ecf-label" for="f-end-date">Wartungsende *</label>
           <input
@@ -109,37 +131,82 @@
             class="ecf-input ecf-input--date"
           />
         </div>
+        <div v-if="form.eventDate && form.endDate" class="ecf-date-preview">
+          <span class="ecf-label">Datum-Vorschau</span>
+          <p class="ecf-meta-preview">{{ previewDate }}</p>
+        </div>
       </template>
     </section>
 
-    <!-- ── Sektion 3: Inhalt ──────────────────────────────────── -->
+    <!-- Sektion 3: Inhalt -->
     <section class="ecf-section">
       <h2 class="ecf-section-title">3. Inhalt</h2>
 
       <div class="ecf-field">
         <label class="ecf-label" for="f-summary">Zusammenfassung * (Markdown)</label>
-        <textarea
-          id="f-summary"
-          v-model="form.summaryMd"
-          class="ecf-input ecf-textarea"
-          placeholder="Kurze Beschreibung des Events (1-3 Sätze)."
-          rows="3"
-        />
+        <div class="ecf-split">
+          <div class="ecf-split-input">
+            <textarea
+              id="f-summary"
+              v-model="form.summaryMd"
+              class="ecf-input ecf-textarea"
+              rows="4"
+              placeholder="Kurze Beschreibung (1-3 Sätze)."
+            />
+            <!--
+              Hinweis zur erlaubten Formatierung.
+              marked.parseInline() rendert Inline-Elemente: **fett**, *kursiv*, `code`.
+              Block-Elemente (Listen, Überschriften, Code-Blöcke) werden von
+              parseInline() nicht verarbeitet und erscheinen als Klartext.
+              Für Block-Formatierungen steht das Feld "Details" zur Verfügung.
+            -->
+            <p class="ecf-hint ecf-hint--format">
+              Erlaubte Inline-Formatierungen:
+              <strong>**fett**</strong>,
+              <em>*kursiv*</em>,
+              <code>`inline-Code`</code>.
+              Listen, Überschriften und Code-Blöcke werden hier nicht gerendert --
+              dafür steht das Feld Details zur Verfügung.
+            </p>
+          </div>
+          <div
+            v-if="form.summaryMd"
+            class="ecf-split-preview"
+            aria-live="polite"
+            aria-label="Vorschau Zusammenfassung"
+          >
+            <span class="ecf-preview-label">Vorschau</span>
+            <div class="ecf-rendered" v-html="summaryPreview" />
+          </div>
+        </div>
       </div>
 
       <div class="ecf-field">
         <label class="ecf-label" for="f-details">Details (Markdown, optional)</label>
-        <textarea
-          id="f-details"
-          v-model="form.detailsMd"
-          class="ecf-input ecf-textarea"
-          placeholder="Ausführliche Beschreibung, Ablauf, Hintergrund..."
-          rows="6"
-        />
+        <div class="ecf-split">
+          <div class="ecf-split-input">
+            <textarea
+              id="f-details"
+              v-model="form.detailsMd"
+              class="ecf-input ecf-textarea"
+              rows="10"
+              placeholder="Ausführliche Beschreibung, Ablauf, Hintergrund..."
+            />
+          </div>
+          <div
+            v-if="form.detailsMd"
+            class="ecf-split-preview"
+            aria-live="polite"
+            aria-label="Vorschau Details"
+          >
+            <span class="ecf-preview-label">Vorschau</span>
+            <div class="ecf-rendered" v-html="detailsPreview" />
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ── Sektion 4: Auswirkungen ────────────────────────────── -->
+    <!-- Sektion 4: Auswirkungen -->
     <section class="ecf-section">
       <h2 class="ecf-section-title">4. Auswirkungen</h2>
 
@@ -170,55 +237,52 @@
         </div>
       </div>
 
-      <!-- customerActionMd: nur sichtbar wenn action-required gewählt -->
       <div v-if="hasActionRequired" class="ecf-field">
         <label class="ecf-label" for="f-customer-action">
           Handlungshinweise * (Markdown)
         </label>
-        <textarea
-          id="f-customer-action"
-          v-model="form.customerActionMd"
-          class="ecf-input ecf-textarea"
-          placeholder="Konkrete Schritte die Kunden durchführen sollen..."
-          rows="4"
-        />
-        <p class="ecf-hint">
-          Pflichtfeld wenn "Action Required" ausgewählt ist.
-        </p>
+        <div class="ecf-split">
+          <div class="ecf-split-input">
+            <textarea
+              id="f-customer-action"
+              v-model="form.customerActionMd"
+              class="ecf-input ecf-textarea"
+              rows="6"
+              placeholder="Konkrete Schritte für Kunden..."
+            />
+          </div>
+          <div
+            v-if="form.customerActionMd"
+            class="ecf-split-preview"
+            aria-live="polite"
+            aria-label="Vorschau Handlungshinweise"
+          >
+            <span class="ecf-preview-label">Vorschau</span>
+            <div class="ecf-rendered" v-html="customerActionPreview" />
+          </div>
+        </div>
+        <p class="ecf-hint">Pflichtfeld wenn "Action Required" aktiv.</p>
       </div>
     </section>
 
-    <!-- ── Sektion 5: Release-Felder (nur release) ────────────── -->
+    <!-- Sektion 5: Release-Felder -->
     <section v-if="form.typeId === 'release'" class="ecf-section">
       <h2 class="ecf-section-title">5. Release-Informationen</h2>
-
       <div class="ecf-field">
         <label class="ecf-label" for="f-version">Version *</label>
-        <input
-          id="f-version"
-          v-model="form.version"
-          type="text"
-          class="ecf-input"
-          placeholder="z.B. 1.18.0"
-        />
+        <input id="f-version" v-model="form.version" type="text"
+          class="ecf-input" placeholder="z.B. 1.18.0" />
       </div>
-
       <div class="ecf-field">
         <label class="ecf-label" for="f-changelog">Changelog-URL (optional)</label>
-        <input
-          id="f-changelog"
-          v-model="form.changelogUrl"
-          type="url"
-          class="ecf-input"
-          placeholder="https://..."
-        />
+        <input id="f-changelog" v-model="form.changelogUrl" type="url"
+          class="ecf-input" placeholder="https://..." />
       </div>
     </section>
 
-    <!-- ── Sektion 5: Security-Felder (nur security) ──────────── -->
+    <!-- Sektion 5: Security-Felder -->
     <section v-if="form.typeId === 'security'" class="ecf-section">
       <h2 class="ecf-section-title">5. Security-Informationen</h2>
-
       <div class="ecf-field">
         <label class="ecf-label" for="f-severity">Severity (optional)</label>
         <select id="f-severity" v-model="form.severity" class="ecf-input">
@@ -229,157 +293,93 @@
           <option value="low">Low</option>
         </select>
       </div>
-
       <div class="ecf-field">
-        <label class="ecf-label" for="f-cveids">
-          CVE-IDs (optional, eine pro Zeile)
-        </label>
-        <textarea
-          id="f-cveids"
-          v-model="form.cveIdsRaw"
+        <label class="ecf-label" for="f-cveids">CVE-IDs (optional, eine pro Zeile)</label>
+        <textarea id="f-cveids" v-model="form.cveIdsRaw"
           class="ecf-input ecf-textarea"
-          placeholder="CVE-2026-1234&#10;CVE-2026-5678"
-          rows="3"
-        />
+          placeholder="CVE-2026-1234&#10;CVE-2026-5678" rows="3" />
         <p class="ecf-hint">Format: CVE-YYYY-NNNNN</p>
       </div>
-
       <div class="ecf-field">
         <label class="ecf-label" for="f-affected">
           Betroffene Versionen (optional, eine pro Zeile)
         </label>
-        <textarea
-          id="f-affected"
-          v-model="form.affectedVersionsRaw"
-          class="ecf-input ecf-textarea"
-          placeholder="9.12.x&#10;9.14.x"
-          rows="2"
-        />
+        <textarea id="f-affected" v-model="form.affectedVersionsRaw"
+          class="ecf-input ecf-textarea" placeholder="9.12.x&#10;9.14.x" rows="2" />
       </div>
-
       <div class="ecf-field">
-        <label class="ecf-label" for="f-fixed">
-          Behoben in Version (optional)
-        </label>
-        <input
-          id="f-fixed"
-          v-model="form.fixedVersion"
-          type="text"
-          class="ecf-input"
-          placeholder="z.B. 9.14.4"
-        />
+        <label class="ecf-label" for="f-fixed">Behoben in Version (optional)</label>
+        <input id="f-fixed" v-model="form.fixedVersion" type="text"
+          class="ecf-input" placeholder="z.B. 9.14.4" />
       </div>
     </section>
 
-    <!-- ── Sektion 6: Verknüpfte Events ──────────────────────── -->
+    <!-- Sektion 6: Relations -->
     <section class="ecf-section">
       <h2 class="ecf-section-title">6. Verknüpfte Events (optional)</h2>
-
-      <div
-        v-for="(rel, idx) in form.relations"
-        :key="idx"
-        class="ecf-relation-row"
-      >
+      <div v-for="(rel, idx) in form.relations" :key="idx" class="ecf-relation-row">
         <select v-model="rel.type" class="ecf-input ecf-relation-type">
           <option value="relates-to">Verwandtes Event</option>
           <option value="resolves">Behebt</option>
           <option value="follow-up-to">Nachfolger von</option>
           <option value="supersedes">Ersetzt</option>
         </select>
-        <input
-          v-model="rel.eventId"
-          type="text"
+        <input v-model="rel.eventId" type="text"
           class="ecf-input ecf-relation-id"
-          placeholder="Event-ID z.B. maintenance-2026-03-15-lpc-prod-update"
-        />
-        <button
-          class="ecf-btn ecf-btn--remove"
-          type="button"
+          placeholder="Event-ID z.B. maintenance-2026-03-15-lpc-prod-update" />
+        <button class="ecf-btn ecf-btn--remove" type="button"
           :aria-label="'Verknüpfung ' + (idx + 1) + ' entfernen'"
-          @click="removeRelation(idx)"
-        >
+          @click="removeRelation(idx)">
           Entfernen
         </button>
       </div>
-
-      <button
-        class="ecf-btn ecf-btn--add"
-        type="button"
-        @click="addRelation"
-      >
+      <button class="ecf-btn ecf-btn--add" type="button" @click="addRelation">
         + Verknüpfung hinzufügen
       </button>
     </section>
 
-    <!-- ── Generieren & Ausgabe ───────────────────────────────── -->
+    <!-- Sektion 7: Generieren -->
     <section class="ecf-section ecf-section--output">
       <h2 class="ecf-section-title">7. YAML generieren</h2>
 
-      <!-- Vorschau von Dateiname und ID bevor generiert wird -->
-      <div
-        v-if="shortname && form.productId && form.publishedAt"
-        class="ecf-preview-meta"
-      >
-        <p>
-          <strong>Dateiname:</strong>
-          <code>{{ previewFilename }}</code>
-        </p>
-        <p>
-          <strong>ID / Slug:</strong>
-          <code>{{ previewId }}</code>
-        </p>
+      <div v-if="shortname && form.productId && form.publishedAt" class="ecf-preview-meta">
+        <p><strong>Dateiname:</strong> <code>{{ previewFilename }}</code></p>
+        <p><strong>ID / Slug:</strong> <code>{{ previewId }}</code></p>
         <p>
           <strong>Zielordner:</strong>
           <code>data/content/{{ form.typeId }}/{{ previewYear }}/</code>
         </p>
       </div>
 
-      <button
-        class="ecf-btn ecf-btn--primary"
-        type="button"
-        @click="generate"
-      >
+      <button class="ecf-btn ecf-btn--primary" type="button" @click="generate">
         YAML generieren
       </button>
 
-      <!-- Ausgabe erscheint nach dem Klick -->
       <div v-if="yamlOutput" class="ecf-output">
         <div class="ecf-output-header">
           <h3>Generierte YAML</h3>
           <button
             class="ecf-btn ecf-btn--download"
             type="button"
+            :disabled="!isValid || isDirty"
+            :title="isDirty ? 'Bitte erneut generieren nach Änderungen' : ''"
             @click="download"
           >
             Herunterladen: {{ previewFilename }}
           </button>
         </div>
-
-        <textarea
-          class="ecf-yaml-output"
-          readonly
-          :value="yamlOutput"
-          rows="20"
-          aria-label="Generierte YAML"
-        />
-
+        <textarea class="ecf-yaml-output" readonly :value="yamlOutput"
+          rows="20" aria-label="Generierte YAML" />
         <div class="ecf-next-steps">
           <h4>Nächste Schritte</h4>
           <ol>
-            <li>
-              YAML-Datei herunterladen.
-            </li>
+            <li>YAML-Datei herunterladen.</li>
             <li>
               Datei im Repository unter
-              <code>data/content/{{ form.typeId }}/{{ previewYear }}/</code>
-              ablegen.
+              <code>data/content/{{ form.typeId }}/{{ previewYear }}/</code> ablegen.
             </li>
-            <li>
-              Einen Pull Request eröffnen.
-            </li>
-            <li>
-              Maintainer prüft Referenzen und merged den PR.
-            </li>
+            <li>Einen Pull Request eröffnen.</li>
+            <li>Maintainer prüft Referenzen und merged den PR.</li>
           </ol>
         </div>
       </div>
@@ -389,40 +389,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, watch, onMounted } from "vue";
+import { marked } from "marked";
 import yaml from "js-yaml";
 
-// ── Literal-Block-Stil fuer Markdown-Felder ───────────────────
-// yaml.dump() waehlt >- (folded) fuer lange Strings ohne Zeilenumbrueche.
-// Markdown-Felder muessen aber als | (literal) ausgegeben werden,
-// damit der Text exakt so erhalten bleibt wie eingegeben.
-//
-// LiteralString ist ein Wrapper-Objekt. LITERAL_TYPE erklaert js-yaml,
-// wie dieses Objekt serialisiert werden soll: als Literal-Block-Scalar.
+// marked konfigurieren -- einmalig, gilt für alle Aufrufe in dieser Komponente
+marked.use({ breaks: true, gfm: true });
 
-class LiteralString {
-  constructor(value) { this.value = value; }
-}
-
-const LITERAL_TYPE = new yaml.Type("tag:yaml.org,2002:str", {
-  kind:        "scalar",
-  instanceOf:  LiteralString,
-  represent:   (obj) => obj.value,
-  defaultStyle: "literal",
-});
-
-const LITERAL_SCHEMA = yaml.DEFAULT_SCHEMA.extend([LITERAL_TYPE]);
-
-// Hilfsfunktion: einen String in einen LiteralString-Wrapper verwandeln.
-// Fuegt einen abschliessenden Zeilenumbruch hinzu -- das ist bei Literal-Blocks
-// gute Praxis und entspricht dem Verhalten von yaml.dump fuer multiline Strings.
-function lit(str) {
-  const trimmed = (str ?? "").trim();
-  if (!trimmed) return undefined;
-  return new LiteralString(trimmed + "\n");
-}
-
-// ── Masterdaten laden ─────────────────────────────────────────
+// Masterdaten laden
 const masters = reactive({ vendors: [], products: [] });
 
 onMounted(async () => {
@@ -436,7 +410,7 @@ onMounted(async () => {
   }
 });
 
-// ── Formular-State ────────────────────────────────────────────
+// Formular-State
 const form = reactive({
   typeId:              "announcement",
   productId:           "",
@@ -460,9 +434,43 @@ const form = reactive({
 
 const errors     = ref([]);
 const yamlOutput = ref("");
+const isValid    = ref(false);
+const isDirty    = ref(false);
 
-// ── Berechnete Felder ─────────────────────────────────────────
+watch(form, () => {
+  if (yamlOutput.value) {
+    isDirty.value = true;
+    isValid.value = false;
+  }
+}, { deep: true });
 
+// Debouncing für Markdown-Vorschau
+const debounceTimer           = ref(null);
+const debouncedSummary        = ref(form.summaryMd);
+const debouncedDetails        = ref(form.detailsMd);
+const debouncedCustomerAction = ref(form.customerActionMd);
+
+function debounce(target, value) {
+  clearTimeout(debounceTimer.value);
+  debounceTimer.value = setTimeout(() => { target.value = value; }, 200);
+}
+
+watch(() => form.summaryMd,        (v) => debounce(debouncedSummary, v));
+watch(() => form.detailsMd,        (v) => debounce(debouncedDetails, v));
+watch(() => form.customerActionMd, (v) => debounce(debouncedCustomerAction, v));
+
+// Vorschau -- parseInline für summary (kein <p>-Wrapper), parse für Details/Actions
+const summaryPreview        = computed(() =>
+  debouncedSummary.value ? marked.parseInline(debouncedSummary.value) : ""
+);
+const detailsPreview        = computed(() =>
+  debouncedDetails.value ? marked.parse(debouncedDetails.value) : ""
+);
+const customerActionPreview = computed(() =>
+  debouncedCustomerAction.value ? marked.parse(debouncedCustomerAction.value) : ""
+);
+
+// Berechnete Felder
 const shortname = computed(() =>
   form.shortnameRaw
     .toLowerCase()
@@ -480,24 +488,42 @@ const derivedVendor = computed(() => {
   );
 });
 
-const hasActionRequired = computed(() =>
-  form.impact.includes("action-required")
-);
+const hasActionRequired = computed(() => form.impact.includes("action-required"));
+const publishedDate     = computed(() => form.publishedAt?.substring(0, 10) ?? "");
+const previewYear       = computed(() => publishedDate.value.substring(0, 4));
 
-const publishedDate = computed(() =>
-  form.publishedAt ? form.publishedAt.substring(0, 10) : ""
-);
-
-const previewYear     = computed(() => publishedDate.value.substring(0, 4));
-const previewId       = computed(() =>
+// ID/Slug: typeId-Präfix bleibt für Eindeutigkeit über alle Event-Typen
+const previewId = computed(() =>
   form.typeId + "-" + publishedDate.value + "-" + form.productId + "-" + shortname.value
 );
+
+// Dateiname: kein typeId-Präfix -- der Ordner data/content/<typeId>/ macht den Typ eindeutig.
+// ISO-Datum am Anfang ermöglicht alphabetische Sortierung nach Veröffentlichungsdatum.
 const previewFilename = computed(() =>
-  form.typeId + "-" + publishedDate.value + "-" + form.productId + "-" + shortname.value + ".yaml"
+  publishedDate.value + "-" + form.productId + "-" + shortname.value + ".yaml"
 );
 
-// ── Hilfsfunktionen ───────────────────────────────────────────
+const typeLabel = computed(() => {
+  const labels = {
+    announcement: "Ankündigung",
+    maintenance:  "Wartung",
+    release:      "Release",
+    security:     "Security / CVE",
+  };
+  return labels[form.typeId] ?? form.typeId;
+});
 
+const previewDate = computed(() =>
+  formatDateRange(form.eventDate, form.endDate, form.publishedAt)
+);
+
+const impactLabel = {
+  "downtime":             "Downtime",
+  "limited-availability": "Einschränkungen",
+  "action-required":      "Handlungsbedarf",
+};
+
+// Hilfsfunktionen
 function formatForDatetimeLocal(date) {
   const pad = (n) => String(n).padStart(2, "0");
   return (
@@ -518,30 +544,55 @@ function toIso(localDatetime) {
   const hh     = pad(Math.floor(Math.abs(offset) / 60));
   const mm     = pad(Math.abs(offset) % 60);
   return (
-    d.getFullYear() + "-" +
-    pad(d.getMonth() + 1) + "-" +
-    pad(d.getDate()) + "T" +
-    pad(d.getHours()) + ":" +
-    pad(d.getMinutes()) + ":00" +
-    sign + hh + ":" + mm
+    d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" +
+    pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":00" + sign + hh + ":" + mm
   );
 }
 
-// ── Relations ─────────────────────────────────────────────────
-
-function addRelation() {
-  form.relations.push({ type: "relates-to", eventId: "" });
+function formatDateRange(start, end, publishedAt) {
+  if (!start || !end) {
+    if (!publishedAt) return "";
+    const date = new Date(publishedAt);
+    return date.toLocaleDateString("de-DE", {
+      year: "numeric", month: "long", day: "numeric",
+    }) + ", " + date.toLocaleTimeString("de-DE", {
+      hour: "2-digit", minute: "2-digit",
+    }) + " Uhr";
+  }
+  const startDate = new Date(start);
+  const endDate   = new Date(end);
+  const sameDay   = startDate.toDateString() === endDate.toDateString();
+  if (sameDay) {
+    return (
+      startDate.toLocaleDateString("de-DE", {
+        year: "numeric", month: "long", day: "numeric",
+      }) + ", " +
+      startDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
+      "\u2013" +
+      endDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
+      " Uhr"
+    );
+  }
+  return (
+    startDate.toLocaleDateString("de-DE", {
+      year: "numeric", month: "long", day: "numeric",
+    }) + ", " +
+    startDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
+    " Uhr \u2013 " +
+    endDate.toLocaleDateString("de-DE", {
+      year: "numeric", month: "long", day: "numeric",
+    }) + ", " +
+    endDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
+    " Uhr"
+  );
 }
 
-function removeRelation(index) {
-  form.relations.splice(index, 1);
-}
+function addRelation()         { form.relations.push({ type: "relates-to", eventId: "" }); }
+function removeRelation(index) { form.relations.splice(index, 1); }
 
-// ── Validierung ───────────────────────────────────────────────
-
+// Validierung
 function validate() {
   const errs = [];
-
   if (!form.typeId)
     errs.push("Event-Typ ist Pflichtfeld.");
   if (!form.productId)
@@ -551,10 +602,9 @@ function validate() {
   if (!shortname.value)
     errs.push("Kurzname ist Pflichtfeld (nur Kleinbuchstaben, Zahlen, Bindestriche).");
   if (!form.publishedAt)
-    errs.push("Veroeffentlichungsdatum ist Pflichtfeld.");
+    errs.push("Veröffentlichungsdatum ist Pflichtfeld.");
   if (!form.summaryMd.trim())
     errs.push("Zusammenfassung ist Pflichtfeld.");
-
   if (form.typeId === "maintenance") {
     if (!form.eventDate)
       errs.push("Wartungsbeginn ist Pflichtfeld bei Wartungs-Events.");
@@ -564,40 +614,29 @@ function validate() {
         new Date(form.eventDate) >= new Date(form.endDate))
       errs.push("Wartungsende muss zeitlich nach dem Wartungsbeginn liegen.");
   }
-
   if (form.typeId === "release" && !form.version.trim())
     errs.push("Version ist Pflichtfeld bei Release-Events.");
-
   if (hasActionRequired.value && !form.customerActionMd.trim())
-    errs.push("Handlungshinweise sind Pflichtfeld wenn 'Action Required' gewaehlt ist.");
-
+    errs.push("Handlungshinweise sind Pflichtfeld wenn 'Action Required' gewählt ist.");
   if (form.changelogUrl && !form.changelogUrl.match(/^https?:\/\/.+/))
     errs.push("Changelog-URL muss mit https:// oder http:// beginnen.");
-
   const cveIds = form.cveIdsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
   for (const cve of cveIds) {
     if (!/^CVE-\d{4}-\d+$/.test(cve))
-      errs.push('CVE-ID "' + cve + '" hat kein gueltiges Format. Erwartet: CVE-YYYY-NNNNN');
+      errs.push('CVE-ID "' + cve + '" hat kein gültiges Format. Erwartet: CVE-YYYY-NNNNN');
   }
-
   return errs;
 }
 
-// ── YAML generieren ───────────────────────────────────────────
-
-function generate() {
-  errors.value = validate();
-
-  if (errors.value.length) {
-    yamlOutput.value = "";
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    return;
-  }
-
+// YAML aufbauen
+// Kein Custom-Schema, kein lit() -- plain yaml.dump mit quotingType: '"' und
+// forceQuotes: false. Das erzeugt sauberes YAML ohne unnötige Anführungszeichen
+// und ohne !!str-Tags. Mehrzeilige Strings werden von js-yaml automatisch als
+// >- (folded scalar) ausgegeben -- vollständig gültiges YAML.
+function buildYaml() {
   const id       = previewId.value;
   const vendorId = derivedVendor.value?.vendorId ?? form.productId;
 
-  // Pflichtfelder -- Markdown-Felder werden mit lit() in LiteralString gewrapped
   const obj = {
     id,
     slug:        id,
@@ -606,69 +645,73 @@ function generate() {
     productIds:  [form.productId],
     title:       form.title.trim(),
     publishedAt: toIso(form.publishedAt),
-    summaryMd:   lit(form.summaryMd),
+    summaryMd:   form.summaryMd.trim(),
   };
 
-  // Optionale Felder -- nur einfuegen wenn belegt
-  const detailsLit = lit(form.detailsMd);
-  if (detailsLit) obj.detailsMd = detailsLit;
+  if (form.detailsMd.trim()) obj.detailsMd = form.detailsMd.trim();
 
-  if (form.impact.length)
-    obj.impact = [...form.impact];
+  // impact immer ausgeben -- auch als leeres Array.
+  // Signalisiert: das Feld ist bewusst leer, nicht vergessen.
+  obj.impact = form.impact.length ? [...form.impact] : [];
 
-  const actionLit = hasActionRequired.value ? lit(form.customerActionMd) : undefined;
-  if (actionLit) obj.customerActionMd = actionLit;
+  if (hasActionRequired.value && form.customerActionMd.trim())
+    obj.customerActionMd = form.customerActionMd.trim();
 
-  // relations immer ausgeben -- auch als leeres Array.
-  // Das signalisiert dem Redakteur dass das Feld existiert,
-  // und der Maintainer sieht sofort dass keine Verknuepfungen gesetzt sind.
   const cleanRelations = form.relations.filter((r) => r.eventId.trim());
   obj.relations = cleanRelations.map((r) => ({
     type:    r.type,
     eventId: r.eventId.trim(),
   }));
 
-  // Maintenance
   if (form.typeId === "maintenance") {
     obj.status    = "active";
     obj.eventDate = toIso(form.eventDate);
     obj.endDate   = toIso(form.endDate);
   }
 
-  // Release
   if (form.typeId === "release") {
     obj.version = form.version.trim();
-    if (form.changelogUrl.trim())
-      obj.changelogUrl = form.changelogUrl.trim();
+    if (form.changelogUrl.trim()) obj.changelogUrl = form.changelogUrl.trim();
   }
 
-  // Security
   if (form.typeId === "security") {
-    const cveIds = form.cveIdsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
-    if (cveIds.length)   obj.cveIds = cveIds;
-    if (form.severity)   obj.severity = form.severity;
-
+    const cveIds   = form.cveIdsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
     const affected = form.affectedVersionsRaw.split("\n").map((s) => s.trim()).filter(Boolean);
-    if (affected.length) obj.affectedVersions = affected;
+    if (cveIds.length)            obj.cveIds = cveIds;
+    if (form.severity)            obj.severity = form.severity;
+    if (affected.length)          obj.affectedVersions = affected;
     if (form.fixedVersion.trim()) obj.fixedVersion = form.fixedVersion.trim();
   }
 
-  // LITERAL_SCHEMA stellt sicher dass LiteralString-Objekte als | ausgegeben werden.
-  yamlOutput.value = yaml.dump(obj, {
-    schema:      LITERAL_SCHEMA,
+  return yaml.dump(obj, {
     lineWidth:   120,
     noRefs:      true,
+    quotingType: '"',
+    forceQuotes: false,
   });
 }
 
-// ── Herunterladen ─────────────────────────────────────────────
+// Generieren
+function generate() {
+  errors.value = validate();
+  if (errors.value.length) {
+    yamlOutput.value = "";
+    isValid.value    = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  yamlOutput.value = buildYaml();
+  isValid.value    = true;
+  isDirty.value    = false;
+}
 
+// Herunterladen
 function download() {
-  if (!yamlOutput.value) return;
+  if (!yamlOutput.value || !isValid.value || isDirty.value) return;
   const blob = new Blob([yamlOutput.value], { type: "text/yaml;charset=utf-8" });
   const url  = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  link.href     = url;
+  link.href = url;
   link.download = previewFilename.value;
   document.body.appendChild(link);
   link.click();
@@ -678,15 +721,7 @@ function download() {
 </script>
 
 <style>
-/*
-  Nicht scoped: Stile gelten auf der gesamten Seite.
-  Der Präfix "ecf-" (event-create-form) verhindert Kollisionen mit anderen Klassen.
-  VitePress-CSS-Variablen (--vp-c-*) sorgen für automatische Unterstützung von Dark Mode.
-*/
-
-.ecf {
-  max-width: 760px;
-}
+.ecf { max-width: 1100px; }
 
 .ecf-errors {
   background: #fee2e2;
@@ -696,8 +731,27 @@ function download() {
   margin-bottom: 1.5rem;
   color: #991b1b;
 }
-.ecf-errors ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
-.ecf-errors li { margin: 0.2rem 0; }
+.ecf-errors ul  { margin: 0.5rem 0 0; padding-left: 1.25rem; }
+.ecf-errors li  { margin: 0.2rem 0; }
+
+.ecf-state-warning {
+  padding: 0.65rem 1rem;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  color: #92400e;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+.ecf-state-success {
+  padding: 0.65rem 1rem;
+  background: #dcfce7;
+  border: 1px solid #22c55e;
+  border-radius: 6px;
+  color: #166534;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
 
 .ecf-section {
   border: 1px solid var(--vp-c-divider);
@@ -706,10 +760,7 @@ function download() {
   margin-bottom: 1.5rem;
   background: var(--vp-c-bg-soft);
 }
-
-.ecf-section--output {
-  background: var(--vp-c-bg);
-}
+.ecf-section--output { background: var(--vp-c-bg); }
 
 .ecf-section-title {
   font-size: 1rem;
@@ -719,12 +770,8 @@ function download() {
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.ecf-field {
-  margin-bottom: 1rem;
-}
-.ecf-field:last-child {
-  margin-bottom: 0;
-}
+.ecf-field { margin-bottom: 1rem; }
+.ecf-field:last-child { margin-bottom: 0; }
 
 .ecf-derived {
   display: flex;
@@ -761,28 +808,24 @@ function download() {
   outline: 2px solid var(--vp-c-brand);
   outline-offset: 1px;
 }
-
-.ecf-input--date {
-  max-width: 280px;
-}
-
-.ecf-textarea {
-  resize: vertical;
-  min-height: 80px;
-}
+.ecf-input--date { max-width: 280px; }
+.ecf-textarea   { resize: vertical; min-height: 80px; }
 
 .ecf-hint {
   font-size: 0.78rem;
   color: var(--vp-c-text-2);
   margin: 0.3rem 0 0;
 }
-
-.ecf-checkboxes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+.ecf-hint--format {
+  background: var(--vp-c-bg-mute);
+  border-left: 3px solid var(--vp-c-divider);
+  padding: 0.4rem 0.6rem;
+  border-radius: 0 4px 4px 0;
+  margin-top: 0.5rem;
+  line-height: 1.5;
 }
 
+.ecf-checkboxes { display: flex; flex-direction: column; gap: 0.6rem; }
 .ecf-checkbox-label {
   display: flex;
   align-items: flex-start;
@@ -796,6 +839,79 @@ function download() {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
+}
+
+.ecf-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .ecf-split { grid-template-columns: 1fr; }
+}
+.ecf-split-input  { min-width: 0; }
+.ecf-split-preview { min-width: 0; }
+
+.ecf-preview-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--vp-c-text-2);
+  margin-bottom: 0.35rem;
+}
+
+.ecf-rendered {
+  padding: 0.65rem 0.75rem;
+  background: var(--vp-c-bg-mute);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  min-height: 2.5rem;
+}
+.ecf-rendered p            { margin: 0 0 0.5em; }
+.ecf-rendered p:last-child { margin-bottom: 0; }
+.ecf-rendered ul,
+.ecf-rendered ol           { margin: 0.25em 0 0.5em 1.25em; }
+.ecf-rendered li           { margin: 0.15em 0; }
+.ecf-rendered strong       { font-weight: 700; }
+.ecf-rendered em           { font-style: italic; }
+.ecf-rendered code {
+  background: var(--vp-c-bg-soft);
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+.ecf-rendered h1,
+.ecf-rendered h2,
+.ecf-rendered h3 { margin: 0.75em 0 0.35em; font-weight: 700; }
+
+.ecf-badge-preview {
+  padding: 0.6rem 0.75rem;
+  background: var(--vp-c-bg-mute);
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+.ecf-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.ecf-date-preview {
+  padding: 0.6rem 0.75rem;
+  background: var(--vp-c-bg-mute);
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+.ecf-meta-preview {
+  font-size: 0.85rem;
+  color: var(--vp-c-text-2);
+  margin: 0.25rem 0 0;
 }
 
 .ecf-relation-row {
@@ -821,7 +937,6 @@ function download() {
   font-family: inherit;
   line-height: 1.4;
 }
-
 .ecf-btn--primary {
   background: var(--vp-c-brand);
   color: white;
@@ -829,7 +944,6 @@ function download() {
   padding: 0.55em 1.75em;
 }
 .ecf-btn--primary:hover { opacity: 0.85; }
-
 .ecf-btn--add {
   background: var(--vp-c-bg-mute);
   color: var(--vp-c-text-1);
@@ -837,7 +951,6 @@ function download() {
   margin-top: 0.25rem;
 }
 .ecf-btn--add:hover { background: var(--vp-c-bg-soft); }
-
 .ecf-btn--remove {
   background: #fee2e2;
   color: #991b1b;
@@ -846,13 +959,18 @@ function download() {
   padding: 0.3em 0.7em;
 }
 .ecf-btn--remove:hover { background: #fecaca; }
-
 .ecf-btn--download {
   background: #22c55e;
   color: white;
   border-color: #22c55e;
 }
-.ecf-btn--download:hover { opacity: 0.85; }
+.ecf-btn--download:hover:not(:disabled) { opacity: 0.85; }
+.ecf-btn--download:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
 
 .ecf-preview-meta {
   background: var(--vp-c-bg-mute);
@@ -863,10 +981,7 @@ function download() {
 }
 .ecf-preview-meta p { margin: 0.25rem 0; }
 
-.ecf-output {
-  margin-top: 1.5rem;
-}
-
+.ecf-output { margin-top: 1.5rem; }
 .ecf-output-header {
   display: flex;
   justify-content: space-between;
@@ -875,10 +990,7 @@ function download() {
   gap: 0.75rem;
   margin-bottom: 0.75rem;
 }
-.ecf-output-header h3 {
-  margin: 0;
-  font-size: 1rem;
-}
+.ecf-output-header h3 { margin: 0; font-size: 1rem; }
 
 .ecf-yaml-output {
   width: 100%;
@@ -900,14 +1012,7 @@ function download() {
   border-radius: 8px;
   border-left: 4px solid var(--vp-c-brand);
 }
-.ecf-next-steps h4 {
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
-}
-.ecf-next-steps ol {
-  margin: 0;
-  padding-left: 1.25rem;
-  font-size: 0.875rem;
-}
+.ecf-next-steps h4 { margin: 0 0 0.5rem; font-size: 0.9rem; }
+.ecf-next-steps ol { margin: 0; padding-left: 1.25rem; font-size: 0.875rem; }
 .ecf-next-steps li { margin: 0.3rem 0; }
 </style>

@@ -7,24 +7,23 @@
   >
     <div class="badges">
       <span
-        class="type-badge"
+        class="vp-badge"
         :style="{ backgroundColor: event.eventType?.color ?? '#ccc' }"
       >
         {{ event.eventType?.name ?? event.typeId }}
       </span>
 
       <span
-        v-if="event.typeId === 'maintenance'"
-        :class="'status-badge ' + statusClass[status]"
+        v-if="event.typeId === 'maintenance' && status"
+        :class="'vp-badge vp-badge-status-' + status"
       >
         {{ statusLabel[status] }}
       </span>
 
-      <!-- Impact-Badges -->
       <span
         v-for="imp in event.impact"
         :key="imp"
-        :class="'impact-badge impact-' + imp"
+        :class="'vp-badge vp-badge-impact-' + imp"
       >
         {{ impactLabel[imp] ?? imp }}
       </span>
@@ -37,7 +36,7 @@
       &middot; {{ event.vendor?.name ?? event.vendorId }}
     </p>
 
-    <p>{{ event.summaryMd }}</p>
+    <p v-html="renderedSummary" />
 
     <div class="footer">
       <div class="products">
@@ -49,7 +48,6 @@
           {{ product.name }}
         </span>
       </div>
-
       <a :href="'/news/' + event.slug" class="details-link">
         Details
       </a>
@@ -59,7 +57,10 @@
 
 <script setup>
 import { computed } from "vue";
-import { deriveStatus, statusLabel, statusClass } from "../composables/useEventStatus.js";
+import { marked } from "marked";
+import { deriveStatus, statusLabel } from "../composables/useEventStatus.js";
+
+marked.use({ breaks: true, gfm: true });
 
 const props = defineProps({ event: { type: Object, required: true } });
 
@@ -73,6 +74,10 @@ const impactLabel = {
   "action-required":      "Handlungsbedarf",
 };
 
+const renderedSummary = computed(() =>
+  props.event.summaryMd ? marked.parseInline(props.event.summaryMd) : ""
+);
+
 function formatDateRange(start, end, publishedAt) {
   if (!start || !end) {
     const date = new Date(publishedAt);
@@ -82,11 +87,9 @@ function formatDateRange(start, end, publishedAt) {
       hour: "2-digit", minute: "2-digit",
     }) + " Uhr";
   }
-
   const startDate = new Date(start);
   const endDate   = new Date(end);
   const sameDay   = startDate.toDateString() === endDate.toDateString();
-
   if (sameDay) {
     return (
       startDate.toLocaleDateString("de-DE", {
@@ -98,14 +101,15 @@ function formatDateRange(start, end, publishedAt) {
       " Uhr"
     );
   }
-
   return (
-    startDate.toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" }) +
-    ", " +
+    startDate.toLocaleDateString("de-DE", {
+      year: "numeric", month: "long", day: "numeric",
+    }) + ", " +
     startDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
     " Uhr \u2013 " +
-    endDate.toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" }) +
-    ", " +
+    endDate.toLocaleDateString("de-DE", {
+      year: "numeric", month: "long", day: "numeric",
+    }) + ", " +
     endDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }) +
     " Uhr"
   );
@@ -121,21 +125,6 @@ function formatDateRange(start, end, publishedAt) {
   border-radius: 0 8px 8px 0;
 }
 .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
-.type-badge, .status-badge, .impact-badge {
-  display: inline-block;
-  padding: 0.2em 0.6em;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: white;
-}
-.status-planned            { background: #6b7280; }
-.status-ongoing            { background: #f59e0b; }
-.status-completed          { background: #22c55e; }
-.status-cancelled          { background: #ef4444; }
-.impact-downtime           { background: #7c3aed; }
-.impact-limited-availability { background: #ea580c; }
-.impact-action-required    { background: #b91c1c; }
 .meta { font-size: 0.85rem; color: var(--vp-c-text-2); margin: 0.25rem 0 0.5rem; }
 .footer {
   display: flex;

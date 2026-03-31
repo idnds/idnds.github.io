@@ -6,7 +6,8 @@
     "./schemas/maintenance.schema.json": "data/content/maintenance/*/*.yaml",
     "./schemas/security.schema.json": "data/content/security/*/*.yaml",
     "./schemas/release.schema.json": "data/content/release/*/*.yaml",
-    "./schemas/announcement.schema.json": "data/content/announcement/*/*.yaml"
+    "./schemas/announcement.schema.json": "data/content/announcement/*/*.yaml",
+    "file:///c%3A/Users/tobia/Git/idnds.github.io/schemas/release.schema.json": "file:///c%3A/Users/tobia/Git/idnds.github.io/data/content/release/2025/2025-09-03-elo-xc-25-lts-release.yaml"
   },
   "yaml.validate": true,
   "yaml.format.enable": true,

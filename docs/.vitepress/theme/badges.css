@@ -1,0 +1,66 @@
+/* docs/.vitepress/theme/badges.css
+   Globale Badge-Styles -- gelten in allen Komponenten und auf statisch
+   generierten Seiten. Einmalig in theme/index.js importiert.
+   Präfix "vp-badge-" verhindert Kollisionen mit VitePress-eigenen Klassen. */
+
+/* Basis-Klasse: legt Größe, Padding und Schrift fest */
+.vp-badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Event-Typ-Badges: werden im Formular verwendet.
+   In EventCard und EventDetailBadges kommt die Farbe aus den Stammdaten
+   und wird per Inline-Style gesetzt -- CSS-Klassen wären dort nicht möglich
+   weil die Farbe zur Laufzeit aus dem JSON-Index gelesen wird.
+   Diese Klassen entsprechen den color-Feldern in data/master/event-types/*.yaml.
+   Bei Farbänderungen in den YAML-Dateien diese Klassen ebenfalls anpassen. */
+.vp-badge-type-announcement {
+  background: #f59e0b;
+}
+
+.vp-badge-type-maintenance {
+  background: #3b82f6;
+}
+
+.vp-badge-type-release {
+  background: #22c55e;
+}
+
+.vp-badge-type-security {
+  background: #ef4444;
+}
+
+/* Status-Badges: werden nur bei Maintenance-Events angezeigt */
+.vp-badge-status-planned {
+  background: #6b7280;
+}
+
+.vp-badge-status-ongoing {
+  background: #f59e0b;
+}
+
+.vp-badge-status-completed {
+  background: #22c55e;
+}
+
+.vp-badge-status-cancelled {
+  background: #ef4444;
+}
+
+/* Impact-Badges: können bei allen Event-Typen auftreten */
+.vp-badge-impact-downtime {
+  background: #7c3aed;
+}
+
+.vp-badge-impact-limited-availability {
+  background: #ea580c;
+}
+
+.vp-badge-impact-action-required {
+  background: #b91c1c;
+}
