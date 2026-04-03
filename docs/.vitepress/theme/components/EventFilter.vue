@@ -64,14 +64,11 @@
         Keine Events für diese Filterauswahl.
       </p>
     </div>
-
-    <EventDetailModal :event="activeEvent" @close="closeDetail" />
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import EventDetailModal from "./EventDetailModal.vue";
 import { deriveStatus, statusLabel } from "../composables/useEventStatus.js";
 
 const props = defineProps({
@@ -84,16 +81,6 @@ const selectedVendor = ref("");
 const selectedStatus = ref("");
 const selectedImpact = ref("");
 const activeEvent    = ref(null);
-
-onMounted(async () => {
-  const res = await fetch(props.indexFile);
-  events.value = await res.json();
-  document.addEventListener("modal-close", closeDetail);
-});
-
-onUnmounted(() => {
-  document.removeEventListener("modal-close", closeDetail);
-});
 
 function openDetail(event) { activeEvent.value = event; }
 function closeDetail()     { activeEvent.value = null;  }
