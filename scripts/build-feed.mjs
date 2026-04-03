@@ -1,69 +1,135 @@
 import fs from "node:fs";
-import { readYamlFiles } from "./utils.mjs";
-import { getSchemaForType } from "./schemas/content.mjs";
 
-const contentDirs = ["maintenance", "security", "release", "announcement"];
-const events = [];
+// Architekturprinzip: Feed und UI-Startmenge (latest.json) sind getrennte
+// Sichten auf dieselben Daten (all.json). Sie dürfen sich überschneiden,
+// dürfen aber nicht voneinander abhängen.
+//
+// Feed-Selektionslogik (typabhängig -- bewusste Entscheidung):
+//
+// Wartungen: nach eventDate selektiert, nicht nach publishedAt.
+//   Ein Wartungsfenster in 12 Wochen ist für RSS-Abonnenten relevant.
+//   Ein reiner publishedAt-90-Tage-Filter würde es ausschliessen.
+//   → zukünftige Wartungen: immer enthalten
+//   → kurzfristige Wartungen (Vorlauf < 4 Wochen): immer enthalten
+//
+// security, release, announcement: nach publishedAt der letzten 90 Tage.
+//   Für diese Typen ist der Veröffentlichungszeitpunkt der fachlich
+//   relevante Zeitpunkt. Das ist eine bewusste Entscheidung -- nicht
+//   eine Vereinfachung.
+//
+// Sortierung des Feeds: nach publishedAt absteigend.
+//   RSS-Reader erwarten chronologische Reihenfolge nach Veröffentlichung,
+//   nicht nach fachlichem Wirkungszeitpunkt.
 
-for (const dir of contentDirs) {
-    for (const { data } of readYamlFiles("data/content/" + dir)) {
-        const result = getSchemaForType(data?.typeId).safeParse(data);
-        if (result.success) events.push(result.data);
-    }
-}
-
-events.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-const latest = events.slice(0, 50);
-
-// Custom Domain des Projekts. Bei Domaenwechsel hier anpassen.
 const BASE_URL = process.env.VITEPRESS_BASE_URL ?? "https://lieblingsplatz.cloud";
 
+const allEvents = JSON.parse(
+    fs.readFileSync("data/_generated/index/all.json", "utf8")
+);
+
+const now = new Date();
+const MS_4_WEEKS = 28 * 24 * 60 * 60 * 1000;
+const MS_7_DAYS = 7 * 24 * 60 * 60 * 1000;
+const MS_90_DAYS = 90 * 24 * 60 * 60 * 1000;
+
+const feedMaintenance = allEvents.filter((e) => {
+    if (e.typeId !== "maintenance") return false;
+    const eventDate = new Date(e.eventDate);
+    const published = new Date(e.publishedAt);
+    const isFuture = eventDate > now;
+    const leadTime = eventDate.getTime() - published.getTime();
+    const isShort = leadTime < MS_4_WEEKS;
+    const justPassed = (now.getTime() - eventDate.getTime()) < MS_7_DAYS;
+    return isFuture || (isShort && justPassed);
+});
+
+const feedOther = allEvents.filter((e) => {
+    if (e.typeId === "maintenance") return false;
+    return (now.getTime() - new Date(e.publishedAt).getTime()) < MS_90_DAYS;
+});
+
+// Deduplizieren, nach publishedAt sortieren, auf 50 begrenzen
+const seenIds = new Set();
+const combined = [];
+for (const e of [...feedMaintenance, ...feedOther]) {
+    if (!seenIds.has(e.id)) {
+        seenIds.add(e.id);
+        combined.push(e);
+    }
+}
+combined.sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+);
+const feedFinal = combined.slice(0, 50);
+
+// ── XML-Hilfsfunktion ─────────────────────────────────────────
 function escapeXml(str) {
-    return String(str)
+    return String(str ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
 }
 
-const items = latest.map((e) => {
-    // Kundenhandlungsbedarf im Titel kennzeichnen
+// ── Feed-Items ────────────────────────────────────────────────
+// Kein <lastBuildDate> pro Item -- das ist ein Channel-Level-Feld in RSS 2.0.
+// Item-Level-Änderungszeitstempel wären Atom (<updated>) -- aktuell nicht benötigt.
+const items = feedFinal.map((e) => {
     const titlePrefix = e.isCustomerActionRequired ? "[Handlungsbedarf] " : "";
+
+    // Für Wartungen: Wartungsfenster in der Beschreibung
+    let description = e.summaryMd ?? "";
+    if (e.typeId === "maintenance" && e.eventDate) {
+        const start = new Date(e.eventDate).toLocaleString("de-DE", {
+            year: "numeric", month: "2-digit", day: "2-digit",
+            hour: "2-digit", minute: "2-digit",
+        });
+        const end = e.endDate
+            ? new Date(e.endDate).toLocaleString("de-DE", {
+                hour: "2-digit", minute: "2-digit",
+            })
+            : null;
+        const window = end
+            ? start + " bis " + end + " Uhr"
+            : start + " Uhr";
+        description = "Wartungsfenster: " + window + ". " + description;
+    }
 
     return (
         "\n  <item>" +
         "\n    <title>" + escapeXml(titlePrefix + e.title) + "</title>" +
         "\n    <link>" + BASE_URL + "/news/" + escapeXml(e.slug) + "</link>" +
-        "\n    <guid isPermaLink=\"true\">" + BASE_URL + "/news/" + escapeXml(e.slug) + "</guid>" +
+        "\n    <guid isPermaLink=\"true\">" +
+        BASE_URL + "/news/" + escapeXml(e.slug) +
+        "</guid>" +
         "\n    <pubDate>" + new Date(e.publishedAt).toUTCString() + "</pubDate>" +
-        (e.updatedAt
-            ? "\n    <lastBuildDate>" + new Date(e.updatedAt).toUTCString() + "</lastBuildDate>"
-            : "") +
-        "\n    <description>" + escapeXml(e.summaryMd) + "</description>" +
+        "\n    <description>" + escapeXml(description) + "</description>" +
         "\n    <category>" + escapeXml(e.typeId) + "</category>" +
         "\n  </item>"
     );
 }).join("");
 
-const rss =
+// ── Feed-XML ──────────────────────────────────────────────────
+const xml = (
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-    "<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n" +
-    "  <channel>\n" +
-    "    <title>Lieblingsplatz.cloud</title>\n" +
-    "    <link>" + BASE_URL + "</link>\n" +
-    "    <description>Wartungen, CVEs, Releases und Ankündigungen</description>\n" +
-    "    <language>de</language>\n" +
-    "    <lastBuildDate>" + new Date().toUTCString() + "</lastBuildDate>\n" +
-    "    <atom:link href=\"" + BASE_URL + "/feed.xml\" rel=\"self\" type=\"application/rss+xml\" />\n" +
+    "<rss version=\"2.0\">\n" +
+    "<channel>\n" +
+    "  <title>lieblingsplatz.cloud -- News &amp; Ankündigungen</title>\n" +
+    "  <link>" + BASE_URL + "</link>\n" +
+    "  <description>" +
+    "Aktuelle Wartungen, Security-Meldungen, Releases und Ankündigungen" +
+    "</description>\n" +
+    "  <language>de-DE</language>\n" +
+    "  <lastBuildDate>" + now.toUTCString() + "</lastBuildDate>\n" +
     items +
-    "\n  </channel>\n" +
-    "</rss>";
+    "\n</channel>\n</rss>\n"
+);
 
-fs.mkdirSync("data/_generated/feeds", { recursive: true });
-fs.writeFileSync("data/_generated/feeds/feed.xml", rss, "utf8");
-
-// Feed nach docs/public/ kopieren, damit er im Build-Output unter /feed.xml erreichbar ist.
 fs.mkdirSync("docs/public", { recursive: true });
-fs.copyFileSync("data/_generated/feeds/feed.xml", "docs/public/feed.xml");
-
-console.log("RSS-Feed erzeugt: " + latest.length + " Einträge");
+fs.writeFileSync("docs/public/feed.xml", xml, "utf8");
+console.log(
+    "Feed erzeugt: docs/public/feed.xml (" +
+    feedFinal.length + " Einträge, davon " +
+    feedMaintenance.length + " Wartungen)"
+);

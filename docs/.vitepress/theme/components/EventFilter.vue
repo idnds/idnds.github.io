@@ -1,7 +1,7 @@
 <template>
   <div class="event-filter">
-    <div class="filters" role="group" aria-label="Event-Filter">
 
+    <div class="filters" role="group" aria-label="Event-Filter">
       <select
         id="type-filter"
         v-model="selectedType"
@@ -9,7 +9,7 @@
         @change="onTypeChange"
       >
         <option value="">Alle Typen</option>
-        <option v-for="t in availableTypes" :key="t.value" :value="t.value">
+        <option v-for="t in filterOptions.types" :key="t.value" :value="t.value">
           {{ t.label }}
         </option>
       </select>
@@ -18,9 +18,10 @@
         id="vendor-filter"
         v-model="selectedVendor"
         aria-label="Nach Hersteller filtern"
+        @change="onVendorChange"
       >
         <option value="">Alle Hersteller</option>
-        <option v-for="v in availableVendors" :key="v.value" :value="v.value">
+        <option v-for="v in filterOptions.vendors" :key="v.value" :value="v.value">
           {{ v.label }}
         </option>
       </select>
@@ -47,71 +48,144 @@
         <option value="limited-availability">Eingeschränkte Verfügbarkeit</option>
         <option value="action-required">Handlungsbedarf</option>
       </select>
-
     </div>
 
-    <p class="result-count" aria-live="polite">
-      {{ filteredEvents.length }} Events gefunden
+    <p v-if="initialLoading" class="filter-status" aria-live="polite">
+      Wird geladen...
+    </p>
+    <p v-else-if="loading" class="filter-status" aria-live="polite">
+      Wird gefiltert...
+    </p>
+    <p v-else class="filter-status" aria-live="polite">
+      <template v-if="visibleCount < totalCount">
+        {{ visibleCount }} von {{ totalCount }} Events angezeigt
+      </template>
+      <template v-else>
+        {{ totalCount }} {{ totalCount === 1 ? "Event" : "Events" }} gefunden
+      </template>
     </p>
 
     <div>
       <EventCard
-        v-for="event in filteredEvents"
+        v-for="event in visibleEvents"
         :key="event.id"
         :event="event"
       />
-      <p v-if="filteredEvents.length === 0">
+      <p v-if="!initialLoading && !loading && totalCount === 0" class="filter-empty">
         Keine Events für diese Filterauswahl.
       </p>
     </div>
+
+    <div v-if="hasMore" class="load-more">
+      <button class="load-more-btn" type="button" @click="loadMore">
+        {{ nextBatchSize }} weitere Events laden
+        ({{ totalCount - visibleCount }} verbleibend)
+      </button>
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import { deriveStatus, statusLabel } from "../composables/useEventStatus.js";
 
-const props = defineProps({
-  indexFile: { type: String, default: "/data/_generated/index/latest.json" },
-});
+// Kein defineProps -- die Komponente verwaltet ihre Lade-Logik vollständig intern.
+// Kein Modal-Code -- Details öffnet /news/<slug> direkt.
+
+const INITIAL_LIMIT = 25;
+const BATCH_SIZE    = 25;
 
 const events         = ref([]);
+const initialLoading = ref(true);
+const loading        = ref(false);
+const visibleCount   = ref(INITIAL_LIMIT);
 const selectedType   = ref("");
 const selectedVendor = ref("");
 const selectedStatus = ref("");
 const selectedImpact = ref("");
-const activeEvent    = ref(null);
+const filterOptions  = ref({ types: [], vendors: [] });
 
-function openDetail(event) { activeEvent.value = event; }
-function closeDetail()     { activeEvent.value = null;  }
+const indexCache = new Map();
 
-const showStatusFilter = computed(() =>
-  selectedType.value === "" || selectedType.value === "maintenance"
-);
-
-function onTypeChange() {
-  if (selectedType.value !== "" && selectedType.value !== "maintenance") {
-    selectedStatus.value = "";
+async function fetchIndex(url, cacheKey) {
+  if (indexCache.has(cacheKey)) return indexCache.get(cacheKey);
+  try {
+    const res  = await fetch(url);
+    const data = await res.json();
+    indexCache.set(cacheKey, data);
+    return data;
+  } catch (err) {
+    console.error("Laden fehlgeschlagen:", url, err);
+    return null;
   }
 }
 
-const availableTypes = computed(() => {
-  const map = new Map();
-  events.value.forEach((e) => {
-    if (!map.has(e.typeId)) map.set(e.typeId, e.eventType?.name ?? e.typeId);
-  });
-  return Array.from(map.entries()).map(([value, label]) => ({ value, label }));
+// Beide Requests parallel, initialLoading erst nach Promise.all false
+onMounted(async () => {
+  try {
+    const [eventsData, opts] = await Promise.all([
+      fetchIndex("/data/_generated/index/latest.json", "latest"),
+      fetchIndex("/data/_generated/options.json", "options"),
+    ]);
+    if (eventsData) events.value = eventsData;
+    if (opts)       filterOptions.value = opts;
+  } finally {
+    initialLoading.value = false;
+  }
 });
 
-const availableVendors = computed(() => {
-  const map = new Map();
-  events.value.forEach((e) => {
-    if (!map.has(e.vendorId)) map.set(e.vendorId, e.vendor?.name ?? e.vendorId);
-  });
-  return Array.from(map.entries()).map(([value, label]) => ({ value, label }));
-});
+// Basis-Index laden -- Entscheidungslogik:
+//   Typ gewählt                → by-type/<type>.json
+//   Nur Hersteller gewählt     → by-vendor/<vendor>.json
+//   Beides leer                → latest.json
+//   Typ + Hersteller           → by-type (kleiner), Hersteller clientseitig gefiltert
+async function loadBaseIndex() {
+  loading.value = true;
+  try {
+    if (selectedType.value) {
+      const data = await fetchIndex(
+        "/data/_generated/index/by-type/" + selectedType.value + ".json",
+        "type:" + selectedType.value
+      );
+      if (data) events.value = data;
+    } else if (selectedVendor.value) {
+      const data = await fetchIndex(
+        "/data/_generated/index/by-vendor/" + selectedVendor.value + ".json",
+        "vendor:" + selectedVendor.value
+      );
+      if (data) events.value = data;
+    } else {
+      const data = await fetchIndex(
+        "/data/_generated/index/latest.json",
+        "latest"
+      );
+      if (data) events.value = data;
+    }
+  } finally {
+    loading.value   = false;
+    visibleCount.value = INITIAL_LIMIT;
+  }
+}
 
-const availableStatuses = ["planned", "ongoing", "completed", "cancelled"];
+async function onTypeChange() {
+  if (selectedType.value !== "" && selectedType.value !== "maintenance") {
+    selectedStatus.value = "";
+  }
+  await loadBaseIndex();
+}
+
+async function onVendorChange() {
+  if (!selectedType.value) {
+    await loadBaseIndex();
+  } else {
+    visibleCount.value = INITIAL_LIMIT;
+  }
+}
+
+watch([selectedStatus, selectedImpact], () => {
+  visibleCount.value = INITIAL_LIMIT;
+});
 
 const filteredEvents = computed(() =>
   events.value.filter((e) => {
@@ -124,19 +198,76 @@ const filteredEvents = computed(() =>
     return true;
   })
 );
+
+const visibleEvents = computed(() =>
+  filteredEvents.value.slice(0, visibleCount.value)
+);
+
+const totalCount    = computed(() => filteredEvents.value.length);
+const hasMore       = computed(() => visibleCount.value < totalCount.value);
+const nextBatchSize = computed(() =>
+  Math.min(BATCH_SIZE, totalCount.value - visibleCount.value)
+);
+
+function loadMore() {
+  visibleCount.value = Math.min(
+    visibleCount.value + BATCH_SIZE,
+    totalCount.value
+  );
+}
+
+const showStatusFilter = computed(() =>
+  selectedType.value === "" || selectedType.value === "maintenance"
+);
+
+const availableStatuses = ["planned", "ongoing", "completed", "cancelled"];
 </script>
 
 <style scoped>
 .filters {
   display: flex;
-  gap: 1rem;
-  align-items: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
-.result-count {
+.filters select {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+.filters select:focus {
+  outline: 2px solid var(--vp-c-brand);
+  outline-offset: 1px;
+}
+.filter-status {
   font-size: 0.85rem;
   color: var(--vp-c-text-2);
   margin-bottom: 0.75rem;
 }
+.filter-empty {
+  font-size: 0.9rem;
+  color: var(--vp-c-text-2);
+  padding: 2rem 0;
+  text-align: center;
+}
+.load-more {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+.load-more-btn {
+  background: var(--vp-c-bg-mute);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.5em 1.5em;
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--vp-c-text-1);
+}
+.load-more-btn:hover { background: var(--vp-c-bg-soft); }
 </style>
