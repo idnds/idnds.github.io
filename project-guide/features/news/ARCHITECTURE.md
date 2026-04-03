@@ -249,21 +249,51 @@ Eine Wartung die am 15.12.2026 angekündigt wird aber am 15.03.2027 stattfindet,
 landet in `by-year/2027.json` -- nicht in `2026.json`. Das ist fachlich gewollt:
 das Archivjahr entspricht der tatsächlichen Auswirkung.
 
-### Kuratierte latest.json -- Prioritätslogik
+## Kuratierte latest.json -- Prioritätslogik
 
-`latest.json` ist keine zeitliche Scheibe sondern eine priorisierte Auswahl:
+`latest.json` ist keine zeitliche Scheibe, sondern eine priorisierte Auswahl der aktuell relevanten Events.
+
+Alle Einträge unterliegen einer einheitlichen Zeitbegrenzung. Historische Daten werden ausschließlich über die Jahresindizes (`by-year`) abgebildet.
+
+### Grundprinzip
+
+- Keine Eventklasse besitzt eine unbegrenzte Historienaufnahme
+- Alle nicht-zukünftigen Events werden zeitlich gleich behandelt
+- `latest.json` ist eine kuratierte UI-Ansicht, kein Archiv
+
+### Zeitliche Begrenzung
+
+Alle vergangenen Events (unabhängig vom Typ) werden auf ein festes Zeitfenster begrenzt:
+
+- **Maximalalter:** 2 Jahre (`MS_2_YEARS`)
+- Grundlage: `sortDate` (Maintenance, Security, Release, Announcement gleichermaßen)
+
+---
+
+## Struktur von latest.json
 
 | Priorität | Inhalt | Limit |
 |---|---|---|
-| P1 | Kurzfristige Wartungen (Vorlauf < 4 Wochen, aktuell oder letzte 7 Tage) | Kein Limit -- immer vollständig |
-| P2 | Zukünftige Wartungen | Max. 6 Termine |
-| PastMaintenance | Vergangene Wartungen | |
-| P3 | Nicht-Wartungs-Events der letzten 2 Jahre | Max. 150 |
+| P1 | Zukünftige Wartungen | Kein hartes Limit (sortiert nach eventDate) |
+| P2 | Alle Events der letzten 2 Jahre (Maintenance + Non-Maintenance) | Globales Limit: MAX_TOTAL (z. B. 200) |
 
-P1-Events können durch das Gesamtlimit von 200 nicht verdrängt werden. P2+PastMaintenance+P3
-füllen die verbleibenden Plätze (`MAX_TOTAL - p1.length`).
+### Sortierlogik
 
-### Feed-Logik
+1. Zukünftige Maintenance-Events werden nach `eventDate` aufsteigend sortiert
+2. Alle übrigen Events werden nach `sortDate` (global absteigend) sortiert
+3. Zusammenführung erfolgt in einer gemeinsamen priorisierten Liste
+4. Duplikate werden entfernt (über `id`)
+5. Begrenzung auf `MAX_TOTAL`
+
+### Architekturhinweis
+
+- Vergangene Maintenance-Events werden **nicht separat behandelt**
+- Sie folgen exakt denselben Regeln wie alle anderen historischen Events
+- Die langfristige Historie ist ausschließlich in `by-year` enthalten
+
+---
+
+## Feed-Logik
 
 Der Feed basiert auf `all.json` (nicht `latest.json`) und ist unabhängig
 von der UI-Startansicht:
