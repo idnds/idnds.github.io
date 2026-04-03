@@ -32,7 +32,7 @@
 }
 
 .vp-badge-type-security {
-  background: #ef4444;
+  background: #b91c1c;
 }
 
 /* Status-Badges: werden nur bei Maintenance-Events angezeigt */
@@ -49,18 +49,18 @@
 }
 
 .vp-badge-status-cancelled {
-  background: #ef4444;
+  background: #000000;
 }
 
 /* Impact-Badges: können bei allen Event-Typen auftreten */
 .vp-badge-impact-downtime {
-  background: #7c3aed;
+  background: #b316b3;
 }
 
 .vp-badge-impact-limited-availability {
-  background: #ea580c;
+  background: #11a0a5;
 }
 
 .vp-badge-impact-action-required {
-  background: #b91c1c;
+  background: #ea580c;
 }

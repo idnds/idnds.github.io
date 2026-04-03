@@ -1,5 +1,5 @@
 typeId: security
 name: Security / CVE
 group: security
-color: "#ef4444"
+color: "#b91c1c"
 description: Sicherheitslücken und CVE-Meldungen
