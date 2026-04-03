@@ -146,7 +146,7 @@ for (const [vendorId, events] of Object.entries(byVendor)) {
 //   Aufsteigend nach eventDate (nächster Termin oben).
 //   Begrenzt auf MAX_FUTURE -- mehr würde die Startansicht dominieren.
 //
-// Priorität 3 -- Aktuelle nicht-Wartungs-Events (letzte 90 Tage)
+// Priorität 3 -- Aktuelle nicht-Wartungs-Events (letzte 2 Jahre)
 //   security, release, announcement nach publishedAt.
 //
 // Gesamtbegrenzung:
@@ -158,8 +158,8 @@ for (const [vendorId, events] of Object.entries(byVendor)) {
 const now = new Date();
 const MS_4_WEEKS = 28 * 24 * 60 * 60 * 1000;
 const MS_7_DAYS = 7 * 24 * 60 * 60 * 1000;
-const MS_90_DAYS = 90 * 24 * 60 * 60 * 1000;
-const MAX_FUTURE = 6;
+const MS_2_YEARS = 2 * 365 * 24 * 60 * 60 * 1000;
+const MAX_FUTURE = 4;
 const MAX_TOTAL = 200;
 
 // Priorität 1: kurzfristige Wartungen (garantiert, kein Limit)
@@ -174,9 +174,10 @@ const p1ShortNotice = allEventsFull.filter((e) => {
     return isShort && (upcoming || veryRecent);
 });
 
+const p1Ids = new Set(p1ShortNotice.map((e) => e.id));
+
 // Priorität 2: zukünftige Wartungen (max. MAX_FUTURE)
 // Bereits in P1 enthaltene Events nicht doppelt aufnehmen.
-const p1Ids = new Set(p1ShortNotice.map((e) => e.id));
 const p2Future = allEventsFull
     .filter((e) =>
         e.typeId === "maintenance" &&
@@ -186,10 +187,17 @@ const p2Future = allEventsFull
     .sort((a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime())
     .slice(0, MAX_FUTURE);
 
-// Priorität 3: nicht-Wartungs-Events der letzten 90 Tage
+// vergangene Wartungen (garantiert, kein Limit)
+const pPastMaintenance = allEventsFull.filter((e) =>
+    e.typeId === "maintenance" &&
+    new Date(e.eventDate) <= now &&
+    !p1Ids.has(e.id)
+);
+
+// Priorität 3: nicht-Wartungs-Events der letzten 2 Jahre
 const p3Other = allEventsFull.filter((e) => {
     if (e.typeId === "maintenance") return false;
-    return (now.getTime() - new Date(e.publishedAt).getTime()) < MS_90_DAYS;
+    return (now.getTime() - new Date(e.publishedAt).getTime()) < MS_2_YEARS;
 });
 
 // Zusammenführung:
@@ -197,26 +205,44 @@ const p3Other = allEventsFull.filter((e) => {
 // Verbleibende Plätze (MAX_TOTAL - p1.length) mit P2+P3 auffüllen.
 const remainingSlots = Math.max(0, MAX_TOTAL - p1ShortNotice.length);
 
+const p2p3Pool = [
+    ...pPastMaintenance,
+    ...p2Future,
+    ...p3Other,
+];
+
+// Erst global nach sortDate sortieren → verhindert Typ-Dominanz
+p2p3Pool.sort(
+    (a, b) =>
+        new Date(b.sortDate).getTime() -
+        new Date(a.sortDate).getTime()
+);
+
 const seenIds = new Set(p1Ids);
 const p2p3 = [];
-for (const e of [...p2Future, ...p3Other]) {
+
+for (const e of p2p3Pool) {
     if (!seenIds.has(e.id)) {
         seenIds.add(e.id);
         p2p3.push(e);
     }
 }
-p2p3.sort(
-    (a, b) => new Date(b.sortDate).getTime() - new Date(a.sortDate).getTime()
-);
+
 const p2p3Capped = p2p3.slice(0, remainingSlots);
 
-// P1 voran, dann P2+P3 -- P1 kann nicht verdrängt werden
-const latest = [
-    ...p1ShortNotice.sort(
-        (a, b) => new Date(b.sortDate).getTime() - new Date(a.sortDate).getTime()
-    ),
+// nur Zeitachse entscheidet
+const latestUnsorted = [
+    ...p1ShortNotice,
     ...p2p3Capped,
-].map(slim);
+];
+
+const latest = latestUnsorted
+    .map(slim)
+    .sort(
+        (a, b) =>
+            new Date(b.sortDate).getTime() -
+            new Date(a.sortDate).getTime()
+    );
 
 writeIndex("data/_generated/index/latest.json", latest);
 
@@ -307,7 +333,7 @@ console.log(
     "\n  latest.json: " + latest.length + " Events (priorisiert kuratiert)" +
     "\n    P1 kurzfristige Wartungen (garantiert): " + p1ShortNotice.length +
     "\n    P2 zukünftige Wartungen (max. " + MAX_FUTURE + "):  " + p2Future.length +
-    "\n    P3 andere (90 Tage):                   " + p3Other.length +
+    "\n    P3 andere (2 Jahre):                   " + p3Other.length +
     "\n    P2+P3 nach Deduplizierung + Limit:      " + p2p3Capped.length +
     "\n  all.json wurde NICHT nach public/ kopiert\n"
 );
