@@ -1,18 +1,14 @@
-id: maintenance-2026-04-17-lpc-test-geplantes-wartungsfenster
-slug: maintenance-2026-04-17-lpc-test-geplantes-wartungsfenster
+id: maintenance-2026-04-17-lpc-test-regelwartung
+slug: maintenance-2026-04-17-lpc-test-regelwartung
 typeId: maintenance
 vendorId: idnds
 productIds:
   - lpc-test
-
-title: "Geplante Wartung - Lieblingsplatz.cloud (Test)"
+title: "Regelwartung - Lieblingsplatz.cloud (Test)"
 publishedAt: "2026-03-24T13:14:15+01:00"
-# updatedAt: ""  # optional -- nur bei nachtraeglicher Aktualisierung setzen
-
 eventDate: "2026-04-17T17:00:00+01:00"
 endDate: "2026-04-17T19:00:00+01:00"
 status: active
-
 summaryMd: |
   Die Lieblingsplatz.cloud-Testumgebung wird routinemäßig quartalsweise gewartet. 
   Wartungen finden jeweils am dritten Donnerstag der Monate Januar, April, Juli und Oktober ab 18 Uhr statt.
@@ -22,15 +18,6 @@ detailsMd: |
   - Auto-Update der Umgebungen mit Versionierung v2X-X-latest
   - Plattform-Updates
   - ELO XC Updates
-
 impact:
   - limited-availability
-# downtime, limited-availability, action-required
-
-# customerActionMd: |  # optional -- nur wenn impact action-required enthaelt
-#   TODO: Konkrete Handlungshinweise fuer Kunden.
-
 relations: []
-# relations:
-#   - type: relates-to  # relates-to | resolves | follow-up-to | supersedes
-#     eventId: ""

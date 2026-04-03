@@ -4,13 +4,10 @@ typeId: security
 vendorId: kemp
 productIds:
   - loadmaster
-
 title: "Kemp LoadMaster: Serie von hochkritischen Sicherheitslücken"
 publishedAt: "2026-03-19T12:05:41+01:00"
-
 summaryMd: |
   Kemp hat eine Serie von fünf hochkritischen Sicherheitslücken in LoadMaster bestätigt. Betroffen sind GA-Versionen bis v7.2.62.2 und LTSF-Versionen bis v7.2.54.16. Gepatchte Versionen stehen bereits zur Verfügung.
-
 detailsMd: |
   Die folgenden CVEs werden am 2. April 2026 öffentlich veröffentlicht: CVE-2026-3517, CVE-2026-3518, CVE-2026-3519, CVE-2026-4048 und CVE-2026-21876.  
   Betroffen sind GA LoadMaster-Versionen v7.2.62.2 und älter sowie LTSF-Versionen v7.2.54.16 und älter.
@@ -23,17 +20,13 @@ detailsMd: |
   - **CVE-2026-21876:** Multipart WAF Bypass durch mehrere Content-Type-Parts
 
   Die ersten vier CVEs ermöglichen einem authentifizierten Angreifer, beliebige Befehle auf der LoadMaster-Appliance auszuführen. CVE-2026-21876 betrifft die WAF-Logik, wodurch speziell gestaltete Multipart-Anfragen die WAF umgehen können.
-
 impact:
   - action-required
-
 customerActionMd: |
   Kunden sollten ihre LoadMaster-Appliances unverzüglich auf Version **v7.2.63.0** oder höher (für LTSF: **v7.2.54.17** oder höher) aktualisieren, um alle beschriebenen Sicherheitslücken zu schließen. Es gibt bisher keine Hinweise auf aktive Ausnutzung der Schwachstellen.
-
 relations:
   - type: relates-to
     eventId: maintenance-2026-03-21-loadmaster-security-patch
-
 cveIds:
   - "CVE-2026-3517"
   - "CVE-2026-3518"

@@ -15,15 +15,10 @@ updatedAt: "2026-03-24T20:00:00+01:00"
 summaryMd: |
   Geplantes Wartungsfenster zur Bereitstellung neuer Versionen der ELO ECM Suite.
 detailsMd: |
-  ## Ablauf
-
   1. Aktualisierung des ELO Operators auf Version 1.18.0
   2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest
   3. Funktionstest
 impact: []
-# limited-availability, downtime, action-required
-# customerActionMd: |  # optional -- nur wenn impact action-required enthaelt
-#   TODO: Konkrete Handlungshinweise fuer Kunden.
 relations:
   - type: relates-to
     eventId: release-2026-03-04-elo-operator-1-18-0
