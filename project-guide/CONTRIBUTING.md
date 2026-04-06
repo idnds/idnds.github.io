@@ -61,12 +61,9 @@ npm run docs:dev
 
 ### 3. Neues Event anlegen
 
-```bash
-npm run new:event -- --type maintenance --vendor idnds --product lpc-prod --name kurzbeschreibung
-# → erzeugt data/content/maintenance/YYYY/YYYY-MM-DD-lpc-prod-kurzbeschreibung.yaml
-```
-
-Danach YAML ausfüllen, validieren und committen. Alternativ: Formular unter `/news/add`.
+- Neues Event mittels Formular unter (http://localhost:5173/news/add) erstellen
+- Ablage unter `data/content/<typeId>/YYYY-MM-DD-<productId>-<shortname>.yaml`
+- Danach validieren, Indizes erzeugen, Seiten generieren und RSS-Feed erzeugen
 
 ## Build & Test lokal
 
@@ -84,7 +81,7 @@ npm run docs:serve
 ### YAML-Dateinamen
 
 ```
-data/content/<typeId>/<Jahr>/YYYY-MM-DD-<productId>-<kurzname>.yaml
+data/content/<typeId>/<Jahr>/YYYY-MM-DD-<productId>-<shortname>.yaml
 ```
 
 Beispiele:
@@ -100,7 +97,7 @@ data/content/security/2026/2026-03-01-loadmaster-cve-fix.yaml
 ### IDs und Slugs
 
 ```
-<typeId>-YYYY-MM-DD-<productId>-<kurzname>
+<typeId>-YYYY-MM-DD-<productId>-<shortname>
 ```
 
 Beispiel: `maintenance-2026-03-24-lpc-prod-operator-update`
