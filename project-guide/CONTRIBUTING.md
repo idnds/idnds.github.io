@@ -10,10 +10,28 @@
 
 ## Installation
 
+### Node.js
+
+- [Download Node.js](https://nodejs.org/en/download)
+- Windows spezifisch...
+  - Administrative Powershell öffnen
+  - Skriptausführung erlauben:
+
+    ```powershell
+    Set-ExecutionPolicy RemoteSigned
+    ```
+
+- Prüfung der installierten Version:
+
+  ```powershell
+  npm -v
+  ```
+
+### Repository klonen
+
 ```bash
 git clone https://github.com/idnds/idnds.github.io.git
 cd idnds.github.io
-git checkout feature-events
 npm ci
 ```
 
