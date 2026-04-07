@@ -1,3 +1,4 @@
+// docs/.vitepress/theme/composables/useEventForm.js
 import { ref, watch, onMounted, reactive } from "vue";
 import { useEventFormState } from "./useEventFormState.js";
 import { useEventMeta } from "./useEventMeta.js";
@@ -21,11 +22,11 @@ export function useEventForm(options = {}) {
             console.warn("Masterdaten konnten nicht geladen werden:", e.message);
         }
     });
-
     const { form, formatForDatetimeLocal } = useEventFormState(mode);
     const meta = useEventMeta(form, masters);
     const { validate } = useEventValidation(form, mode);
     const { buildYaml, toIso } = useEventYaml(form, meta, mode);
+    const { summaryPreview, detailsPreview, customerActionPreview, initializePreviews } = useMarkdownPreview(form);
     const previews = useMarkdownPreview(form);
     const { downloadYaml } = useYamlIO();
 
@@ -65,9 +66,10 @@ export function useEventForm(options = {}) {
     return {
         form, masters, meta, errors,
         yamlOutput, isValid, isDirty,
-        ...previews,
+        summaryPreview, detailsPreview, customerActionPreview,
+        initializePreviews,
         generate, download,
         addRelation, removeRelation,
-        formatForDatetimeLocal,
+        formatForDatetimeLocal
     };
 }

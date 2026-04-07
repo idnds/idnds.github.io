@@ -17,6 +17,14 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 
+const props = defineProps({
+  // Basispfad zur generierten Templates-JSON, ohne abschließenden Slash.
+  // Muss mit dem Ausgabepfad in build-templates.mjs übereinstimmen.
+  basePath: {
+    type:    String,
+    default: "/data/_generated/templates/news",
+  },
+});
 const emit = defineEmits(["apply"]);
 
 const templates    = ref([]);
@@ -25,7 +33,7 @@ const templateCache = new Map();
 
 onMounted(async () => {
   try {
-    const res  = await fetch("/data/_generated/templates/news/index.json");
+    const res  = await fetch(props.basePath + "/index.json");
     const data = await res.json();
     templates.value = data.templates ?? [];
   } catch (e) {
@@ -43,17 +51,18 @@ async function onSelect() {
   let data = templateCache.get(selectedId.value);
   if (!data) {
     try {
-      const res = await fetch("/data/_genrated/templates/news/" + selectedId.value + ".json");
+      const res = await fetch(props.basePath + "/" + selectedId.value + ".json");
+      if (!res.ok) throw new Error("HTTP " + res.status);
       data = await res.json();
       templateCache.set(selectedId.value, data);
     } catch (e) {
       console.error("Template konnte nicht geladen werden:", e.message);
+      selectedId.value = "";
       return;
     }
   }
 
   emit("apply", data);
-  // Dropdown zurücksetzen nach Anwendung
   selectedId.value = "";
 }
 </script>

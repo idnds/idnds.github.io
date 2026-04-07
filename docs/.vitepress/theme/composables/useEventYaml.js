@@ -84,7 +84,11 @@ export function useEventYaml(form, meta, mode = "create") {
             if (form.fixedVersion.trim()) obj.fixedVersion = form.fixedVersion.trim();
         }
 
-        return yaml.dump(obj, { schema: LITERAL_SCHEMA, lineWidth: 120, noRefs: true });
+        return yaml.dump(obj, {
+            schema: LITERAL_SCHEMA,
+            lineWidth: 120,
+            noRefs: true,
+        });
     }
 
     return { buildYaml, toIso };

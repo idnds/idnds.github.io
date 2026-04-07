@@ -18,8 +18,16 @@ export function useMarkdownPreview(form) {
     watch(() => form.detailsMd, (v) => debounce(debouncedDetails, v));
     watch(() => form.customerActionMd, (v) => debounce(debouncedCustomerAction, v));
 
+    // Wird nach YAML-Import aufgerufen: Debounce umgehen, sofort rendern.
+    function initializePreviews() {
+        clearTimeout(debounceTimer.value);
+        debouncedSummary.value = form.summaryMd;
+        debouncedDetails.value = form.detailsMd;
+        debouncedCustomerAction.value = form.customerActionMd;
+    }
+
     const summaryPreview = computed(() =>
-        debouncedSummary.value ? marked.parseInline(debouncedSummary.value) : ""
+        debouncedSummary.value ? marked.parse(debouncedSummary.value) : ""
     );
     const detailsPreview = computed(() =>
         debouncedDetails.value ? marked.parse(debouncedDetails.value) : ""
@@ -28,5 +36,5 @@ export function useMarkdownPreview(form) {
         debouncedCustomerAction.value ? marked.parse(debouncedCustomerAction.value) : ""
     );
 
-    return { summaryPreview, detailsPreview, customerActionPreview };
+    return { summaryPreview, detailsPreview, customerActionPreview, initializePreviews };
 }
