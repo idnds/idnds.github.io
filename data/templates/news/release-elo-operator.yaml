@@ -1,19 +1,24 @@
-# data/templates/news/maintenance-lpc-test-regular.yaml
+# data/templates/news/release-elo-operator.yaml
 _meta:
   name: "elo-operator - Release"
   description: "Neue Version des ELO Operators"
 
 typeId: release
 productIds:
-  - lpc-test
-title: "Regelwartung - Lieblingsplatz.cloud (Test)"
+  - elo-operator
+title: "ELO Cloud Kubernetes Operator X.XX.X"
 impact: []
 summaryMd: |
-  Die Lieblingsplatz.cloud-Testumgebung wird routinemäßig quartalsweise gewartet. 
-  Wartungen finden jeweils am dritten Donnerstag der Monate Januar, April, Juli und Oktober ab 18 Uhr statt.
+  Release des ELO Cloud Kubernetes Operators mit...
 detailsMd: |
-  Die Wartung der Testumgebung umfasst die folgenden Arbeiten:
-  - Operator-Update auf den aktuellen Stand
-  - Auto-Update der Umgebungen mit Versionierung v2X-X-latest
-  - Plattform-Updates
-  - ELO XC Updates
+  ### Fixes
+
+  **FIX-1:** Beschreibung des Fixes.
+
+  **FIX-2:** Beschreibung des Fixes.
+
+  ### Features
+
+  **FEATURE-1:** Beschreibung des neuen Features.
+
+  **FEATURE-2:** Beschreibung des neuen Features.

@@ -1,0 +1,26 @@
+# data/templates/news/security-elo-ecm-25.yaml
+_meta:
+  name: "elo-ecm-25 - Security"
+  description: "Sicherheitsrelevante Informationen zu ELO ECM 25"
+
+typeId: security
+productIds:
+  - elo-ecm-25
+title: "ELO ECM Suite 25: Sicherheitsrelevante Informationen"
+summaryMd: |
+  ELO informiert über mehrere Sicherheitslücken in der ELO ECM Suite 25. Betroffen sind Versionen v25-X.X bis v25-Y.Y.
+detailsMd: |
+  Die folgenden CVEs werden am XX.XX.2026 öffentlich veröffentlicht: CVE-2026-XXXXX, CVE-2026-YYYYY und CVE-2026-ZZZZZ.
+  Betroffen sind ELO ECM Suite Versionen v25-0.0 bis v25-0.5.
+
+  **Sicherheitslücken im Detail:**
+  - **CVE-2026-XXXXX:** Beschreibung der Sicherheitslücke.
+  - **CVE-2026-YYYYY:** Beschreibung der Sicherheitslücke.
+  - **CVE-2026-ZZZZZ:** Beschreibung der Sicherheitslücke.
+
+  Die CVEs ermöglichen einem Angreifer, XYZ zu tun. Es gibt bisher keine Hinweise auf aktive Ausnutzung der Schwachstellen.
+impact:
+  - action-required
+customerActionMd: |
+  Kunden sollten ihre ELO ECM Suite Instanzen auf die neueste Version aktualisieren,
+  um von den Sicherheitsverbesserungen zu profitieren.
