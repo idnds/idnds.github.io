@@ -26,7 +26,7 @@ Die Seite informiert Kunden und Partner über:
 ## Technologie-Stack
 
 | Komponente | Paket / Version |
-|---|---|
+| --- | --- |
 | Static Site Generator | VitePress ^1.6.4 |
 | Frontend-Framework | Vue ^3.5.26 |
 | Schema-Validierung | Zod ^4.3.6 |
@@ -37,7 +37,7 @@ Die Seite informiert Kunden und Partner über:
 
 ## Systemkontext
 
-```
+```text
 Redakteur       → YAML-Datei erstellen (manuell oder über /news/add)
                 → Git Push / Pull Request
                 → GitHub Actions: Validierung → Build → Deploy
