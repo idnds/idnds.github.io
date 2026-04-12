@@ -1,3 +1,4 @@
+// docs/.vitepress/config.mjs
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
