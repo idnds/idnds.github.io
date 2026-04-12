@@ -5,7 +5,7 @@
 Installiert via `npm ci`:
 
 | Paket | Version | Zweck |
-|---|---|---|
+| --- | --- | --- |
 | vitepress | ^1.6.4 | Static Site Generator |
 | vue | ^3.5.26 | Frontend-Framework |
 | js-yaml | ^4.1.1 | YAML lesen und schreiben |
@@ -64,7 +64,7 @@ npm run docs:build
 ## Lokale Builds vs. Produktion
 
 | Aspekt | Lokal | Produktion (CI) |
-|---|---|---|
+| --- | --- | --- |
 | Node.js | >= 24 empfohlen | 24 (in workflow.yml fixiert) |
 | Trigger | manuell | git push auf feature-events/main |
 | `docs/public` | bleibt zwischen Runs | frisch erzeugt (sauberer Checkout) |
@@ -108,6 +108,7 @@ npm run generate:schemas
 ```
 
 Die Schemas ermöglichen in VS Code:
+
 - Autocompletion für YAML-Felder
 - Inline-Fehlermarkierung bei ungültigen Werten
 - Hover-Dokumentation

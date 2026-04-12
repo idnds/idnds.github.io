@@ -1,0 +1,24 @@
+# data/templates/news/release-elo-operator.yaml
+_meta:
+  name: "elo-operator - Release"
+  description: "Neue Version des ELO Operators"
+
+typeId: release
+productIds:
+  - elo-operator
+title: "ELO Cloud Kubernetes Operator X.XX.X"
+impact: []
+summaryMd: |
+  Release des ELO Cloud Kubernetes Operators mit...
+detailsMd: |
+  ### Fixes
+
+  **FIX-1:** Beschreibung des Fixes.
+
+  **FIX-2:** Beschreibung des Fixes.
+
+  ### Features
+
+  **FEATURE-1:** Beschreibung des neuen Features.
+
+  **FEATURE-2:** Beschreibung des neuen Features.

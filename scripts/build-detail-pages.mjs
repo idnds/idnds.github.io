@@ -135,9 +135,9 @@ for (const event of events) {
     if (event.customerActionMd) {
         add("## Was jetzt zu tun ist");
         gap();
-        add("::: warning Handlungsbedarf");
+        //  add("::: warning Handlungsbedarf");
         add(event.customerActionMd);
-        add(":::");
+        //  add(":::");
         gap();
     }
 

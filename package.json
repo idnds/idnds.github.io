@@ -9,10 +9,11 @@
     "docs:serve": "vitepress serve docs",
     "validate:master": "node scripts/validate-master-data.mjs",
     "validate:content": "node scripts/validate-content.mjs",
+    "build:templates": "node scripts/build-templates.mjs",
     "build:index": "node scripts/build-content-index.mjs",
+    "build:data": "npm run build:index && npm run build:templates",
     "build:pages": "node scripts/build-detail-pages.mjs",
     "build:feed": "node scripts/build-feed.mjs",
-    "new:event": "node scripts/scaffold-event.mjs",
     "generate:schemas": "node scripts/generate-json-schemas.mjs"
   },
   "keywords": [],

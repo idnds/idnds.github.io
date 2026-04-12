@@ -25,12 +25,14 @@ Dieses Dokument richtet sich an:
 8. Datei herunterladen
 
 **Dateiname der heruntergeladenen Datei:**
-```
+
+```text
 YYYY-MM-DD-<productId>-<kurzname>.yaml
 ```
 
 **Ablegen im Repository:**
-```
+
+```text
 data/content/<typeId>/<Jahr>/YYYY-MM-DD-<productId>-<kurzname>.yaml
 ```
 
@@ -54,7 +56,7 @@ als TODO-Platzhalter. Anschließend die TODOs durch echte Inhalte ersetzen.
 **Alle Typen:**
 
 | Feld | Beschreibung | Beispiel |
-|---|---|---|
+| --- | --- | --- |
 | `id` | Automatisch generiert | `maintenance-2026-03-24-lpc-prod-update` |
 | `slug` | Identisch mit id | `maintenance-2026-03-24-lpc-prod-update` |
 | `typeId` | Event-Typ | `maintenance` |
@@ -67,14 +69,14 @@ als TODO-Platzhalter. Anschließend die TODOs durch echte Inhalte ersetzen.
 **Zusätzlich bei `maintenance`:**
 
 | Feld | Beschreibung |
-|---|---|
+| --- | --- |
 | `eventDate` | Beginn des Wartungsfensters |
 | `endDate` | Ende (muss nach eventDate liegen) |
 
 **Zusätzlich bei `release`:**
 
 | Feld | Beschreibung |
-|---|---|
+| --- | --- |
 | `version` | Versionsnummer, z.B. `1.18.0` |
 
 ---
@@ -82,7 +84,7 @@ als TODO-Platzhalter. Anschließend die TODOs durch echte Inhalte ersetzen.
 ### Optionale Felder
 
 | Feld | Verwendung |
-|---|---|
+| --- | --- |
 | `updatedAt` | Nachträgliche Aktualisierung (nicht vor publishedAt) |
 | `detailsMd` | Ausführliche Beschreibung mit vollem Markdown |
 | `impact` | `downtime`, `limited-availability`, `action-required` |
@@ -146,7 +148,7 @@ node scripts/migrate-events.mjs
 ### Typische Fehler
 
 | Fehler | Ursache | Lösung |
-|---|---|---|
+| --- | --- | --- |
 | `ID darf nicht leer sein` | `id`-Feld fehlt oder leer | ID muss gesetzt sein |
 | `Doppelte Event-ID` | ID existiert bereits | Kurzname im Dateinamen anpassen |
 | `Unbekannte vendorId` | Hersteller nicht in Stammdaten | `data/master/vendors/<id>.yaml` anlegen |
@@ -217,6 +219,7 @@ Relations sind unidirektional in der YAML -- bidirektionale Verknüpfungen
 können später im Build berechnet werden ohne YAML-Änderungen.
 
 Erlaubte Relationstypen:
+
 - `relates-to` -- allgemeine inhaltliche Verbindung
 - `resolves` -- dieses Event behebt das referenzierte Event
 - `follow-up-to` -- dieses Event folgt auf das referenzierte Event

@@ -1,0 +1,6 @@
+productId: elo-operator
+vendorId: elo
+name: ELO Cloud Kubernetes Operator
+category: ecm
+description: Kubernetes Operator zur automatisierten Bereitstellung und Verwaltung der ELO Cloud.
+deprecatedAt: null

@@ -12,6 +12,7 @@ und durch konkrete Maßnahmen behoben worden.
 **Ursache:** `zodToJsonSchema()` erhält `undefined` -- Named Export schlägt lautlos fehl.
 
 **Diagnose:**
+
 ```bash
 node -e "import('./scripts/schemas/master.mjs').then(m => console.log(Object.keys(m))).catch(e => console.error(e))"
 # Erwartet: [ 'VendorSchema', 'ProductSchema', 'EventTypeSchema' ]

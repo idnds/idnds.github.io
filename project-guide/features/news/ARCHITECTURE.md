@@ -20,6 +20,7 @@ Drei Regeln sind nicht verhandelbar:
 Stammdaten ändern sich selten und haben keine Jahreszweige.
 
 **Hersteller** (`data/master/vendors/<vendorId>.yaml`):
+
 ```yaml
 vendorId:     string       # Pflicht, eindeutig, z.B. "cisco"
 name:         string       # Pflicht, Anzeigename
@@ -29,6 +30,7 @@ deprecatedAt: IsoDateTime  # Optional -- gesetzt = taucht nicht mehr in Filtern 
 ```
 
 **Produkte** (`data/master/products/<productId>.yaml`):
+
 ```yaml
 productId:   string       # Pflicht, eindeutig
 vendorId:    string       # Pflicht, Referenz auf Hersteller
@@ -39,6 +41,7 @@ deprecatedAt: IsoDateTime # Optional
 ```
 
 **Event-Typen** (`data/master/event-types/<typeId>.yaml`):
+
 ```yaml
 typeId:      string  # Pflicht: maintenance | security | release | announcement
 name:        string  # Pflicht, Anzeigename
@@ -50,7 +53,7 @@ description: string  # Optional
 Farben der Standard-Typen:
 
 | typeId | Farbe |
-|---|---|
+| --- | --- |
 | announcement | #f59e0b |
 | maintenance | #3b82f6 |
 | release | #22c55e |
@@ -59,6 +62,7 @@ Farben der Standard-Typen:
 ### Content-Datenmodell
 
 **Basisfelder (alle Typen, Pflicht):**
+
 ```yaml
 id:          string      # typeId-YYYY-MM-DD-productId-kurzname, global eindeutig
 slug:        string      # identisch mit id
@@ -71,6 +75,7 @@ summaryMd:   string      # Pflicht, nur Inline-Markdown
 ```
 
 **Basisfelder (alle Typen, optional):**
+
 ```yaml
 updatedAt:        IsoDateTime  # Letzte inhaltliche Aktualisierung, nicht vor publishedAt
 detailsMd:        string       # Vollständiges Markdown
@@ -82,6 +87,7 @@ relations:
 ```
 
 **Nur `maintenance`:**
+
 ```yaml
 status:    active | cancelled  # Default: active
 eventDate: IsoDateTime         # Pflicht bei maintenance
@@ -89,6 +95,7 @@ endDate:   IsoDateTime         # Pflicht bei maintenance, nach eventDate
 ```
 
 **Nur `security`:**
+
 ```yaml
 cveIds:           string[]  # Format CVE-YYYY-NNNNN
 severity:         critical | high | medium | low
@@ -97,6 +104,7 @@ fixedVersion:     string
 ```
 
 **Nur `release`:**
+
 ```yaml
 version:      string  # Pflicht bei release
 changelogUrl: string  # Optional, muss gültige URL sein
@@ -115,6 +123,7 @@ changelogUrl: string  # Optional, muss gültige URL sein
 ### Wichtige Entscheidungen
 
 **`isCustomerActionRequired` wird nicht gepflegt** -- es wird aus `impact` berechnet:
+
 ```js
 const customerActionRequired = event.impact?.includes("action-required") ?? false;
 ```
@@ -129,7 +138,7 @@ const customerActionRequired = event.impact?.includes("action-required") ?? fals
 
 ## Verzeichnisstruktur
 
-```
+```text
 idnds.github.io/
 ├── data/
 │   ├── master/
@@ -195,7 +204,7 @@ idnds.github.io/
 ## Skripte -- Zweck und Zusammenspiel
 
 | Script (npm run) | Datei | Zweck |
-|---|---|---|
+| --- | --- | --- |
 | `validate:master` | `validate-master-data.mjs` | Stammdaten: Pflichtfelder, ID-Eindeutigkeit, Referenzintegrität |
 | `validate:content` | `validate-content.mjs` | Events: Zod-Schema, IDs, Slugs, Stammdaten-Referenzen, Relations |
 | `build:index` | `build-content-index.mjs` | JSON-Indizes + options.json + masters.json erzeugen |
@@ -209,7 +218,7 @@ idnds.github.io/
 
 ## Transformationslogik: Datenfluss
 
-```
+```text
 YAML-Quelldateien
     ↓ readYamlFiles() + Zod-Validierung
 Vollständige Event-Objekte (allEventsFull)
@@ -273,7 +282,7 @@ Alle vergangenen Events (unabhängig vom Typ) werden auf ein festes Zeitfenster 
 ## Struktur von latest.json
 
 | Priorität | Inhalt | Limit |
-|---|---|---|
+| --- | --- | --- |
 | P1 | Zukünftige Wartungen | Kein hartes Limit (sortiert nach eventDate) |
 | P2 | Alle Events der letzten 2 Jahre (Maintenance + Non-Maintenance) | Globales Limit: MAX_TOTAL (z. B. 200) |
 
@@ -310,7 +319,7 @@ von der UI-Startansicht:
 
 ### Drei getrennte Datensichten
 
-```
+```text
 A) all.json (intern)      → build-detail-pages.mjs, build-feed.mjs
 B) Browserindizes         → EventFilter.vue (Lazy Loading)
 C) Statische Seiten       → docs/news/<slug>.md (VitePress rendert)
@@ -319,7 +328,7 @@ C) Statische Seiten       → docs/news/<slug>.md (VitePress rendert)
 ### EventFilter -- Lazy Loading Strategie
 
 | Filter-Kombination | Geladener Index |
-|---|---|
+| --- | --- |
 | Kein Filter | `latest.json` |
 | Nur Typ | `by-type/<type>.json` |
 | Nur Hersteller | `by-vendor/<vendor>.json` |
@@ -336,7 +345,7 @@ Das verhindert "verschwindende" Typen in Dropdowns.
 Badge-Styles sind global in `badges.css` definiert (nicht scoped):
 
 | Klasse | Verwendung |
-|---|---|
+| --- | --- |
 | `.vp-badge` | Basis für alle Badges |
 | `.vp-badge-type-<typeId>` | Event-Typ (nur im Formular) |
 | `.vp-badge-status-<status>` | Maintenance-Status |

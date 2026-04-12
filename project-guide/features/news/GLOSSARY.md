@@ -1,7 +1,7 @@
 # GLOSSARY.md -- Begriffe und Definitionen
 
 | Begriff | Bedeutung |
-|---|---|
+| --- | --- |
 | **Event** | Ein einmaliger Eintrag (Wartung, CVE, Release, Ankündigung) |
 | **typeId** | Typ eines Events: `maintenance`, `security`, `release`, `announcement` |
 | **vendorId** | Eindeutige ID eines Herstellers, z.B. `cisco`, `idnds` |

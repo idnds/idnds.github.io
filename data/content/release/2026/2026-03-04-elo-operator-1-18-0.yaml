@@ -3,8 +3,7 @@ slug: release-2026-03-04-elo-operator-1-18-0
 typeId: release
 vendorId: elo
 productIds:
-  - lpc-test
-  - lpc-prod
+  - elo-operator
 title: ELO Cloud Kubernetes Operator 1.18.0
 publishedAt: "2026-03-04T00:00:00+01:00"
 version: 1.18.0
@@ -13,36 +12,32 @@ summaryMd: |
   Release des ELO Cloud Kubernetes Operators mit Verbesserungen an der StartupProbe,
   Performance-Optimierungen und Unterstuetzung fuer Priority Classes.
 detailsMd: |
-  ## Fixes
+  ### Fixes
 
-  **ECLKOP-19** -- ES_JAVA_OPTS Umgebungsvariable wurde durch den Standardwert fuer
+  **ECLKOP-19**: ES_JAVA_OPTS Umgebungsvariable wurde durch den Standardwert fuer
   Search Nodes ueberschrieben. Dieses Verhalten ist korrigiert.
 
-  **ECLKOP-20** -- Die StartupProbe im Server StatefulSet prueft nun ausschliesslich
+  **ECLKOP-20**: Die StartupProbe im Server StatefulSet prueft nun ausschliesslich
   ob der Indexserver erreichbar ist. Dadurch koennen sich alle anderen Services korrekt
   initialisieren und verbinden. Die Aenderung gilt fuer ELO v25-0.6 und neuere Versionen
   sowie fuer v23-0.27 bis v23-1.0.
 
-  ## Features
+  ### Features
 
-  **ECLKOP-9** -- Unterstuetzung fuer Priority Classes. Ermoeglicht die Steuerung der
+  **ECLKOP-9**: Unterstuetzung fuer Priority Classes. Ermoeglicht die Steuerung der
   Scheduling-Prioritaet von Pods im Kubernetes-Cluster.
 
-  **ECLKOP-10** -- Priority Class fuer das Operator Deployment konfigurierbar
+  **ECLKOP-10**: Priority Class fuer das Operator Deployment konfigurierbar
   (Teilimplementierung von ECLKOP-9).
 
-  **ECLKOP-11** -- Priority Class Einstellungen fuer ELO Services integriert
+  **ECLKOP-11**: Priority Class Einstellungen fuer ELO Services integriert
   (Teilimplementierung von ECLKOP-9).
 
-  **ECLKOP-17** -- Performance-Verbesserung: Diff-Generierung fuer Base64-Strings wird
+  **ECLKOP-17**: Performance-Verbesserung: Diff-Generierung fuer Base64-Strings wird
   uebersprungen.
 
-  **ECLKOP-6** -- Messung der Dauer einzelner Abschnitte des Reconciliation-Prozesses
+  **ECLKOP-6**: Messung der Dauer einzelner Abschnitte des Reconciliation-Prozesses
   zur Identifikation von Performance-Engpaessen. Aktivierbar ueber erhoehtes Log-Level
   beim Start des Operators: `--zap-log-level=2`
 impact: []
-relations:
-  - type: relates-to
-    eventId: maintenance-2026-03-15-lpc-test-operator-update
-  - type: relates-to
-    eventId: maintenance-2026-03-24-lpc-prod-operator-update
+relations: []
