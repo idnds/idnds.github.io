@@ -1,0 +1,15 @@
+# data/templates/news/wartung-lpc-test-scheduled.yaml
+_meta:
+  name: "lpc-test - Geplante Wartung"
+  description: "Geplantes Wartungsfenster der Testumgebung"
+
+typeId: maintenance
+productIds:
+  - lpc-test
+title: "Geplante Wartung - Lieblingsplatz.cloud (Test)"
+impact: []
+summaryMd: |
+  Geplantes Wartungsfenster zur Aktualisierung des ELO Operators und Bereitstellung neuer Versionen der ELO ECM Suite.
+detailsMd: |
+  1. Aktualisierung des ELO Operators auf Version X.XX.X
+  2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest

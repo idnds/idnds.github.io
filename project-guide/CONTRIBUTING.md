@@ -3,17 +3,35 @@
 ## Voraussetzungen
 
 | Tool | Version | Prüfbefehl |
-|---|---|---|
+| --- | --- | --- |
 | Node.js | >= 24 | `node --version` |
 | npm | >= 10 | `npm --version` |
 | Git | beliebig | `git --version` |
 
 ## Installation
 
+### Node.js
+
+- [Download Node.js](https://nodejs.org/en/download)
+- Windows spezifisch...
+  - Administrative Powershell öffnen
+  - Skriptausführung erlauben:
+
+    ```powershell
+    Set-ExecutionPolicy RemoteSigned
+    ```
+
+- Prüfung der installierten Version:
+
+  ```powershell
+  npm -v
+  ```
+
+### Repository klonen
+
 ```bash
 git clone https://github.com/idnds/idnds.github.io.git
 cd idnds.github.io
-git checkout feature-events
 npm ci
 ```
 
@@ -43,12 +61,9 @@ npm run docs:dev
 
 ### 3. Neues Event anlegen
 
-```bash
-npm run new:event -- --type maintenance --vendor idnds --product lpc-prod --name kurzbeschreibung
-# → erzeugt data/content/maintenance/YYYY/YYYY-MM-DD-lpc-prod-kurzbeschreibung.yaml
-```
-
-Danach YAML ausfüllen, validieren und committen. Alternativ: Formular unter `/news/add`.
+- Neues Event mittels Formular unter (<http://localhost:5173/news/add>) erstellen
+- Ablage unter `data/content/<typeId>/YYYY-MM-DD-<productId>-<shortname>.yaml`
+- Danach validieren, Indizes erzeugen, Seiten generieren und RSS-Feed erzeugen
 
 ## Build & Test lokal
 
@@ -65,12 +80,13 @@ npm run docs:serve
 
 ### YAML-Dateinamen
 
-```
-data/content/<typeId>/<Jahr>/YYYY-MM-DD-<productId>-<kurzname>.yaml
+```text
+data/content/<typeId>/<Jahr>/YYYY-MM-DD-<productId>-<shortname>.yaml
 ```
 
 Beispiele:
-```
+
+```text
 data/content/maintenance/2026/2026-03-24-lpc-prod-operator-update.yaml
 data/content/security/2026/2026-03-01-loadmaster-cve-fix.yaml
 ```
@@ -81,8 +97,8 @@ data/content/security/2026/2026-03-01-loadmaster-cve-fix.yaml
 
 ### IDs und Slugs
 
-```
-<typeId>-YYYY-MM-DD-<productId>-<kurzname>
+```text
+<typeId>-YYYY-MM-DD-<productId>-<shortname>
 ```
 
 Beispiel: `maintenance-2026-03-24-lpc-prod-operator-update`
@@ -96,7 +112,7 @@ ID und Slug sind identisch und global eindeutig über alle Event-Typen hinweg.
 
 ### Commits
 
-```
+```text
 feat: neues Event announcement-2026-03-28-lpc-prod-supportende
 fix: falsche endDate in maintenance-2026-03-24
 docs: README aktualisiert
@@ -105,7 +121,7 @@ chore: npm-Pakete aktualisiert
 
 ## Git-Workflow
 
-```
+```text
 main          → produktiver Stand (nur via PR)
 feature-events → aktiver Entwicklungs-Branch (News-System)
 ```
@@ -135,12 +151,14 @@ git push -u origin event/maintenance-2026-04-15-lpc-prod-update
 ## Do's & Don'ts
 
 **Do:**
+
 - Immer `npm run validate:content` vor dem Commit ausführen
 - `npm ci` statt `npm install` für reproduzierbare Builds
 - Fehlende Stammdaten (neuer Hersteller, neues Produkt) zuerst unter `data/master/` anlegen
 - `customerActionMd` nur setzen wenn `impact: [action-required]` gesetzt ist
 
 **Don't:**
+
 - Nie `data/_generated/` committen (ist in `.gitignore`)
 - Nie `docs/news/*.md` committen (automatisch generiert), außer `docs/news/index.md`
 - Nie `all.json` nach `docs/public/` kopieren (enthält alle Events, zu groß für den Browser)

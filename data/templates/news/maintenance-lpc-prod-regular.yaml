@@ -1,0 +1,20 @@
+# data/templates/news/maintenance-lpc-prod-regular.yaml
+_meta:
+  name: "lpc-prod - Regelwartung"
+  description: "Quarteilsweise Wartung der Produktionsumgebung"
+
+typeId: maintenance
+productIds:
+  - lpc-prod
+title: "Regelwartung - Lieblingsplatz.cloud (Produktiv)"
+impact:
+  - limited-availability
+summaryMd: |
+  Die Lieblingsplatz.cloud-Produktivumgebung wird routinemäßig quartalsweise gewartet. 
+  Wartungen finden jeweils am dritten Donnerstag der Monate Februar, Mai, August und November ab 18 Uhr statt.
+detailsMd: |
+  Die Wartung der Produktivumgebung umfasst die folgenden Arbeiten:
+  - Operator-Update auf den Stand der Testumgebung
+  - Auto-Update der Umgebungen mit Versionierung v2X-X-latest
+  - Plattform-Updates
+  - ELO XC Updates

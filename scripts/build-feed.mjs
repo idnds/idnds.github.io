@@ -115,10 +115,10 @@ const xml = (
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
     "<rss version=\"2.0\">\n" +
     "<channel>\n" +
-    "  <title>lieblingsplatz.cloud -- News &amp; Ankündigungen</title>\n" +
+    "  <title>Lieblingsplatz.cloud - Ankündigungen</title>\n" +
     "  <link>" + BASE_URL + "</link>\n" +
     "  <description>" +
-    "Aktuelle Wartungen, Security-Meldungen, Releases und Ankündigungen" +
+    "Ankündigungen, Releases, Security-Meldungen und Wartungen" +
     "</description>\n" +
     "  <language>de-DE</language>\n" +
     "  <lastBuildDate>" + now.toUTCString() + "</lastBuildDate>\n" +
