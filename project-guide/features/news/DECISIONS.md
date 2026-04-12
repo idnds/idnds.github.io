@@ -22,6 +22,7 @@ Ein Modal kann keine kanonische URL haben.
 **Kontext:** Das ursprüngliche Konzept sah `isCustomerActionRequired: true/false` als eigenes YAML-Feld vor.
 
 **Entscheidung:** Das Feld existiert nicht in YAML. Es wird aus `impact` berechnet:
+
 ```js
 const customerActionRequired = event.impact?.includes("action-required") ?? false;
 ```
@@ -85,6 +86,7 @@ nicht unerwartet.
 Ein Wartungsfenster in 12 Wochen wäre damit ausgeblendet.
 
 **Entscheidung:** Drei Prioritätsgruppen:
+
 1. P1 (immer): Kurzfristige Wartungen (Vorlauf < 4 Wochen)
 2. P2 (max. 6): Zukünftige Wartungen
 3. P3 (max. 150): Nicht-Wartungs-Events der letzten 90 Tage
