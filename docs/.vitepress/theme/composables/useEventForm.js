@@ -26,7 +26,7 @@ export function useEventForm(options = {}) {
     const meta = useEventMeta(form, masters);
     const { validate } = useEventValidation(form, mode);
     const { buildYaml, toIso } = useEventYaml(form, meta, mode);
-    const { summaryPreview, detailsPreview, customerActionPreview, initializePreviews } = useMarkdownPreview(form);
+    const { summaryPreview, detailsPreview, customerActionPreview } = useMarkdownPreview(form);
     const previews = useMarkdownPreview(form);
     const { downloadYaml } = useYamlIO();
 
@@ -67,7 +67,6 @@ export function useEventForm(options = {}) {
         form, masters, meta, errors,
         yamlOutput, isValid, isDirty,
         summaryPreview, detailsPreview, customerActionPreview,
-        initializePreviews,
         generate, download,
         addRelation, removeRelation,
         formatForDatetimeLocal

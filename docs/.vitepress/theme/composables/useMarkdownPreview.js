@@ -1,40 +1,23 @@
-import { ref, computed, watch } from "vue";
+// useMarkdownPreview.js -- komplett vereinfacht
+import { computed } from "vue";
 import { marked } from "marked";
 
 marked.use({ breaks: true, gfm: true });
 
 export function useMarkdownPreview(form) {
-    const debounceTimer = ref(null);
-    const debouncedSummary = ref(form.summaryMd);
-    const debouncedDetails = ref(form.detailsMd);
-    const debouncedCustomerAction = ref(form.customerActionMd);
-
-    function debounce(target, value) {
-        clearTimeout(debounceTimer.value);
-        debounceTimer.value = setTimeout(() => { target.value = value; }, 200);
-    }
-
-    watch(() => form.summaryMd, (v) => debounce(debouncedSummary, v));
-    watch(() => form.detailsMd, (v) => debounce(debouncedDetails, v));
-    watch(() => form.customerActionMd, (v) => debounce(debouncedCustomerAction, v));
-
-    // Wird nach YAML-Import aufgerufen: Debounce umgehen, sofort rendern.
-    function initializePreviews() {
-        clearTimeout(debounceTimer.value);
-        debouncedSummary.value = form.summaryMd;
-        debouncedDetails.value = form.detailsMd;
-        debouncedCustomerAction.value = form.customerActionMd;
-    }
-
+    // Direkte computed properties statt debounced refs.
+    // Vue's computed-Caching stellt sicher dass nur bei tatsächlicher Änderung
+    // neu berechnet wird -- kein Debouncing, kein nextTick, kein initializePreviews.
+    // marked.parseInline/parse sind für typische Event-Texte unter 1ms schnell.
     const summaryPreview = computed(() =>
-        debouncedSummary.value ? marked.parse(debouncedSummary.value) : ""
+        form.summaryMd ? marked.parseInline(form.summaryMd) : ""
     );
     const detailsPreview = computed(() =>
-        debouncedDetails.value ? marked.parse(debouncedDetails.value) : ""
+        form.detailsMd ? marked.parse(form.detailsMd) : ""
     );
     const customerActionPreview = computed(() =>
-        debouncedCustomerAction.value ? marked.parse(debouncedCustomerAction.value) : ""
+        form.customerActionMd ? marked.parse(form.customerActionMd) : ""
     );
 
-    return { summaryPreview, detailsPreview, customerActionPreview, initializePreviews };
+    return { summaryPreview, detailsPreview, customerActionPreview };
 }

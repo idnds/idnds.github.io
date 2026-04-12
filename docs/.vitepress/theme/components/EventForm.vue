@@ -147,10 +147,6 @@ function onApplyTemplate(templateData) {
 function onImported(yamlString) {
   const data = importYaml(yamlString);
   Object.assign(form, data);
-  // Vorschau sofort befüllen (Debounce umgehen) und Textareas auf Inhalt anpassen
-  nextTick(() => {
-    initializePreviews();
-  });
   importDone.value = true;
 }
 
