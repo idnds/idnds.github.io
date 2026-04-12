@@ -1,3 +1,5 @@
+// docs/.vitepress/theme/composables/useEventYaml.js
+
 import yaml from "js-yaml";
 
 // Literal-Block-Schema: Strings mit abschließendem \n werden als | ausgegeben.
@@ -8,10 +10,7 @@ const STR_LITERAL = new yaml.Type("tag:yaml.org,2002:str", {
     represent: (data) => data,
     defaultStyle: "literal",
 });
-const LITERAL_SCHEMA = new yaml.Schema({
-    implicit: [STR_LITERAL, ...(yaml.DEFAULT_SCHEMA.implicit ?? [])],
-    explicit: [...(yaml.DEFAULT_SCHEMA.explicit ?? [])],
-});
+const LITERAL_SCHEMA = yaml.DEFAULT_SCHEMA.extend([STR_LITERAL]);
 
 function lit(str) {
     const trimmed = (str ?? "").trim();
@@ -88,6 +87,8 @@ export function useEventYaml(form, meta, mode = "create") {
             schema: LITERAL_SCHEMA,
             lineWidth: 120,
             noRefs: true,
+            quotingType: '"',       // doppelte statt einfache Anführungszeichen
+            forceQuotes: false,     // nur wo nötig, nicht pauschal
         });
     }
 

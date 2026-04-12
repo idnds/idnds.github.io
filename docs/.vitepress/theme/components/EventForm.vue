@@ -140,7 +140,6 @@ function onApplyTemplate(templateData) {
   applyTemplate(form, templateData);
   nextTick(() => {
     initializePreviews();
-    autoResizeTextareas();
   });
 }
 
@@ -151,7 +150,6 @@ function onImported(yamlString) {
   // Vorschau sofort befüllen (Debounce umgehen) und Textareas auf Inhalt anpassen
   nextTick(() => {
     initializePreviews();
-    autoResizeTextareas();
   });
   importDone.value = true;
 }

@@ -6,7 +6,7 @@
       <label class="ecf-label" for="f-summary">Zusammenfassung * (Markdown)</label>
       <div class="ecf-split">
         <div class="ecf-split-input">
-          <textarea id="f-summary" :value="form.summaryMd"
+          <textarea v-autoresize id="f-summary" :value="form.summaryMd"
             @input="$emit('update:summaryMd', $event.target.value)"
             class="ecf-input ecf-textarea" rows="4"
             placeholder="Kurze Beschreibung (1-3 Sätze)." />
@@ -28,7 +28,7 @@
       <label class="ecf-label" for="f-details">Details (Markdown, optional)</label>
       <div class="ecf-split">
         <div class="ecf-split-input">
-          <textarea id="f-details" :value="form.detailsMd"
+          <textarea v-autoresize id="f-details" :value="form.detailsMd"
             @input="$emit('update:detailsMd', $event.target.value)"
             class="ecf-input ecf-textarea" rows="10"
             placeholder="Ausführliche Beschreibung..." />

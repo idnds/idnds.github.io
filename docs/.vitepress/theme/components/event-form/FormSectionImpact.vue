@@ -27,7 +27,7 @@
       <label class="ecf-label" for="f-customer-action">Handlungshinweise * (Markdown)</label>
       <div class="ecf-split">
         <div class="ecf-split-input">
-          <textarea id="f-customer-action" :value="form.customerActionMd"
+          <textarea v-autoresize id="f-customer-action" :value="form.customerActionMd"
             @input="$emit('update:customerActionMd', $event.target.value)"
             class="ecf-input ecf-textarea" rows="6"
             placeholder="Konkrete Schritte für Kunden..." />

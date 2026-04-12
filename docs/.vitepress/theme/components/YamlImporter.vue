@@ -11,7 +11,7 @@
     <!-- Paste: Primärpfad (Go-Beschluss #3) -->
     <div class="ecf-field">
       <label class="ecf-label" for="f-yaml-paste">YAML einfügen (empfohlen)</label>
-      <textarea id="f-yaml-paste" v-model="pasteContent"
+      <textarea v-autoresize id="f-yaml-paste" v-model="pasteContent"
         class="ecf-input ecf-textarea ecf-textarea--yaml"
         rows="12" placeholder="id: announcement-2026-03-28-..." />
     </div>

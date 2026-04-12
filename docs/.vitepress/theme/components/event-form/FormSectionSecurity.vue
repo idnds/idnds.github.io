@@ -14,14 +14,14 @@
     </div>
     <div class="ecf-field">
       <label class="ecf-label" for="f-cveids">CVE-IDs (optional, eine pro Zeile)</label>
-      <textarea id="f-cveids" :value="form.cveIdsRaw"
+      <textarea v-autoresize id="f-cveids" :value="form.cveIdsRaw"
         @input="$emit('update:cveIdsRaw', $event.target.value)"
         class="ecf-input ecf-textarea" placeholder="CVE-2026-1234&#10;CVE-2026-5678" rows="3" />
       <p class="ecf-hint">Format: CVE-YYYY-NNNNN</p>
     </div>
     <div class="ecf-field">
       <label class="ecf-label" for="f-affected">Betroffene Versionen (optional, eine pro Zeile)</label>
-      <textarea id="f-affected" :value="form.affectedVersionsRaw"
+      <textarea v-autoresize id="f-affected" :value="form.affectedVersionsRaw"
         @input="$emit('update:affectedVersionsRaw', $event.target.value)"
         class="ecf-input ecf-textarea" placeholder="9.12.x&#10;9.14.x" rows="2" />
     </div>

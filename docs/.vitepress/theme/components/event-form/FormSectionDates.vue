@@ -2,11 +2,20 @@
   <section class="ecf-section">
     <h2 class="ecf-section-title">{{ sectionNumber }}. Datum und Zeit</h2>
 
+    <!-- FormSectionDates.vue -- publishedAt-Feld -->
     <div class="ecf-field">
       <label class="ecf-label" for="f-published">Veröffentlicht am *</label>
-      <input id="f-published" :value="form.publishedAt"
-        @input="$emit('update:publishedAt', $event.target.value)"
-        type="datetime-local" class="ecf-input ecf-input--date" />
+      <input
+        id="f-published"
+        :value="form.publishedAt"
+        @input="mode !== 'edit' && $emit('update:publishedAt', $event.target.value)"
+        type="datetime-local"
+        class="ecf-input ecf-input--date"
+        :readonly="mode === 'edit'"
+      />
+      <p v-if="mode === 'edit'" class="ecf-hint">
+        Nicht änderbar -- Bestandteil von Dateiname und ID.
+      </p>
     </div>
 
     <template v-if="form.typeId === 'maintenance'">
