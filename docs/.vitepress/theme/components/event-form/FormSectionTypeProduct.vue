@@ -42,14 +42,35 @@
 
     <div class="ecf-field">
       <label class="ecf-label" for="f-shortname">Kurzname *</label>
-      <input id="f-shortname" :value="form.shortnameRaw"
+      <input
+        id="f-shortname"
+        :value="form.shortnameRaw"
         @input="$emit('update:shortnameRaw', $event.target.value)"
-        type="text" class="ecf-input"
+        type="text"
+        class="ecf-input"
         placeholder="z.B. operator-update"
-        :readonly="mode === 'edit'" />
+        :readonly="mode === 'edit'"
+      />
       <p class="ecf-hint">
-        Normalisiert: <code>{{ shortname || "..." }}</code>
-        <span v-if="mode === 'edit'"> -- nicht änderbar bei bestehenden Events</span>
+        Nur Kleinbuchstaben, Zahlen und Bindestriche.
+        <span v-if="mode === 'edit'"> -- nicht änderbar bei bestehenden Events.</span>
+      </p>
+    </div>
+
+    <!-- URL-Vorschau: ersetzt die bisherige "Normalisiert: ..."-Zeile.
+        Erscheint sobald Typ, Produkt, Datum und Kurzname vorhanden sind.
+        Zeigt dem Redakteur sofort welche URL das Event bekommen wird. -->
+    <div
+      v-if="previewId && form.productId && publishedDate && shortname"
+      class="ecf-url-preview"
+    >
+      <span class="ecf-label">Permanente URL dieses Events</span>
+      <div class="ecf-url-display">
+        <span class="ecf-url-base">lieblingsplatz.cloud/news/</span><!--
+        --><span class="ecf-url-slug">{{ previewId }}</span>
+      </div>
+      <p class="ecf-hint">
+        Diese URL ist dauerhaft und wird z.B. im Feed und in E-Mails verwendet.
       </p>
     </div>
 
@@ -79,6 +100,8 @@ const props = defineProps({
   masters:       { type: Object, required: true },
   derivedVendor: { type: Object, default: null },
   shortname:     { type: String, default: "" },
+  previewId:     { type: String,  default: "" },
+  publishedDate: { type: String,  default: "" },
   typeLabel:     { type: String, default: "" },
   mode:          { type: String, default: "create" },
   sectionNumber: { type: Number, default: 1 },

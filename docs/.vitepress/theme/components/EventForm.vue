@@ -30,11 +30,15 @@
     <!-- Formular-Sections (immer sichtbar im Create-Modus, nach Import im Edit-Modus) -->
     <template v-if="mode === 'create' || importDone">
       <FormSectionTypeProduct
-        :form="form" :masters="masters"
+        :form="form"
+        :masters="masters"
         :derived-vendor="meta.derivedVendor.value"
         :shortname="meta.shortname.value"
+        :preview-id="meta.previewId.value"
+        :published-date="meta.publishedDate.value"
         :type-label="meta.typeLabel.value"
-        :mode="mode" :section-number="sectionOffset + 1"
+        :mode="mode"
+        :section-number="sectionOffset + 1"
         @update:typeId="form.typeId = $event"
         @update:productId="form.productId = $event"
         @update:title="form.title = $event"
@@ -505,6 +509,25 @@ function autoResizeTextareas() {
   cursor: not-allowed;
   opacity: 0.7;
 }
+
+/* ── URL-Preview ───────────────────────────────────────── */
+
+.ecf-url-preview {
+  padding: 0.6rem 0.75rem;
+  background: var(--vp-c-bg-mute);
+  border-radius: 6px;
+  margin-top: 0.75rem;
+}
+
+.ecf-url-display {
+  font-family: monospace;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  word-break: break-all;
+}
+
+.ecf-url-base  { color: var(--vp-c-text-2); }
+.ecf-url-slug  { color: var(--vp-c-brand); font-weight: 600; }
 
 /* ── YAML-Ausgabe ───────────────────────────────────────── */
 .ecf-preview-meta {
