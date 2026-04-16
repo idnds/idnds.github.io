@@ -4,7 +4,10 @@ outline: false
 
 # Gestalte deinen Lieblingsplatz
 
-Jeder Lieblingsplatz ist anders. Du kannst ihn selbst gestalten. Wir unterstützen dich dabei.
+Jede Lieblingsplatz.cloud ist so individuell wie die Anforderungen dahinter.
+Von der ersten Planung bis zur konkreten Umsetzung lässt sich die Umgebung gezielt gestalten – abgestimmt auf Prozesse, Nutzer und Integrationen.
+
+Wir begleiten dich dabei mit erprobten Konzepten und unterstützen dich bei der passenden Zusammenstellung deiner Lösung.
 
 ## Direkt loslegen
 

@@ -1,5 +1,9 @@
 # Arbeitsumgebungen
 
+Ob im Browser, am Desktop oder mobil – die Lieblingsplatz.cloud bietet für jede Arbeitssituation die passende Arbeitsumgebung. Die verschiedenen Clients sind auf unterschiedliche Anforderungen zugeschnitten und ermöglichen ein effizientes Arbeiten mit Dokumenten und Geschäftsprozessen.
+
+Dabei greifen alle Anwendungen auf dieselbe zentrale Datenbasis zu und sorgen für eine nahtlose Zusammenarbeit.
+
 ## ELO Web Client
 
 Der **ELO Web Client** ist eine browserbasierte Anwendung der ELO ECM Suite, die den Zugriff auf Dokumente, Akten und Geschäftsprozesse ohne lokale Installation ermöglicht. Er stellt zentrale Funktionen für die tägliche Arbeit mit ELO direkt im Webbrowser bereit und ist damit unabhängig vom Betriebssystem nutzbar.

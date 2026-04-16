@@ -1,6 +1,10 @@
 # Leistungen
 
-Flexible Gestaltung deiner Lieblingsplatz.cloud nach individuellen Anforderungen.
+Die Lieblingsplatz.cloud bietet ein modular aufgebautes Leistungsmodell, das sich flexibel an unterschiedliche Anforderungen und Nutzungsszenarien anpassen lässt.
+
+Auf Basis eines stabilen Grundsystems können zusätzliche Erweiterungen und Optionen gezielt kombiniert werden, um sowohl wachsende Datenmengen als auch steigende Anforderungen an Performance, Sicherheit und Archivierung abzudecken.
+
+Alle Leistungen sind darauf ausgelegt, einen sicheren, skalierbaren und langfristig stabilen Betrieb der ELO ECM Suite in der Cloud zu gewährleisten.
 
 ## Basispakete
 
@@ -109,5 +113,5 @@ Als Alternative zu den Standard-Storage-Paketen besteht die Möglichkeit die Dat
 - Optimiert für Systeme mit hohem Dokumentenvolumen, aber geringer Änderungs- und Workflowaktivität
 - Keine Erweiterung der Kapazitäten für Verwaltungsdaten (z. B. Metadaten, Workflows oder Historien)
 - Kosteneffiziente Langzeitablage
-- Aktivierte Verschlüsselung gespeicherter Daten (Data at Rest)
+- **Aktivierte Verschlüsselung gespeicherter Daten (Data at Rest)**
 - Schutz sensibler Inhalte durch Verschlüsselung im Ruhezustand

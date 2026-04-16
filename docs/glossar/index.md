@@ -38,7 +38,7 @@ Kubernetes ist wie ein Dirigent für Anwendungen. Es sorgt dafür, dass sie reib
 
 ### LTO (Linear Tape-Open) {#lto}
 
-**LTO (Linear Tape-Open)** ist ein Bandlaufwerk- und Bandmedien-Standard für die langfristige Datensicherung und Archivierung großer Datenmengen. Die Technologie basiert auf magnetischen Bändern und wird vor allem für Backups sowie die revisionssichere, kosteneffiziente Langzeitspeicherung eingesetzt.
+LTO (Linear Tape-Open) ist ein Bandlaufwerk- und Bandmedien-Standard für die langfristige Datensicherung und Archivierung großer Datenmengen. Die Technologie basiert auf magnetischen Bändern und wird vor allem für Backups sowie die revisionssichere, kosteneffiziente Langzeitspeicherung eingesetzt.
 
 LTO zeichnet sich durch eine hohe Speicherkapazität, lange Haltbarkeit der Medien sowie eine gute Eignung für Offline- oder ausgelagerte Datensicherungen aus. Dadurch wird es häufig als zusätzliche Sicherheitsschicht außerhalb der primären IT-Infrastruktur genutzt.
 

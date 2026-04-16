@@ -1,6 +1,6 @@
 # Regelwartung der Lieblingsplatz.cloud
 
-Die Lieblingsplatz.cloud wird kontinuierlich technisch aktualisiert und weiterrentwickelt. Ein zentraler Bestandteil hierfür sind die regelmäßig geplanten Wartungsfenster für Test- und Produktivumgebungen.
+Die Lieblingsplatz.cloud wird kontinuierlich technisch aktualisiert und weiterentwickelt. Ein zentraler Bestandteil hierfür sind die regelmäßig geplanten Wartungsfenster für Test- und Produktivumgebungen.
 
 ## Ziele
 
