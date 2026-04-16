@@ -13,8 +13,7 @@ export default defineConfig({
   themeConfig: {
     logo: '/favicon-48x48.png',
     nav: [
-      { text: 'Erste Schritte', link: '/erste-schritte/' },
-      { text: 'Gestaltung', link: '/gestaltung/' },
+      { text: 'Einstieg', link: '/einstieg/' },
       {
         text: 'Wissen & Praxis',
         items: [
@@ -22,6 +21,7 @@ export default defineConfig({
           { text: 'Praxis', link: '/praxis' }
         ]
       },
+      { text: 'Betrieb & Service', link: '/betrieb-service/' },
       { text: 'Ankündigungen', link: '/news/' },
       { text: 'Über uns', link: '/ueber-uns/' },
       {
@@ -38,13 +38,26 @@ export default defineConfig({
       next: 'Nächste Seite'
     },
     sidebar: {
-      '/erste-schritte/': [
+      '/einstieg/': [
         {
-          text: 'Erste Schritte',
+          text: 'Einstieg',
           items: [
-            { text: 'Übersicht', link: '/erste-schritte/' },
-            { text: 'Clients', link: '/erste-schritte/clients/' },
-            { text: 'Glossar', link: '/erste-schritte/glossar/' }
+            { text: 'Erste Schritte', link: '/einstieg/' },
+            { text: 'Gestaltung', link: '/einstieg/gestaltung/' },
+            { text: 'Leistungen', link: '/einstieg/leistungen/' },
+            { text: 'Cloud Migration', link: '/einstieg/migration/' },
+            { text: 'Arbeitsumgebungen', link: '/einstieg/clients/' },
+            { text: 'Glossar', link: '/glossar/' }
+          ]
+        }
+      ],
+      '/betrieb-service/': [
+        {
+          text: 'Betrieb & Service',
+          items: [
+            { text: 'Übersicht', link: '/betrieb-service/' },
+            { text: 'Wartung', link: '/betrieb-service/wartung/' },
+            { text: 'Glossar', link: '/glossar/' }
           ]
         }
       ],
@@ -54,7 +67,8 @@ export default defineConfig({
           items: [
             { text: 'Übersicht', link: '/wissen/' },
             { text: 'ELO DocXtractor & 7zip', link: '/wissen/docxtractor_7zip' },
-            { text: 'Lieblingsplatz.cloud', link: '/wissen/lieblingsplatz' }
+            { text: 'Lieblingsplatz.cloud', link: '/wissen/lieblingsplatz' },
+            { text: 'Glossar', link: '/glossar/' }
           ]
         }
       ],
@@ -64,7 +78,8 @@ export default defineConfig({
           items: [
             { text: 'Übersicht', link: '/praxis/' },
             { text: 'Dynamische Ordner', link: '/praxis/dynamische_ordner' },
-            { text: 'Metadaten', link: '/praxis/metadaten' }
+            { text: 'Metadaten', link: '/praxis/metadaten' },
+            { text: 'Glossar', link: '/glossar/' }
           ]
         }
       ]

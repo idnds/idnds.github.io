@@ -10,7 +10,7 @@ hero:
   actions:
     - theme: brand
       text: Erste Schritte
-      link: /erste-schritte/
+      link: /einstieg/
 
 features:
   - title: ELO ECM Suite
@@ -23,7 +23,7 @@ features:
     details: DATEV, SAP, Dynamics BC, Microsoft 365, Salesforce, uvm.
 ---
 
-## 
+##
 
 <div class="home-footer-banner">
 
