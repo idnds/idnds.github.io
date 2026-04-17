@@ -1,57 +1,67 @@
-import { reactive } from "vue";
+// useEventFormState.js
+//
+// Verantwortung: reaktiver Formular-Zustand + Defaults.
+// Keine Validierungslogik, keine YAML-Verarbeitung, keine Computed-Felder.
+//
+// Datumswerte im Form-State: datetime-local-Format ("YYYY-MM-DDTHH:MM", lokal).
+// datetime-local-Inputs akzeptieren ausschließlich dieses Format als :value.
+// UTC-Konvertierung für den YAML-Export erfolgt in useEventYaml.js → toIso().
+// Für Datumskonvertierungen: siehe dateUtils.js.
 
-// Wandelt ein Date-Objekt in den Wert für einen datetime-local-Input um.
-// Wird hier definiert weil sie nur für Defaults benötigt wird.
-function formatForDatetimeLocal(date) {
-    const pad = (n) => String(n).padStart(2, "0");
-    return (
-        date.getFullYear() + "-" +
-        pad(date.getMonth() + 1) + "-" +
-        pad(date.getDate()) + "T" +
-        pad(date.getHours()) + ":" +
-        pad(date.getMinutes())
-    );
-}
+import { reactive } from "vue";
+import { formatForDatetimeLocal } from "./dateUtils.js";
 
 export function useEventFormState(mode = "create") {
     const form = reactive({
-        // Identifikation (im Edit-Modus readonly)
+        // ── Identifikation ────────────────────────────────────────────────────────
+        // Im Edit-Modus readonly (Bestandteil von Dateiname, ID und Slug).
         id: "",
         slug: "",
 
-        // Basis-Pflichtfelder
+        // ── Basis-Pflichtfelder ───────────────────────────────────────────────────
         typeId: "announcement",
-        productId: "",
+        productId: "",  // Formular nutzt Singular; YAML exportiert productIds: [value]
         title: "",
         shortnameRaw: "",
+
+        // publishedAt: lokale Zeit im datetime-local-Format.
+        // UTC-Export in useEventYaml.js → toIso(form.publishedAt).
         publishedAt: formatForDatetimeLocal(new Date()),
 
-        // Optionale Basis-Felder
-        updatedAt: "",  // wird im Edit-Modus beim Export automatisch gesetzt
+        // updatedAt: kein Eingabefeld.
+        // Im Edit-Modus beim YAML-Export automatisch auf new Date().toISOString() gesetzt.
+        updatedAt: "",
 
-        // Zeitfelder (nur maintenance)
+        // ── Zeitfelder (nur maintenance) ─────────────────────────────────────────
+        // datetime-local-Format -- UTC-Export in useEventYaml.js → toIso().
         eventDate: "",
         endDate: "",
 
-        // Markdown-Felder
+        // ── Maintenance-Status ────────────────────────────────────────────────────
+        // Create-Modus: immer "active" (implizit, kein Dropdown).
+        // Edit-Modus: als Dropdown für maintenance-Events wählbar.
+        status: "active",
+
+        // ── Markdown-Felder ───────────────────────────────────────────────────────
         summaryMd: "",
         detailsMd: "",
-        impact: [],
+        impact: [],  // "downtime" | "limited-availability" | "action-required"
         customerActionMd: "",
 
-        // Release-Felder
+        // ── Release-Felder ────────────────────────────────────────────────────────
         version: "",
         changelogUrl: "",
 
-        // Security-Felder
+        // ── Security-Felder ───────────────────────────────────────────────────────
         severity: "",
-        cveIdsRaw: "",
-        affectedVersionsRaw: "",
+        cveIdsRaw: "",  // Textarea: eine CVE-ID pro Zeile
+        affectedVersionsRaw: "",  // Textarea: eine Version pro Zeile
         fixedVersion: "",
 
-        // Relations
+        // ── Relations ─────────────────────────────────────────────────────────────
+        // [{ type: "relates-to"|"resolves"|"follow-up-to"|"supersedes", eventId: string }]
         relations: [],
     });
 
-    return { form, formatForDatetimeLocal };
+    return { form };
 }
