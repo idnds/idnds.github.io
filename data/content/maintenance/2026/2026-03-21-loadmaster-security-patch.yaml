@@ -7,9 +7,9 @@ productIds:
   - lpc-prod
   - lpc-test
 title: "Wartung - Kemp LoadMaster Sicherheitsupdates"
-publishedAt: "2026-03-19T12:10:00+01:00"
-eventDate: "2026-03-21T09:00:00+01:00"
-endDate: "2026-03-21T09:30:00+01:00"
+publishedAt: "2026-03-19T12:10:00Z"
+eventDate: "2026-03-21T09:00:00Z"
+endDate: "2026-03-21T09:30:00Z"
 status: active
 summaryMd: |
   Wartung zur Behebung kritischer Sicherheitslücken (CVE-2026-3517, CVE-2026-3518, CVE-2026-3519, CVE-2026-4048, CVE-2026-21876) in Kemp LoadMaster. Das System ist während der Arbeiten kurzzeitig nicht verfügbar.
