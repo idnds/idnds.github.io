@@ -20,4 +20,6 @@ detailsMd: |
   - ELO XC Updates
 impact:
   - limited-availability
-relations: []
+relations:
+  - type: relates-to
+    eventId: release-2026-03-18-elo-operator-1-18-1
