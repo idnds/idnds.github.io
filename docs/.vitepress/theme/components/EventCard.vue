@@ -131,10 +131,10 @@ function formatDateRange(start, end, publishedAt) {
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-top: 0.75rem;
 }
-.products { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.products { display: flex; gap: 0.4rem; flex-wrap: wrap; min-width: 0;}
 .product-badge {
   background: var(--vp-c-bg-mute);
   border: 1px solid var(--vp-c-divider);
@@ -150,6 +150,8 @@ function formatDateRange(start, end, publishedAt) {
   font-size: 0.8rem;
   text-decoration: none;
   white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 .details-link:hover { opacity: 0.85; }
 </style>
