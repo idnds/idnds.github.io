@@ -9,35 +9,35 @@ publishedAt: "2026-03-04T00:00:00Z"
 version: 1.18.0
 changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-18-0
 summaryMd: |
-  Release des ELO Cloud Kubernetes Operators mit Verbesserungen an der StartupProbe,
-  Performance-Optimierungen und Unterstuetzung fuer Priority Classes.
+  Neue ELO ECM Suite LTS-Versionen verfügbar:
+
+    - v23-0.27
+    - v25-0.6
+
+  Des weiteren werden mit diesem Update die Stabilität und Performance der Plattform verbessert.
+  Ziel ist eine zuverlässigere Startphase der Dienste, eine bessere Ressourcennutzung und eine optimierte Verarbeitung im Hintergrundbetrieb.
+  Zusätzlich wird die Verwaltung von Prioritäten für Systemprozesse eingeführt, um kritische Komponenten besser steuern zu können.
 detailsMd: |
-  ### Fixes
+  Die wichtigsten Änderungen lassen sich in die folgenden Bereiche unterteilen:
 
-  **ECLKOP-19**: ES_JAVA_OPTS Umgebungsvariable wurde durch den Standardwert fuer
-  Search Nodes ueberschrieben. Dieses Verhalten ist korrigiert.
+  ### Stabilität und Startverhalten
 
-  **ECLKOP-20**: Die StartupProbe im Server StatefulSet prueft nun ausschliesslich
-  ob der Indexserver erreichbar ist. Dadurch koennen sich alle anderen Services korrekt
-  initialisieren und verbinden. Die Aenderung gilt fuer ELO v25-0.6 und neuere Versionen
-  sowie fuer v23-0.27 bis v23-1.0.
+  Der Startprozess wurde angepasst, sodass zentrale Systemdienste jetzt gezielter geprüft werden. Dadurch wird sichergestellt, dass abhängige Komponenten erst dann starten, wenn die Kernservices vollständig verfügbar sind.
+  Eine Fehlkonfiguration von Systemvariablen, die in bestimmten Fällen zu unerwartetem Verhalten führen konnte, wurde korrigiert.
 
-  ### Features
+  ### Performance- und Effizienzverbesserungen
 
-  **ECLKOP-9**: Unterstuetzung fuer Priority Classes. Ermoeglicht die Steuerung der
-  Scheduling-Prioritaet von Pods im Kubernetes-Cluster.
+  Die Verarbeitung großer Datenmengen wurde optimiert, indem unnötige Vergleichs- und Differenzberechnungen reduziert werden.
+  Zusätzlich wurde die interne Analyse des Verarbeitungsprozesses verbessert, um mögliche Engpässe schneller erkennen zu können.
 
-  **ECLKOP-10**: Priority Class fuer das Operator Deployment konfigurierbar
-  (Teilimplementierung von ECLKOP-9).
+  ### Ressourcen- und Prioritätssteuerung
 
-  **ECLKOP-11**: Priority Class Einstellungen fuer ELO Services integriert
-  (Teilimplementierung von ECLKOP-9).
+  Es ist nun möglich, die Priorität von Systemdiensten festzulegen. Dadurch können wichtige Prozesse im Betrieb bevorzugt behandelt werden.
+  Diese Steuerung betrifft sowohl die zentrale Steuerungseinheit als auch die angebundenen Services.
 
-  **ECLKOP-17**: Performance-Verbesserung: Diff-Generierung fuer Base64-Strings wird
-  uebersprungen.
+  ### Plattform- und Versionsunterstützung
 
-  **ECLKOP-6**: Messung der Dauer einzelner Abschnitte des Reconciliation-Prozesses
-  zur Identifikation von Performance-Engpaessen. Aktivierbar ueber erhoehtes Log-Level
-  beim Start des Operators: `--zap-log-level=2`
+  Die Plattform wurde um Unterstützung für aktuelle ELO-Systemstände erweitert.
+  Damit werden sowohl neuere als auch bestehende Installationen besser unterstützt und können einheitlicher betrieben werden.
 impact: []
 relations: []
