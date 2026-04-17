@@ -36,4 +36,6 @@ detailsMd: |
   Automatische Updates auf eine neue „Latest“-Kennzeichnung wurden bewusst deaktiviert, um unbeabsichtigte Systemwechsel zu vermeiden.
   Updates auf die neue Version müssen gezielt und explizit angestoßen werden.
 impact: []
-relations: []
+relations:
+  - type: supersedes
+    eventId: release-2026-03-04-elo-operator-1-18-0
