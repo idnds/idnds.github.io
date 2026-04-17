@@ -9,10 +9,7 @@ publishedAt: "2026-03-04T00:00:00Z"
 version: 1.18.0
 changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-18-0
 summaryMd: |
-  Neue ELO ECM Suite LTS-Versionen verfügbar:
-
-    - v23-0.27
-    - v25-0.6
+  Neue ELO ECM Suite LTS-Versionen verfügbar: v23-0.27 und v25-0.6
 
   Des weiteren werden mit diesem Update die Stabilität und Performance der Plattform verbessert.
   Ziel ist eine zuverlässigere Startphase der Dienste, eine bessere Ressourcennutzung und eine optimierte Verarbeitung im Hintergrundbetrieb.

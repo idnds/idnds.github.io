@@ -1,0 +1,39 @@
+id: release-2026-03-18-elo-operator-1-18-1
+slug: release-2026-03-18-elo-operator-1-18-1
+typeId: release
+vendorId: elo
+productIds:
+  - elo-operator
+title: ELO Cloud Kubernetes Operator 1.18.1
+publishedAt: "2026-03-18T17:00:00Z"
+version: 1.18.1
+changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-18-1
+summaryMd: |
+  Neuer ELO ECM Suite Release Candidate verfügbar: v25-0.7-rc (25.00.002)
+
+  Mit diesem Update wird die neue LTS-Version 25.00.002 berücksichtigt, die wichtige technologische Weiterentwicklungen enthält.
+  Dadurch ergeben sich grundlegende Änderungen in der Plattformarchitektur, die eine vollständige Kompatibilität mit der vorherigen LTS-Version nicht mehr in allen Bereichen gewährleisten.
+
+  Das Update stellt sicher, dass aktuelle Systemstände korrekt erkannt und gesteuert werden und verhindert gleichzeitig ungewollte automatische Versionswechsel.
+detailsMd: |
+  Die neue LTS-Version 25.00.002 bringt umfangreiche technische Weiterentwicklungen mit sich.
+  Diese Änderungen betreffen zentrale Systemkomponenten und führen dazu, dass nicht alle Module vollständig kompatibel mit vorherigen Versionen bleiben.
+  Besonders betroffen sind weiterentwickelte Kernbereiche wie Formularverarbeitung, Prozessautomatisierung und administrative Komponenten.
+
+  ### Betroffene Hauptkomponenten
+
+  Im Rahmen der Weiterentwicklung wurden insbesondere folgende Funktionsbereiche technisch angepasst:
+
+  - Formular- und Erfassungsfunktionen
+  - Automatisierungs- und Workflow-Prozesse
+  - Verwaltungs- und Administrationsoberflächen
+  - Integrationskomponenten für KI-gestützte Funktionen
+  - Kommunikations- und Kollaborationsschnittstellen (z. B. externe Plattformanbindungen)
+
+  ### Update- und Versionssteuerung
+
+  Das Version-Mapping wurde angepasst, um eine klare Zuordnung aktueller Systemstände zu gewährleisten.
+  Automatische Updates auf eine neue „Latest“-Kennzeichnung wurden bewusst deaktiviert, um unbeabsichtigte Systemwechsel zu vermeiden.
+  Updates auf die neue Version müssen gezielt und explizit angestoßen werden.
+impact: []
+relations: []

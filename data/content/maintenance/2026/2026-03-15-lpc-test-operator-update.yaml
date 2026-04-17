@@ -4,8 +4,6 @@ typeId: maintenance
 vendorId: idnds
 productIds:
   - lpc-test
-  - elo-ecm-23
-  - elo-ecm-25
 title: Geplante Wartung - Lieblingsplatz.cloud (Test)
 status: active
 publishedAt: "2026-03-01T10:00:00Z"
@@ -15,7 +13,7 @@ summaryMd: |
   Geplantes Wartungsfenster zur Aktualisierung des ELO Operators und Bereitstellung neuer Versionen der ELO ECM Suite.
 detailsMd: |
   1. Aktualisierung des ELO Operators auf Version 1.18.0
-  2. Automatische Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest
+  2. Aktualisierung der ELO ECM Suite Instanzen mit v23-0-latest und v25-0-latest
 impact: []
 relations:
   - type: relates-to
