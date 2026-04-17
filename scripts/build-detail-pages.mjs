@@ -228,7 +228,7 @@ for (const event of events) {
 
     // Zusammenfassung
     if (event.summaryMd) {
-        add("## 📝 Zusammenfassung");
+        add("## 📝 Zusammenfassung {#summary}");
         gap();
         add(event.summaryMd);
         gap();
@@ -236,7 +236,7 @@ for (const event of events) {
 
     // Details
     if (event.detailsMd) {
-        add("## 🔍 Details");
+        add("## 🔍 Details {#details}");
         gap();
         add(event.detailsMd);
         gap();
@@ -245,7 +245,7 @@ for (const event of events) {
     // Handlungsbedarf: ohne "Handlungsbedarf"-Label im warning-Block
     // (Überschrift "Was jetzt zu tun ist" ist ausreichend)
     if (event.customerActionMd) {
-        add("## ⚠️ Was jetzt zu tun ist");
+        add("## ⚠️ Was jetzt zu tun ist {#action}");
         gap();
         add(event.customerActionMd);
         gap();
@@ -254,7 +254,7 @@ for (const event of events) {
     // Verwandte Events (bidirektional)
     const effectiveRelations = getEffectiveRelations(event);
     if (effectiveRelations.length) {
-        add("## 🔗 Verwandte Events");
+        add("## 🔗 Verwandte Events {#relations}");
         gap();
         for (const rel of effectiveRelations) {
             const related = eventMap.get(rel.eventId);
