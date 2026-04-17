@@ -14,7 +14,7 @@ summaryMd: |
   Wartungen finden jeweils am dritten Donnerstag der Monate Februar, Mai, August und November ab 18 Uhr statt.
 detailsMd: |
   Die Wartung der Produktivumgebung umfasst die folgenden Arbeiten:
-  - Operator-Update auf den Stand der Testumgebung
-  - Auto-Update der Umgebungen mit Versionierung v2X-X-latest
   - Plattform-Updates
-  - ELO XC Updates
+  - ELO Operator-Update auf den Stand der Testumgebung
+  - ELO ECM Suite-Update auf LTS-Version der Testumgebung
+  - ELO XC Updates auf den Stand der Testumgebung

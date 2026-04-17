@@ -136,12 +136,6 @@ function formatDateRange(start, end) {
 }
 
 // ── Label-Maps ────────────────────────────────────────────────────────────────
-const impactLabel = {
-    "downtime": "Downtime",
-    "limited-availability": "Eingeschränkte Verfügbarkeit",
-    "action-required": "Handlungsbedarf",
-};
-
 const relationLabel = {
     "relates-to": "Verwandtes Event",
     "resolves": "Behebt",
@@ -153,10 +147,12 @@ const relationLabel = {
 };
 
 const typeSymbol = {
-    maintenance: "🔧",
+    // maintenance: "🔧",
+    maintenance: "⚙",
     security: "🛡️",
     release: "🚀",
-    announcement: "📣",
+    // announcement: "📣",
+    announcement: "📢",
 };
 
 // ── Seitengenerierung ─────────────────────────────────────────────────────────
@@ -189,13 +185,13 @@ for (const event of events) {
 
     // Titel mit Unicode-Symbol
     const symbol = typeSymbol[event.typeId] ?? "";
-    add("# " + (symbol ? symbol + " " : "") + event.title);
+    add("# " + event.title);
     gap();
 
     // Meta-Tabelle
-    add("| | |");
-    add("|---|---|");
+    // add("| **Typ** | " + (event.eventType?.name ?? event.typeId) + (symbol ? symbol + " " : "") + " |");
     add("| **Typ** | " + (event.eventType?.name ?? event.typeId) + " |");
+    add("|---|---|");
     add("| **Hersteller** | " + (event.vendor?.name ?? event.vendorId) + " |");
     add("| **Produkte** | " +
         (event.products?.map((p) => p.name).join(", ") || event.productIds.join(", ")) + " |");
@@ -230,19 +226,9 @@ for (const event of events) {
     }
     gap();
 
-    // Auswirkungen
-    if (event.impact?.length) {
-        add("## Auswirkungen");
-        gap();
-        for (const imp of event.impact) {
-            add("- **" + (impactLabel[imp] ?? imp) + "**");
-        }
-        gap();
-    }
-
     // Zusammenfassung
     if (event.summaryMd) {
-        add("## Zusammenfassung");
+        add("## 📝 Zusammenfassung");
         gap();
         add(event.summaryMd);
         gap();
@@ -250,7 +236,7 @@ for (const event of events) {
 
     // Details
     if (event.detailsMd) {
-        add("## Details");
+        add("## 🔍 Details");
         gap();
         add(event.detailsMd);
         gap();
@@ -259,18 +245,16 @@ for (const event of events) {
     // Handlungsbedarf: ohne "Handlungsbedarf"-Label im warning-Block
     // (Überschrift "Was jetzt zu tun ist" ist ausreichend)
     if (event.customerActionMd) {
-        add("## Was jetzt zu tun ist");
+        add("## ⚠️ Was jetzt zu tun ist");
         gap();
-        add("::: warning");
         add(event.customerActionMd);
-        add(":::");
         gap();
     }
 
     // Verwandte Events (bidirektional)
     const effectiveRelations = getEffectiveRelations(event);
     if (effectiveRelations.length) {
-        add("## Verwandte Events");
+        add("## 🔗 Verwandte Events");
         gap();
         for (const rel of effectiveRelations) {
             const related = eventMap.get(rel.eventId);

@@ -24,9 +24,7 @@ impact:
   - action-required
 customerActionMd: |
   Kunden sollten ihre LoadMaster-Appliances unverzüglich auf Version **v7.2.63.0** oder höher (für LTSF: **v7.2.54.17** oder höher) aktualisieren, um alle beschriebenen Sicherheitslücken zu schließen. Es gibt bisher keine Hinweise auf aktive Ausnutzung der Schwachstellen.
-relations:
-  - type: relates-to
-    eventId: maintenance-2026-03-21-loadmaster-security-patch
+relations: []
 cveIds:
   - "CVE-2026-3517"
   - "CVE-2026-3518"

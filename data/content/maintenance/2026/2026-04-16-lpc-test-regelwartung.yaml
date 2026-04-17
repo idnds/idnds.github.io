@@ -14,8 +14,8 @@ summaryMd: |
   Wartungen finden jeweils am dritten Donnerstag der Monate Januar, April, Juli und Oktober ab 18 Uhr statt.
 detailsMd: |
   Die Wartung der Testumgebung umfasst die folgenden Arbeiten:
-  - Operator-Update auf den aktuellen Stand
-  - Auto-Update der Umgebungen mit Versionierung v2X-X-latest
+  - ELO Operator-Update auf den aktuellen Stand
+  - ELO ECM Suite-Update auf LTS-Version
   - Plattform-Updates
   - ELO XC Updates
 impact:
