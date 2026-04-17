@@ -8,9 +8,9 @@ productIds:
   - elo-ecm-25
 title: Geplante Wartung - Lieblingsplatz.cloud (Test)
 status: active
-publishedAt: "2026-03-01T10:00:00+01:00"
-eventDate: "2026-03-15T20:00:00+01:00"
-endDate: "2026-03-15T22:00:00+01:00"
+publishedAt: "2026-03-01T10:00:00Z"
+eventDate: "2026-03-15T20:00:00Z"
+endDate: "2026-03-15T22:00:00Z"
 summaryMd: |
   Geplantes Wartungsfenster zur Aktualisierung des ELO Operators und Bereitstellung neuer Versionen der ELO ECM Suite.
 detailsMd: |

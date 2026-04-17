@@ -5,9 +5,9 @@ vendorId: idnds
 productIds:
   - lpc-test
 title: "Regelwartung - Lieblingsplatz.cloud (Test)"
-publishedAt: "2026-03-24T13:14:15+01:00"
-eventDate: "2026-04-16T18:00:00+01:00"
-endDate: "2026-04-16T20:00:00+01:00"
+publishedAt: "2026-03-24T13:14:15Z"
+eventDate: "2026-04-16T16:00:00Z"
+endDate: "2026-04-16T18:00:00Z"
 status: active
 summaryMd: |
   Die Lieblingsplatz.cloud-Testumgebung wird routinemäßig quartalsweise gewartet. 

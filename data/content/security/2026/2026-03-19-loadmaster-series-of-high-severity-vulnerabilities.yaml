@@ -5,7 +5,7 @@ vendorId: kemp
 productIds:
   - loadmaster
 title: "Kemp LoadMaster: Serie von hochkritischen Sicherheitslücken"
-publishedAt: "2026-03-19T12:05:41+01:00"
+publishedAt: "2026-03-19T12:05:41Z"
 summaryMd: |
   Kemp hat eine Serie von fünf hochkritischen Sicherheitslücken in LoadMaster bestätigt. Betroffen sind GA-Versionen bis v7.2.62.2 und LTSF-Versionen bis v7.2.54.16. Gepatchte Versionen stehen bereits zur Verfügung.
 detailsMd: |

@@ -5,7 +5,7 @@ vendorId: elo
 productIds:
   - elo-xc-23
 title: "Abkündigung von ELO XC 23"
-publishedAt: "2025-08-04T19:49:17+01:00"
+publishedAt: "2025-08-04T19:49:17Z"
 summaryMd: |
   ELO XC 23 wird ab sofort abgekündigt. Nutzer sollten auf die LTS-Version XC 25 migrieren, die Verbesserungen für Exchange Online enthält und geplante Änderungen der Microsoft Schnittstellen berücksichtigt.
 detailsMd: |
