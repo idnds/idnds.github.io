@@ -6,10 +6,10 @@
 // Datumswerte im Form-State: datetime-local-Format ("YYYY-MM-DDTHH:MM", lokal).
 // datetime-local-Inputs akzeptieren ausschließlich dieses Format als :value.
 // UTC-Konvertierung für den YAML-Export erfolgt in useEventYaml.js → toIso().
-// Für Datumskonvertierungen: siehe dateUtils.js.
+// Für Datumskonvertierungen: siehe dateUtils.mjs.
 
 import { reactive } from "vue";
-import { formatForDatetimeLocal } from "./dateUtils.js";
+import { formatForDatetimeLocal } from "@shared/dateUtils.mjs";
 
 export function useEventFormState(mode = "create") {
     const form = reactive({

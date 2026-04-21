@@ -1,4 +1,4 @@
-// dateUtils.js
+// dateUtils.mjs
 //
 // Zentraler Utility-Layer für alle Datumskonvertierungen im News-System.
 // Einzige Quelle für toIso, utcToLocal und formatForDatetimeLocal.

@@ -9,7 +9,7 @@
 //   Konvertierungsstelle: toIso() -- genau einmal pro Datumswert hier.
 
 import yaml from "js-yaml";
-import { toIso } from "./dateUtils.js";
+import { toIso } from "@shared/dateUtils.mjs";
 
 // ── Literal-Block-Schema ──────────────────────────────────────────────────────
 // Markdown-Felder werden als YAML-Literal-Block ausgegeben (|).
@@ -45,7 +45,7 @@ export function useEventYaml(form, meta, mode = "create") {
     /**
      * Baut den vollständigen YAML-String aus dem Form-State.
      *
-     * Alle Datumswerte werden via toIso() (aus dateUtils.js) nach UTC konvertiert.
+     * Alle Datumswerte werden via toIso() (aus dateUtils.mjs) nach UTC konvertiert.
      * Im Edit-Modus: updatedAt automatisch auf aktuellen Zeitpunkt gesetzt.
      *
      * @returns {string} gültiger YAML-String mit UTC-Datumswerten
@@ -61,7 +61,7 @@ export function useEventYaml(form, meta, mode = "create") {
             vendorId,
             productIds: [form.productId],
             title: form.title.trim(),
-            // datetime-local → UTC ISO: toIso() aus dateUtils.js
+            // datetime-local → UTC ISO: toIso() aus dateUtils.mjs
             publishedAt: toIso(form.publishedAt),
             summaryMd: lit(form.summaryMd),
         };

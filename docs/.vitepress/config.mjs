@@ -1,5 +1,6 @@
 // docs/.vitepress/config.mjs
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
+import path from "node:path";
 
 export default defineConfig({
   title: 'Lieblingsplatz.cloud',
@@ -83,6 +84,13 @@ export default defineConfig({
           ]
         }
       ]
+    }
+  },
+  vite: {
+    resolve: {
+      alias: {
+        '@shared': path.resolve(__dirname, '../../scripts/shared')
+      }
     }
   }
 })

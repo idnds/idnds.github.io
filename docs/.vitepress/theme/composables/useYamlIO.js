@@ -6,10 +6,10 @@
 // Datumsformat-Strategie:
 //   YAML enthält UTC ISO ("...Z") oder Altdaten mit Offset ("+01:00").
 //   Form-State erwartet datetime-local-Format ("YYYY-MM-DDTHH:MM").
-//   Konvertierungsstelle: utcToLocal() aus dateUtils.js -- einmalig in normalize().
+//   Konvertierungsstelle: utcToLocal() aus dateUtils.mjs -- einmalig in normalize().
 
 import yaml from "js-yaml";
-import { utcToLocal } from "./dateUtils.js";
+import { utcToLocal } from "@shared/dateUtils.mjs";
 
 /**
  * Extrahiert den Kurznamen aus einem Slug.
@@ -35,7 +35,7 @@ export function useYamlIO() {
     /**
      * Normalisiert ein rohes geparste YAML-Objekt in ein Form-kompatibles Objekt.
      *
-     * Datumsfelder: UTC/Offset ISO → datetime-local via utcToLocal() (dateUtils.js).
+     * Datumsfelder: UTC/Offset ISO → datetime-local via utcToLocal() (dateUtils.mjs).
      * Akzeptiert neue UTC-Strings ("...Z") und alte Offset-Strings ("+01:00").
      * Fehlende Felder erhalten sichere Defaults (leere Strings, leere Arrays).
      * Unbekannte Felder werden ignoriert.
@@ -58,7 +58,7 @@ export function useYamlIO() {
             title: data.title ?? "",
             shortnameRaw: extractShortname(data.slug ?? ""),
 
-            // Datumswerte: UTC/Offset → datetime-local (utcToLocal aus dateUtils.js).
+            // Datumswerte: UTC/Offset → datetime-local (utcToLocal aus dateUtils.mjs).
             // Nach normalize() enthält der form-State datetime-local-Werte --
             // identisch zu manuellem Eintippen durch den Nutzer.
             publishedAt: utcToLocal(data.publishedAt),
