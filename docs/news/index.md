@@ -4,12 +4,9 @@ title: Ankündigungen
 
 # Ankündigungen
 
-::: info Feeds
+::: info Feeds zum Abonnement der Ankündigungen
 📡 **RSS Feed**: <https://lieblingsplatz.cloud/feed.xml>  
-*Für klassische Feed-Reader und einfache Abonnements.*
-
 ⚛️ **Atom Feed**: <https://lieblingsplatz.cloud/atom.xml>  
-*Erweiterter Standard mit Änderungs-Benachrichtigung.*
 :::
 
 <EventFilter />
