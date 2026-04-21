@@ -46,7 +46,7 @@ const INPUT_PATH = "data/_generated/index/all.json";
 const OUTPUT_DIR = "docs/public";
 
 const FEED_AUTHOR = "id-netsolutions Digital Solutions GmbH";
-const FEED_TITLE = "Lieblingsplatz.cloud \u2013 News & Ank\u00FCndigungen";
+const FEED_TITLE = "Lieblingsplatz.cloud \u2013 Ank\u00FCndigungen";
 const FEED_DESC = "Aktuelle Wartungen, Security-Meldungen, Releases und Ank\u00FCndigungen";
 
 const MS_4_WEEKS = 28 * 24 * 60 * 60 * 1000;
