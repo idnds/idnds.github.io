@@ -2,6 +2,8 @@
   <div class="event-filter">
 
     <div class="filters" role="group" aria-label="Event-Filter">
+
+      <!-- Typ-Filter: Single-Select aus options.json -->
       <select
         id="type-filter"
         v-model="selectedType"
@@ -14,42 +16,22 @@
         </option>
       </select>
 
-      <select
-        id="vendor-filter"
-        v-model="selectedVendor"
-        aria-label="Nach Hersteller filtern"
-        @change="onVendorChange"
-      >
-        <option value="">Alle Hersteller</option>
-        <option v-for="v in filterOptions.vendors" :key="v.value" :value="v.value">
-          {{ v.label }}
-        </option>
-      </select>
-
-      <select
-        v-if="showStatusFilter"
-        id="status-filter"
-        v-model="selectedStatus"
-        aria-label="Nach Wartungsstatus filtern"
-      >
-        <option value="">Alle Wartungsstatus</option>
-        <option v-for="s in availableStatuses" :key="s" :value="s">
-          {{ statusLabel[s] }}
-        </option>
-      </select>
-
+      <!-- Impact-Filter: Single-Select, statische Optionen -->
       <select
         id="impact-filter"
         v-model="selectedImpact"
         aria-label="Nach Auswirkung filtern"
+        @change="onImpactChange"
       >
         <option value="">Alle Auswirkungen</option>
         <option value="downtime">Downtime</option>
         <option value="limited-availability">Eingeschränkte Verfügbarkeit</option>
         <option value="action-required">Handlungsbedarf</option>
       </select>
+
     </div>
 
+    <!-- Ladezustand -->
     <p v-if="initialLoading" class="filter-status" aria-live="polite">
       Wird geladen...
     </p>
@@ -65,6 +47,7 @@
       </template>
     </p>
 
+    <!-- Ergebnisliste -->
     <div>
       <EventCard
         v-for="event in visibleEvents"
@@ -76,6 +59,7 @@
       </p>
     </div>
 
+    <!-- Mehr laden -->
     <div v-if="hasMore" class="load-more">
       <button class="load-more-btn" type="button" @click="loadMore">
         {{ nextBatchSize }} weitere Events laden
@@ -88,24 +72,29 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
-import { deriveStatus, statusLabel } from "../composables/useEventStatus.js";
 
-// Kein defineProps -- die Komponente verwaltet ihre Lade-Logik vollständig intern.
-// Kein Modal-Code -- Details öffnet /news/<slug> direkt.
-
+// ── Konstanten ────────────────────────────────────────────────────────────────
 const INITIAL_LIMIT = 25;
 const BATCH_SIZE    = 25;
 
+// ── State ─────────────────────────────────────────────────────────────────────
 const events         = ref([]);
-const initialLoading = ref(true);
-const loading        = ref(false);
+const initialLoading = ref(true);   // Initiales Laden: latest.json + options.json parallel
+const loading        = ref(false);  // Nachfolgendes Lazy Loading bei Typ-Filterwechsel
 const visibleCount   = ref(INITIAL_LIMIT);
-const selectedType   = ref("");
-const selectedVendor = ref("");
-const selectedStatus = ref("");
-const selectedImpact = ref("");
-const filterOptions  = ref({ types: [], vendors: [] });
 
+// Filter: nur Typ und Impact
+const selectedType   = ref("");
+const selectedImpact = ref("");
+
+// Filteroptionen aus options.json.
+// Typ-Optionen kommen aus options.json damit alle Typen im Dropdown erscheinen --
+// auch wenn gerade kein Event dieses Typs in latest.json vorhanden ist.
+// Impact-Optionen sind statisch (drei feste Werte im Datenmodell).
+const filterOptions = ref({ types: [] });
+
+// ── Index-Cache ───────────────────────────────────────────────────────────────
+// Verhindert doppelte Requests für denselben Index innerhalb einer Session.
 const indexCache = new Map();
 
 async function fetchIndex(url, cacheKey) {
@@ -121,8 +110,36 @@ async function fetchIndex(url, cacheKey) {
   }
 }
 
-// Beide Requests parallel, initialLoading erst nach Promise.all false
+// ── URL-Parameter ─────────────────────────────────────────────────────────────
+// Beide Filter sind über URL direkt ansteuerbar:
+//   ?type=maintenance
+//   ?impact=downtime
+//   ?type=security&impact=action-required
+//
+// URL-Parsing nur in onMounted (SSR-kompatibel: kein window-Zugriff auf Server).
+
+function readUrlParams() {
+  const p = new URLSearchParams(window.location.search);
+  selectedType.value   = p.get("type")   ?? "";
+  selectedImpact.value = p.get("impact") ?? "";
+}
+
+function writeUrlParams() {
+  const p = new URLSearchParams();
+  if (selectedType.value)   p.set("type",   selectedType.value);
+  if (selectedImpact.value) p.set("impact", selectedImpact.value);
+  const qs = p.toString();
+  // replaceState statt pushState: kein Einrag in die Browser-History pro Filterwechsel
+  history.replaceState(null, "", qs ? "?" + qs : window.location.pathname);
+}
+
+// URL bei Filterwechsel aktualisieren
+watch([selectedType, selectedImpact], writeUrlParams);
+
+// ── Initial laden ─────────────────────────────────────────────────────────────
+// latest.json und options.json parallel -- initialLoading erst nach Promise.all false.
 onMounted(async () => {
+  readUrlParams(); // URL-Params vor dem ersten Laden lesen (SSR-sicher)
   try {
     const [eventsData, opts] = await Promise.all([
       fetchIndex("/data/_generated/index/latest.json", "latest"),
@@ -130,75 +147,73 @@ onMounted(async () => {
     ]);
     if (eventsData) events.value = eventsData;
     if (opts)       filterOptions.value = opts;
+
+    // Falls URL-Param einen Typ vorgibt: passenden Index sofort nachladen
+    if (selectedType.value) {
+      await loadTypeIndex(selectedType.value);
+    }
   } finally {
     initialLoading.value = false;
   }
 });
 
-// Basis-Index laden -- Entscheidungslogik:
-//   Typ gewählt                → by-type/<type>.json
-//   Nur Hersteller gewählt     → by-vendor/<vendor>.json
-//   Beides leer                → latest.json
-//   Typ + Hersteller           → by-type (kleiner), Hersteller clientseitig gefiltert
-async function loadBaseIndex() {
+// ── Lazy Loading: Typ-Index ───────────────────────────────────────────────────
+// Wenn ein Typ gewählt wird, wird by-type/<type>.json geladen.
+// Dieser Index enthält nur Events des gewählten Typs und ist kleiner als latest.json.
+// Impact wird immer clientseitig auf dem geladenen Index gefiltert.
+async function loadTypeIndex(typeId) {
   loading.value = true;
   try {
-    if (selectedType.value) {
-      const data = await fetchIndex(
-        "/data/_generated/index/by-type/" + selectedType.value + ".json",
-        "type:" + selectedType.value
-      );
-      if (data) events.value = data;
-    } else if (selectedVendor.value) {
-      const data = await fetchIndex(
-        "/data/_generated/index/by-vendor/" + selectedVendor.value + ".json",
-        "vendor:" + selectedVendor.value
-      );
-      if (data) events.value = data;
-    } else {
-      const data = await fetchIndex(
-        "/data/_generated/index/latest.json",
-        "latest"
-      );
-      if (data) events.value = data;
-    }
+    const data = await fetchIndex(
+      "/data/_generated/index/by-type/" + typeId + ".json",
+      "type:" + typeId
+    );
+    if (data) events.value = data;
   } finally {
-    loading.value   = false;
+    loading.value      = false;
     visibleCount.value = INITIAL_LIMIT;
   }
 }
+
+async function loadLatestIndex() {
+  loading.value = true;
+  try {
+    const data = await fetchIndex("/data/_generated/index/latest.json", "latest");
+    if (data) events.value = data;
+  } finally {
+    loading.value      = false;
+    visibleCount.value = INITIAL_LIMIT;
+  }
+}
+
+// ── Filter-Handler ────────────────────────────────────────────────────────────
 
 async function onTypeChange() {
-  if (selectedType.value !== "" && selectedType.value !== "maintenance") {
-    selectedStatus.value = "";
-  }
-  await loadBaseIndex();
-}
-
-async function onVendorChange() {
-  if (!selectedType.value) {
-    await loadBaseIndex();
+  if (selectedType.value) {
+    await loadTypeIndex(selectedType.value);
   } else {
-    visibleCount.value = INITIAL_LIMIT;
+    await loadLatestIndex();
   }
 }
 
-watch([selectedStatus, selectedImpact], () => {
+function onImpactChange() {
+  // Impact ist clientseitig -- kein Index-Load nötig
   visibleCount.value = INITIAL_LIMIT;
-});
+}
 
+// ── Clientseitige Filterung ───────────────────────────────────────────────────
+// Typ: wird durch Index-Wahl bereits vorselektiert (redundante Prüfung schadet nicht).
+// Impact: immer clientseitig auf dem geladenen Index-Subset.
 const filteredEvents = computed(() =>
   events.value.filter((e) => {
-    if (selectedType.value   && e.typeId   !== selectedType.value)   return false;
-    if (selectedVendor.value && e.vendorId !== selectedVendor.value) return false;
+    if (selectedType.value   && e.typeId !== selectedType.value)         return false;
     if (selectedImpact.value && !e.impact?.includes(selectedImpact.value)) return false;
-    if (selectedStatus.value && e.typeId === "maintenance") {
-      if (deriveStatus(e) !== selectedStatus.value) return false;
-    }
     return true;
   })
 );
 
+// ── Anzeige-Limit ─────────────────────────────────────────────────────────────
+// v-for läuft nur auf visibleEvents -- nie auf dem vollen filteredEvents-Array.
 const visibleEvents = computed(() =>
   filteredEvents.value.slice(0, visibleCount.value)
 );
@@ -210,17 +225,8 @@ const nextBatchSize = computed(() =>
 );
 
 function loadMore() {
-  visibleCount.value = Math.min(
-    visibleCount.value + BATCH_SIZE,
-    totalCount.value
-  );
+  visibleCount.value = Math.min(visibleCount.value + BATCH_SIZE, totalCount.value);
 }
-
-const showStatusFilter = computed(() =>
-  selectedType.value === "" || selectedType.value === "maintenance"
-);
-
-const availableStatuses = ["planned", "ongoing", "completed", "cancelled"];
 </script>
 
 <style scoped>
@@ -230,6 +236,7 @@ const availableStatuses = ["planned", "ongoing", "completed", "cancelled"];
   flex-wrap: wrap;
   margin-bottom: 1rem;
 }
+
 .filters select {
   padding: 0.35rem 0.6rem;
   border: 1px solid var(--vp-c-divider);
@@ -240,25 +247,30 @@ const availableStatuses = ["planned", "ongoing", "completed", "cancelled"];
   font-family: inherit;
   cursor: pointer;
 }
+
 .filters select:focus {
   outline: 2px solid var(--vp-c-brand);
   outline-offset: 1px;
 }
+
 .filter-status {
   font-size: 0.85rem;
   color: var(--vp-c-text-2);
   margin-bottom: 0.75rem;
 }
+
 .filter-empty {
   font-size: 0.9rem;
   color: var(--vp-c-text-2);
   padding: 2rem 0;
   text-align: center;
 }
+
 .load-more {
   text-align: center;
   padding: 1.5rem 0 0.5rem;
 }
+
 .load-more-btn {
   background: var(--vp-c-bg-mute);
   border: 1px solid var(--vp-c-divider);
@@ -269,5 +281,6 @@ const availableStatuses = ["planned", "ongoing", "completed", "cancelled"];
   cursor: pointer;
   color: var(--vp-c-text-1);
 }
+
 .load-more-btn:hover { background: var(--vp-c-bg-soft); }
 </style>
