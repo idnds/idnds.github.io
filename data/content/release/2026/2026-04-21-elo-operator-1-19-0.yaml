@@ -1,0 +1,108 @@
+id: release-2026-04-21-elo-operator-1-19-0
+slug: release-2026-04-21-elo-operator-1-19-0
+typeId: release
+vendorId: elo
+productIds:
+  - elo-operator
+title: ELO Cloud Kubernetes Operator 1.19.0
+publishedAt: "2026-04-21T16:00:00.000Z"
+summaryMd: !!str >
+  Neuer ELO ECM Suite Release Candidate verfügbar: v25-0.2.1-rc (25.00.002)
+
+
+  Die Vorschau zur neuen LTS-Version enthält umfangreiche technologische
+  Weiterentwicklungen, wodurch keine vollständige Kompatibilität zur vorherigen
+  LTS-Version 25.00.001 mehr gewährleistet werden kann.
+
+
+  Zusätzlich verbessert dieses Release die Verarbeitung von Systemversionen,
+  ermöglicht genauere Analysen von Prozessabläufen zur Leistungsoptimierung und
+  enthält Aktualisierungen zentraler Plattform- und Entwicklungsbestandteile.
+detailsMd: !!str >
+  Die neue LTS-Version 25.00.002 bringt umfangreiche technische
+  Weiterentwicklungen mit sich. Diese Änderungen betreffen zentrale
+  Systemkomponenten und führen dazu, dass nicht alle Module vollständig
+  kompatibel mit vorherigen Versionen bleiben. Besonders betroffen sind
+  weiterentwickelte Kernbereiche wie Formularverarbeitung,
+  Prozessautomatisierung und administrative Komponenten.
+
+
+  ### Erweiterte Versions- und Tag-Logik
+
+
+  Zur besseren Unterstützung paralleler LTS- und Release-Candidate-Versionen
+  wurde die Tag-Struktur erweitert. Dadurch können zukünftig mehrere Varianten
+  einer Hauptversion parallel gepflegt werden.
+
+
+  Zusätzlich wurde die Versionsverwaltung erweitert, damit unterschiedliche
+  Versionsstände künftig flexibler und eindeutiger verarbeitet werden können.
+  Dadurch lassen sich neue und bestehende Systemversionen zuverlässiger erkennen
+  und steuern.
+
+
+  ### Technische Verbesserungen
+
+
+  Dieses Release enthält verschiedene technische Optimierungen zur Verbesserung
+  von Stabilität, Wartbarkeit und Systemperformance:
+
+
+  - Erweiterte Versionsverwaltung für eine zuverlässigere Verarbeitung
+  unterschiedlicher Systemstände
+
+  - Verbesserte Analysefunktionen zur frühzeitigen Erkennung möglicher
+  Performance-Engpässe
+
+  - Optimierte automatische Übernahme sicherheitsrelevanter Konfigurationen bei
+  neuen und aktualisierten Bereitstellungen
+
+  - Aktualisierung zentraler System- und Plattformkomponenten zur Verbesserung
+  von Stabilität und Sicherheit
+
+  - Technische Modernisierung wichtiger Verwaltungs- und
+  Kommunikationskomponenten der Plattform
+
+
+  ### Plattform- und Komponentenupdates
+
+
+  Im Rahmen dieses Releases wurden zentrale Systemkomponenten auf den aktuellen
+  Stand gebracht. Dadurch werden Stabilität, Sicherheit und Zukunftsfähigkeit
+  der Plattform weiter verbessert.
+
+
+  Aktualisiert wurden unter anderem:
+
+
+  - die Programmlaufzeit und Entwicklungsumgebung
+
+  - Schnittstellen und Bibliotheken für die Kubernetes-Plattform
+
+  - Komponenten für Überwachung und Systemmonitoring
+
+  - zentrale Steuerungs- und Verarbeitungsmechanismen der Plattform
+
+  - sicherheits- und netzwerkrelevante Bibliotheken
+
+
+  Zusätzlich wurden die Images und Plugins für zentrale ELO-Komponenten wie IX,
+  Flows, Forms, Workflow, KI-Integration und Synchronisationsdienste auf den
+  neuen 25.00.002-Stand angehoben.
+
+
+  ### Update- und Kompatibilitätshinweise
+
+
+  Die neue LTS-Version 25.00.002 sollte aufgrund der enthaltenen Verbesserungen
+  bevorzugt eingesetzt werden.
+
+
+  Aufgrund der technologischen Änderungen wird jedoch empfohlen, bestehende
+  Umgebungen und Integrationen vor einem Upgrade sorgfältig zu prüfen.
+impact: []
+relations:
+  - type: supersedes
+    eventId: release-2026-03-18-elo-operator-1-18-1
+version: 1.19.0
+changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-19-0
