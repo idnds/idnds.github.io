@@ -1,0 +1,20 @@
+id: maintenance-2026-04-28-lpc-test-operator-update
+slug: maintenance-2026-04-28-lpc-test-operator-update
+typeId: maintenance
+vendorId: idnds
+productIds:
+  - lpc-test
+title: Geplante Wartung - Lieblingsplatz.cloud (Test)
+status: active
+publishedAt: "2026-04-28T10:00:00Z"
+eventDate: "2026-04-28T13:00:00Z"
+endDate: "2026-04-28T14:00:00Z"
+summaryMd: |
+  Geplantes Wartungsfenster zur Aktualisierung des ELO Operators und Bereitstellung neuer Versionen der ELO ECM Suite.
+detailsMd: |
+  1. Aktualisierung des ELO Operators auf Version 1.19.1
+  2. Bereitstellung neuer Versionen der ELO ECM Suite 25.00.002
+impact: []
+relations:
+  - type: relates-to
+    eventId: release-2026-04-28-elo-operator-1-19-1
