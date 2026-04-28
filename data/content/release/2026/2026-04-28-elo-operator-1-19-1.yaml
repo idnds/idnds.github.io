@@ -1,0 +1,30 @@
+id: release-2026-04-28-elo-operator-1-19-1
+slug: release-2026-04-28-elo-operator-1-19-1
+typeId: release
+vendorId: elo
+productIds:
+  - elo-operator
+title: ELO Cloud Kubernetes Operator 1.19.1
+publishedAt: "2026-04-28T06:00:00.000Z"
+summaryMd: !!str >
+  Neues Version-Mapping der ELO ECM Suite verfügbar: v25-0.2.2 (25.00.002)
+detailsMd: !!str >
+  Die Version hat den Status des "Release Candidate" verlassen und ist nun als
+  reguläre LTS-Version verfügbar.
+
+
+  Sie enthält umfangreiche technologische Weiterentwicklungen, wodurch keine
+  vollständige Kompatibilität zur vorherigen LTS-Version 25.00.001 mehr
+  gewährleistet werden kann.
+
+
+  Mögliche Auswirkungen auf bestehende Installationen sollten vor der
+  Aktualisierung sorgfältig geprüft werden. Es wird empfohlen, die neuen
+  Funktionen und Änderungen in einer Testumgebung zu evaluieren, bevor sie in
+  Produktionsumgebungen eingesetzt werden.
+impact: []
+relations:
+  - type: supersedes
+    eventId: release-2026-04-21-elo-operator-1-19-0
+version: 1.19.1
+changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-19-1
