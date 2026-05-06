@@ -9,6 +9,7 @@ productIds:
 title: "Regelwartung - Lieblingsplatz.cloud (Test)"
 impact:
   - limited-availability
+  - action-required
 summaryMd: |
   Die Lieblingsplatz.cloud-Testumgebung wird routinemäßig quartalsweise gewartet. 
   Wartungen finden jeweils am dritten Donnerstag der Monate Januar, April, Juli und Oktober ab 18 Uhr statt.
@@ -18,3 +19,9 @@ detailsMd: |
   - ELO ECM Suite-Update auf LTS-Version
   - Plattform-Updates
   - ELO XC Updates
+customerActionMd: |
+  Bitte prüfen Sie nach dem Update die Funktionalität Ihrer Anwendungen und Prozesse in der Testumgebung.
+
+  Melden Sie uns eventuelle Fehler oder Auffälligkeiten **spätestens bis eine Woche vor dem geplanten Update der Produktivumgebung**, damit diese rechtzeitig analysiert und behoben werden können.
+
+  Erfolgt keine Rückmeldung, gehen wir davon aus, dass keine Einschränkungen vorliegen und das Produktivupdate wie geplant durchgeführt werden kann.
