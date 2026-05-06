@@ -1,0 +1,6 @@
+productId: elo-java-client
+vendorId: elo
+name: ELO Java Client
+category: ecm
+description: Java Client for ELO ECM Suite
+deprecatedAt: null
