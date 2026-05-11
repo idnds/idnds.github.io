@@ -268,6 +268,12 @@ for (const event of events) {
         gap();
     }
 
+    // ── Support-Hinweis immer als letzter Abschnitt ──────────────────────────────────────
+    add("## Können wir helfen?");
+    gap();
+    add("Bei Fragen oder Unterstützungsbedarf wenden Sie sich bitte an unseren Support unter [servicedesk@idnds.de](mailto:servicedesk@idnds.de).");
+    gap();
+
     const outPath = path.join(outDir, event.slug + ".md");
     fs.writeFileSync(outPath, lines.join("\n") + "\n", "utf8");
 }
