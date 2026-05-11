@@ -1,0 +1,82 @@
+id: security-2026-05-05-elo-java-client-cve
+slug: security-2026-05-05-elo-java-client-cve
+typeId: security
+vendorId: elo
+productIds:
+  - elo-java-client
+title: "ELO Java Client: Sicherheitsrelevante Informationen"
+publishedAt: "2026-05-05T18:00:00.000Z"
+summaryMd: !!str |
+  ELO informiert über mehrere Sicherheitslücken in älteren ELO Java Client Versionen.
+detailsMd: !!str >
+  Betroffen sind eingesetzte ELO Java Client Versionen unter ELO 20.X, ELO 23.X und ELO 25.X.
+
+
+  **Sicherheitslücken im Detail:**
+
+  - **CVE-2026-34282:** Eine leicht ausnutzbare Sicherheitslücke ermöglicht es einem nicht authentifizierten Angreifer
+  mit Netzwerkzugriff über verschiedene Protokolle, Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise
+  Edition zu kompromittieren. Erfolgreiche Angriffe auf diese Sicherheitslücke können dazu führen, dass Oracle Java SE,
+  Oracle GraalVM für JDK und Oracle GraalVM Enterprise Edition unbefugt zum Absturz gebracht werden oder wiederholt
+  abstürzen (vollständiger Denial-of-Service).
+
+  - **CVE-2026-22016:** Eine leicht ausnutzbare Schwachstelle ermöglicht es einem nicht authentifizierten Angreifer mit
+  Netzwerkzugriff über verschiedene Protokolle, Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise
+  Edition zu kompromittieren. Erfolgreiche Angriffe auf diese Schwachstelle können zu unberechtigtem Zugriff auf
+  kritische Daten oder zum vollständigen Zugriff auf alle zugänglichen Daten in Oracle Java SE, Oracle GraalVM für JDK
+  und Oracle GraalVM Enterprise Edition führen.
+
+  - **CVE-2025-7425:** In libxslt wurde eine Schwachstelle entdeckt, bei der die Attribute `type`, `atype` und `flags`
+  so verändert werden, dass die interne Speicherverwaltung beeinträchtigt wird. Wenn XSLT-Funktionen wie `key()`
+  Baumfragmente erzeugen, verhindert diese Beschädigung die korrekte Bereinigung der ID-Attribute. Dadurch kann das
+  System auf freigegebenen Speicher zugreifen, was zu Abstürzen führen oder Angreifern ermöglichen kann, den Heap zu
+  beschädigen.
+
+  - **CVE-2025-43368:** Ein Problem mit der Speichernutzung nach Freigabe wurde durch verbesserte Speicherverwaltung
+  behoben. Dieses Problem ist in Safari 26, iOS 26 und iPadOS 26 behoben. Die Verarbeitung von bösartig präparierten
+  Webinhalten kann zu einem unerwarteten Absturz von Safari führen.
+
+  - **CVE-2025-31257:** Dieses Problem wurde durch eine verbesserte Speicherverwaltung behoben. Es ist in watchOS 11.5,
+  tvOS 18.5, iOS 18.5, iPadOS 18.5, macOS Sequoia 15.5, visionOS 2.5 und Safari 18.5 behoben. Die Verarbeitung von
+  manipulierten Webinhalten kann zu einem unerwarteten Absturz von Safari führen.
+
+  - **CVE-2025-21945:** Eine leicht ausnutzbare Sicherheitslücke ermöglicht es einem nicht authentifizierten Angreifer
+  mit Netzwerkzugriff über verschiedene Protokolle, Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise
+  Edition zu kompromittieren. Erfolgreiche Angriffe auf diese Sicherheitslücke können dazu führen, dass die Systeme von
+  Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise Edition unbefugt zum Absturz gebracht werden oder
+  wiederholt abstürzen (vollständiger Denial-of-Service).
+
+  - **CVE-2026-6021:** In der Funktion `xmlBuildQName` der Bibliothek `libxml2` wurde eine Schwachstelle entdeckt, die
+  zu Integer-Überläufen bei der Berechnung der Puffergröße und damit zu einem Stack-basierten Pufferüberlauf führen
+  kann. Dies kann bei der Verarbeitung manipulierter Eingaben zu Speicherbeschädigung oder einem
+  Denial-of-Service-Angriff führen.
+
+  - **CVE-2025-30749:** Eine schwer auszunutzende Sicherheitslücke ermöglicht es einem nicht authentifizierten Angreifer
+  mit Netzwerkzugriff über verschiedene Protokolle, Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise
+  Edition zu kompromittieren. Erfolgreiche Angriffe auf diese Sicherheitslücke können zur vollständigen Übernahme der
+  Systeme führen.
+
+  - **CVE-2026-21945:** Eine leicht ausnutzbare Sicherheitslücke ermöglicht es einem nicht authentifizierten Angreifer
+  mit Netzwerkzugriff über verschiedene Protokolle, Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise
+  Edition zu kompromittieren. Erfolgreiche Angriffe auf diese Sicherheitslücke können dazu führen, dass die Systeme von
+  Oracle Java SE, Oracle GraalVM für JDK und Oracle GraalVM Enterprise Edition unbefugt zum Absturz gebracht werden oder
+  wiederholt abstürzen (vollständiger Denial-of-Service).
+impact:
+  - action-required
+customerActionMd: !!str |
+  Kunden sollten ihren ELO Java Client auf die neueste Version aktualisieren,
+  um von den Sicherheitsverbesserungen zu profitieren.
+relations: []
+cveIds:
+  - CVE-2026-34282
+  - CVE-2026-22016
+  - CVE-2025-7425
+  - CVE-2025-43368
+  - CVE-2025-31257
+  - CVE-2026-34282
+  - CVE-2025-21945
+  - CVE-2026-6021
+  - CVE-2025-30749
+  - CVE-2026-21945
+severity: critical
+fixedVersion: 25.00.041, 23.00.191, 20.28.000
