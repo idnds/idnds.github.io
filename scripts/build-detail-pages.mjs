@@ -269,7 +269,7 @@ for (const event of events) {
     }
 
     // ── Support-Hinweis immer als letzter Abschnitt ──────────────────────────────────────
-    add("## 💬 Können wir helfen?");
+    add("## 💬 Können wir helfen? {#support}");
     gap();
     add("Bei Fragen oder Unterstützungsbedarf wenden Sie sich bitte an unseren Support unter [servicedesk@idnds.de](mailto:servicedesk@idnds.de).");
     gap();

@@ -1,0 +1,27 @@
+id: maintenance-2026-08-20-lpc-prod-regelwartung
+slug: maintenance-2026-08-20-lpc-prod-regelwartung
+typeId: maintenance
+vendorId: idnds
+productIds:
+  - lpc-prod
+title: "Regelwartung - Lieblingsplatz.cloud (Produktiv)"
+publishedAt: "2026-05-19T10:35:15Z"
+eventDate: "2026-08-20T16:00:00Z"
+endDate: "2026-08-20T18:00:00Z"
+status: active
+summaryMd: |
+  Die Lieblingsplatz.cloud-Produktivumgebung wird routinemäßig quartalsweise gewartet. 
+  Wartungen finden jeweils am dritten Donnerstag der Monate Februar, Mai, August und November ab 18 Uhr statt.
+detailsMd: |
+  Die Wartung der Produktivumgebung umfasst die folgenden Arbeiten:
+  - Plattform-Updates
+  - ELO Operator-Update auf den Stand der Testumgebung
+  - ELO ECM Suite-Update auf LTS-Version der Testumgebung
+  - ELO XC Updates auf den Stand der Testumgebung
+impact:
+  - limited-availability
+relations:
+  - type: relates-to
+    eventId: release-2026-04-28-elo-operator-1-19-1
+  - type: relates-to
+    eventId: maintenance-2026-07-16-lpc-test-regelwartung

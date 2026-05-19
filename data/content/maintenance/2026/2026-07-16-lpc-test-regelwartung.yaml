@@ -1,0 +1,25 @@
+id: maintenance-2026-07-16-lpc-test-regelwartung
+slug: maintenance-2026-07-16-lpc-test-regelwartung
+typeId: maintenance
+vendorId: idnds
+productIds:
+  - lpc-test
+title: "Regelwartung - Lieblingsplatz.cloud (Test)"
+publishedAt: "2026-05-19T10:32:15Z"
+eventDate: "2026-07-16T16:00:00Z"
+endDate: "2026-07-16T18:00:00Z"
+status: active
+summaryMd: |
+  Die Lieblingsplatz.cloud-Testumgebung wird routinemäßig quartalsweise gewartet. 
+  Wartungen finden jeweils am dritten Donnerstag der Monate Januar, April, Juli und Oktober ab 18 Uhr statt.
+detailsMd: |
+  Die Wartung der Testumgebung umfasst die folgenden Arbeiten:
+  - ELO Operator-Update auf den aktuellen Stand
+  - ELO ECM Suite-Update auf LTS-Version
+  - Plattform-Updates
+  - ELO XC Updates
+impact:
+  - limited-availability
+relations:
+  - type: relates-to
+    eventId: release-2026-04-28-elo-operator-1-19-1
