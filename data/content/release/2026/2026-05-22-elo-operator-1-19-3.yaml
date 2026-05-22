@@ -1,0 +1,20 @@
+id: release-2026-05-22-elo-operator-1-19-3
+slug: release-2026-05-22-elo-operator-1-19-3
+typeId: release
+vendorId: elo
+productIds:
+  - elo-operator
+title: ELO Cloud Kubernetes Operator 1.19.3
+publishedAt: "2026-05-22T14:00:00.000Z"
+summaryMd: !!str >
+  Neues Version-Mapping der ELO ECM Suite verfügbar: v25-0.2.3
+detailsMd: !!str >
+  Eine neue Version der ELO ECM Suite 25 LTS wurde veröffentlicht.
+
+  Einzelne Komponenten wurden aktualisiert, um die Sicherheit und Stabilität zu verbessern.
+impact: []
+relations:
+  - type: supersedes
+    eventId: release-2026-05-07-elo-operator-1-19-2
+version: 1.19.3
+changelogUrl: https://docs.elo.com/ops/eck/en-us/getting-started/overview/changelog.html#changes-in-1-19-3

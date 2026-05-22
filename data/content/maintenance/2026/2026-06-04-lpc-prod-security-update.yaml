@@ -1,0 +1,30 @@
+id: maintenance-2026-06-04-lpc-prod-security-update
+slug: maintenance-2026-06-04-lpc-prod-security-update
+typeId: maintenance
+vendorId: idnds
+productIds:
+  - lpc-prod
+title: Sicherheitsupdate - Lieblingsplatz.cloud (Produktiv)
+status: active
+publishedAt: "2026-05-22T10:00:00Z"
+eventDate: "2026-06-04T15:00:00Z"
+endDate: "2026-06-04T16:00:00Z"
+summaryMd: |
+  Bereitstellung neuer Versionen der ELO ECM Suite zur Behebung von Sicherheitslücken und zur Verbesserung der Stabilität.
+detailsMd: |
+  1. Aktualisierung des ELO Operators auf Version 1.19.3
+  2. Bereitstellung neuer Versionen der ELO ECM Suite 23 LTS
+  3. Bereitstellung neuer Versionen der ELO ECM Suite 25 LTS
+  4. Aktualisierung der Lieblingsplatz.cloud-Umgebungen auf die neuesten Versionen der ELO ECM Suite
+impact:
+  - action-required
+  - limited-availability
+customerActionMd: |
+  Während des Wartungsfensters werden die Umgebungen auf die neuesten Versionen der ELO ECM Suite aktualisiert.
+
+  Bitte planen Sie Ihre Aktivitäten entsprechend und stellen Sie sicher, dass keine kritischen Prozesse während dieser Zeit laufen.
+
+  Kunden deren Umgebungen aktualisiert werden müssen, werden zusätzlich per Newsletter informiert.
+relations:
+  - type: relates-to
+    eventId: release-2026-05-22-elo-operator-1-19-3
